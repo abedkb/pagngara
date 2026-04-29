@@ -507,6 +507,8 @@ tr:hover td{background:var(--warm);}
           <button class="btn btn-sky btn-sm" onclick="downloadWauminiList('ka')">📥 Pakua CSV</button>
         </div>
         <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Hali ya Uhai</th><th>Vitendo</th></tr></thead><tbody id="ka-waumini-tbody"></tbody></table></div>
+      </div>
+    </div>
     <!-- MUHTASARI -->
 <div id="ka-muhtasari" style="display:none;">
   <div class="card">
@@ -523,8 +525,6 @@ tr:hover td{background:var(--warm);}
     <div id="ka-muhtasari-list"></div>
   </div>
 </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -546,6 +546,7 @@ tr:hover td{background:var(--warm);}
       <div class="tab" id="ha-tab-historia" onclick="haTab('historia')">📋 Historia</div>
       <div class="tab" id="ha-tab-ripoti" onclick="haTab('ripoti')">📄 Ripoti</div>
       <div class="tab" id="ha-tab-waumini" onclick="haTab('waumini')">👥 Waumini</div>
+      <div class="tab" id="ha-tab-zaka" onclick="haTab('zaka')">📋 Kadi ya Zaka</div>
     </div>
     <div id="ha-ingiza">
       <div class="card"><div class="card-title">➕ Ingiza Mchango wa Muumini (Binafsi)</div>
@@ -677,6 +678,69 @@ tr:hover td{background:var(--warm);}
         <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Jumla Michango</th></tr></thead><tbody id="ha-waumini-tbody"></tbody></table></div>
       </div>
     </div>
+
+    <!-- ══ KADI YA ZAKA TAB ══ -->
+    <div id="ha-zaka" style="display:none;">
+      <div style="display:flex;gap:8px;margin:0 0 14px;flex-wrap:wrap;">
+        <button class="btn btn-sm btn-gold" id="zaka-btn-orodha" onclick="zakaView('orodha')">📋 Orodha ya Zaka</button>
+        <button class="btn btn-sm btn-ghost" id="zaka-btn-kadi" onclick="zakaView('kadi')">🪪 Kadi ya Muumini</button>
+      </div>
+
+      <!-- ORODHA VIEW -->
+      <div id="zaka-orodha-view">
+        <div class="card">
+          <div class="card-title">📋 Orodha ya Fungu la Kumi — Juma kwa Juma</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
+            <select class="fsel" id="zaka-o-mwezi" style="width:140px;" onchange="renderZakaOrodha()">
+              <option value="1">Januari</option><option value="2">Februari</option><option value="3">Machi</option>
+              <option value="4">Aprili</option><option value="5">Mei</option><option value="6">Juni</option>
+              <option value="7">Julai</option><option value="8">Agosti</option><option value="9">Septemba</option>
+              <option value="10">Oktoba</option><option value="11">Novemba</option><option value="12">Desemba</option>
+            </select>
+            <select class="fsel" id="zaka-o-mwaka" style="width:100px;" onchange="renderZakaOrodha()"></select>
+            <button class="btn btn-gold btn-sm" onclick="toggleZakaMembersPanel()">👥 Simamia Orodha</button>
+            <button class="btn btn-sky btn-sm" onclick="printZakaOrodha()">🖨 Chapisha</button>
+            <span id="zaka-save-ind" style="display:none;color:var(--green);font-size:11px;font-weight:800;padding:4px 8px;background:var(--green-pale);border-radius:6px;">✓ Imehifadhiwa</span>
+          </div>
+          <!-- Member management panel -->
+          <div id="zaka-members-panel" style="display:none;border:1.5px solid var(--gold);border-radius:8px;padding:14px;margin-bottom:14px;background:var(--gold-pale);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <span style="font-weight:900;font-size:11px;color:var(--brown);text-transform:uppercase;letter-spacing:0.5px;">👥 Simamia Orodha ya Waumini</span>
+              <button class="btn btn-ghost btn-sm" onclick="toggleZakaMembersPanel()">✕ Funga</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+              <select class="fsel" id="zaka-add-from-list" style="flex:1;min-width:200px;">
+                <option value="">— Chagua kutoka Orodha ya Waumini —</option>
+              </select>
+              <button class="btn btn-green btn-sm" onclick="zakaAddFromList()">+ Ongeza</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+              <input type="text" id="zaka-add-manual" class="fi" placeholder="Au andika jina jipya hapa..." style="flex:1;"/>
+              <button class="btn btn-green btn-sm" onclick="zakaAddManual()">+ Ongeza</button>
+            </div>
+            <div id="zaka-members-list" style="max-height:260px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;background:white;padding:6px 10px;"></div>
+          </div>
+          <div id="zaka-orodha-container" style="overflow-x:auto;"></div>
+        </div>
+      </div>
+
+      <!-- KADI VIEW -->
+      <div id="zaka-kadi-view" style="display:none;">
+        <div class="card">
+          <div class="card-title">🪪 Kadi ya Fungu la Kumi — Mwanachama Mmoja</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
+            <select class="fsel" id="zaka-k-muumini" style="flex:1;min-width:180px;" onchange="renderZakaKadi()">
+              <option value="">— Chagua Muumini —</option>
+            </select>
+            <select class="fsel" id="zaka-k-mwaka" style="width:100px;" onchange="renderZakaKadi()"></select>
+            <button class="btn btn-sky btn-sm" onclick="printZakaKadi()">🖨 Chapisha Kadi</button>
+          </div>
+          <div id="zaka-kadi-container"></div>
+        </div>
+      </div>
+    </div>
+    <!-- ══ END KADI YA ZAKA ══ -->
+
   </div>
 </div>
 
@@ -1255,6 +1319,7 @@ async function rejectItem(id,aina){
   toastMsg('❌ Imekataliwa');
 }
 function renderPaWaumini(){
+  if(!allWaumini.length){$('pa-waumini-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--gray);">Hakuna waumini waliosajiliwa</td></tr>';return;}
   $('pa-waumini-tbody').innerHTML=allWaumini.map((w,i)=>`
     <tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td>
     <td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td>
@@ -1301,6 +1366,7 @@ function paTab(tab){
     const e=$('pa-'+t);if(e)e.style.display=t===tab?'block':'none';
     const b=$('pa-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
+  if(tab==='waumini')renderPaWaumini();
   if(tab==='leo')renderIbadaLeo('pa-leo-content');
   if(tab==='fedha')renderFedhaViongozi('pa-fedha-content');
 }
@@ -1409,6 +1475,7 @@ async function rejectRegRequest(rrId,muuminiId,jina){
   toastMsg(`❌ Ombi la ${jina} limekataliwa`);
 }
 function renderKaWaumini(){
+  if(!allWaumini.length){$('ka-waumini-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--gray);">Hakuna waumini waliosajiliwa</td></tr>';return;}
   $('ka-waumini-tbody').innerHTML=allWaumini.map((w,i)=>`
     <tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td>
     <td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td>
@@ -1850,19 +1917,21 @@ async function hifadhiMchango(id){
 function renderHaWaumini(){
   const q=(($('ha-search')||{}).value||'').toLowerCase();
   const list=q?allWaumini.filter(w=>w.jina_kamili.toLowerCase().includes(q)||(w.namba_simu||'').includes(q)):allWaumini;
+  if(!list.length){$('ha-waumini-tbody').innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--gray);">'+(q?'Hakuna matokeo ya utafutaji':'Hakuna waumini waliosajiliwa')+'</td></tr>';return;}
   $('ha-waumini-tbody').innerHTML=list.map((w,i)=>{
     const jumla=allMichango.filter(m=>m.muumini_id===w.id&&m.hali==='approved').reduce((s,m)=>s+m.kiasi,0);
     return`<tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td><td><strong style="color:var(--green);">${pesa(jumla)}</strong></td></tr>`;
   }).join('');
 }
 function haTab(tab){
-  ['ingiza','jumla','maombi','matumizi','aina','leo','fedha','historia','ripoti','waumini'].forEach(t=>{
+  ['ingiza','jumla','maombi','matumizi','aina','leo','fedha','historia','ripoti','waumini','zaka'].forEach(t=>{
     const e=$('ha-'+t);if(e)e.style.display=t===tab?'block':'none';
     const b=$('ha-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
   if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini')renderHaWaumini();
   if(tab==='matumizi')renderHaMatumiziList();if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha')renderFedhaViongozi('ha-fedha-content');
   if(tab==='maombi')renderHaOmbiList();if(tab==='jumla')renderJumlaHistoria();
+  if(tab==='zaka')initZakaTab();
 }
 
 // ═══════════════════════════════════════════
@@ -2144,6 +2213,354 @@ function tkCopySMS(msg){
 }
 
 // END PATCH
+
+// ═══════════════════════════════════════════
+// KADI YA ZAKA — FUNGU LA KUMI
+// ═══════════════════════════════════════════
+
+const ZAKA={
+  mk:y=>'pag_zaka_mem_'+y,
+  dk:(y,m)=>'pag_zaka_'+y+'_'+m,
+  mems(y){try{return JSON.parse(localStorage.getItem(ZAKA.mk(y))||'[]');}catch(e){return[];}},
+  setMems(y,a){localStorage.setItem(ZAKA.mk(y),JSON.stringify(a));},
+  data(y,m){try{return JSON.parse(localStorage.getItem(ZAKA.dk(y,m))||'{}');}catch(e){return{};}},
+  setData(y,m,o){localStorage.setItem(ZAKA.dk(y,m),JSON.stringify(o));}
+};
+
+function initZakaTab(){
+  const y=new Date().getFullYear();
+  const yrs=[y-2,y-1,y,y+1].map(yr=>`<option value="${yr}"${yr===y?' selected':''}>${yr}</option>`).join('');
+  ['zaka-o-mwaka','zaka-k-mwaka'].forEach(id=>{const e=$(id);if(e&&!e.innerHTML.trim())e.innerHTML=yrs;});
+  const ms=$('zaka-o-mwezi');if(ms&&!ms.value)ms.value=new Date().getMonth()+1;
+  _zakaRefreshKadiSel();
+  renderZakaOrodha();
+}
+
+function _zakaRefreshKadiSel(){
+  const y=parseInt(($('zaka-k-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  const sel=$('zaka-k-muumini');if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">&#8212; Chagua Muumini &#8212;</option>'+
+    mems.map((m,i)=>`<option value="${i}"${String(i)===String(cur)?'  selected':''}>${m.jina}</option>`).join('');
+}
+
+function toggleZakaMembersPanel(){
+  const p=$('zaka-members-panel');if(!p)return;
+  const open=p.style.display==='none';
+  p.style.display=open?'block':'none';
+  if(open)renderZakaMembersList();
+}
+
+function renderZakaMembersList(){
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  const el=$('zaka-members-list');if(!el)return;
+  if(!mems.length){
+    el.innerHTML='<p style="color:var(--gray);font-size:12px;text-align:center;padding:12px;">Orodha bado haina waumini. Ongeza hapo juu.</p>';
+  }else{
+    el.innerHTML=mems.map((m,i)=>`<div style="display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);">
+      <span style="color:var(--gray);font-size:11px;min-width:22px;text-align:center;">${i+1}</span>
+      <span style="flex:1;font-weight:700;font-size:13px;color:var(--navy);">${m.jina}</span>
+      <button class="btn btn-ghost btn-sm" style="padding:3px 8px;" onclick="zakaMoveUp(${i})">&#8593;</button>
+      <button class="btn btn-ghost btn-sm" style="padding:3px 8px;" onclick="zakaMoveDown(${i})">&#8595;</button>
+      <button class="btn btn-sm" style="padding:3px 8px;background:var(--red-pale);color:var(--red);" onclick="zakaRemoveMember(${i})">&#10005;</button>
+    </div>`).join('');
+  }
+  const addSel=$('zaka-add-from-list');
+  if(addSel){
+    const existing=new Set(mems.map(m=>m.jina.toLowerCase()));
+    addSel.innerHTML='<option value="">&#8212; Chagua kutoka Orodha ya Waumini &#8212;</option>'+
+      allWaumini.filter(w=>!existing.has(w.jina_kamili.toLowerCase()))
+        .map(w=>`<option value="${w.jina_kamili}">${w.jina_kamili}</option>`).join('');
+  }
+}
+
+function zakaAddFromList(){
+  const sel=$('zaka-add-from-list');if(!sel||!sel.value)return;
+  const jina=sel.value.trim();
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  if(mems.some(m=>m.jina.toLowerCase()===jina.toLowerCase())){toastMsg('Muumini huyu yuko tayari kwenye orodha');return;}
+  mems.push({jina,muumini_id:null});
+  ZAKA.setMems(y,mems);sel.value='';
+  renderZakaMembersList();renderZakaOrodha();_zakaRefreshKadiSel();
+}
+
+function zakaAddManual(){
+  const inp=$('zaka-add-manual');if(!inp||!inp.value.trim())return;
+  const jina=inp.value.trim();
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  if(mems.some(m=>m.jina.toLowerCase()===jina.toLowerCase())){toastMsg('Muumini huyu yuko tayari kwenye orodha');return;}
+  mems.push({jina,muumini_id:null});
+  ZAKA.setMems(y,mems);inp.value='';
+  renderZakaMembersList();renderZakaOrodha();_zakaRefreshKadiSel();
+}
+
+function zakaMoveUp(idx){
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);if(idx<=0)return;
+  [mems[idx-1],mems[idx]]=[mems[idx],mems[idx-1]];
+  ZAKA.setMems(y,mems);renderZakaMembersList();renderZakaOrodha();
+}
+
+function zakaMoveDown(idx){
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);if(idx>=mems.length-1)return;
+  [mems[idx],mems[idx+1]]=[mems[idx+1],mems[idx]];
+  ZAKA.setMems(y,mems);renderZakaMembersList();renderZakaOrodha();
+}
+
+function zakaRemoveMember(idx){
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  if(!confirm('Futa "'+mems[idx].jina+'" kutoka orodha?'))return;
+  mems.splice(idx,1);ZAKA.setMems(y,mems);
+  renderZakaMembersList();renderZakaOrodha();_zakaRefreshKadiSel();
+}
+
+function zakaInputChanged(y,m,memIdx,cellKey,val){
+  const mems=ZAKA.mems(y);if(!mems[memIdx])return;
+  const jina=mems[memIdx].jina;
+  const d=ZAKA.data(y,m);
+  if(!d[jina])d[jina]={};
+  const n=parseInt(val)||0;
+  if(n===0)delete d[jina][cellKey];else d[jina][cellKey]=n;
+  ZAKA.setData(y,m,d);
+  const si=$('zaka-save-ind');
+  if(si){si.style.display='inline';clearTimeout(si._t);si._t=setTimeout(()=>{si.style.display='none';},1600);}
+}
+
+function zakaView(v){
+  $('zaka-orodha-view').style.display=v==='orodha'?'block':'none';
+  $('zaka-kadi-view').style.display=v==='kadi'?'block':'none';
+  $('zaka-btn-orodha').className='btn btn-sm '+(v==='orodha'?'btn-gold':'btn-ghost');
+  $('zaka-btn-kadi').className='btn btn-sm '+(v==='kadi'?'btn-gold':'btn-ghost');
+  if(v==='kadi')renderZakaKadi();
+  if(v==='orodha')renderZakaOrodha();
+}
+
+function renderZakaOrodha(){
+  const mwezi=parseInt(($('zaka-o-mwezi')||{}).value||new Date().getMonth()+1);
+  const mwaka=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const container=$('zaka-orodha-container');
+  if(!container)return;
+  const mems=ZAKA.mems(mwaka);
+  const cellData=ZAKA.data(mwaka,mwezi);
+  const wkRoman=['I','II','III','IV'];
+  const dayLabels=["J'PILI","J'TANO","IJUMAA"];
+  const dayKeys=['j','t','i'];
+
+  let tbl=`<table style="min-width:960px;border-collapse:collapse;font-size:11px;">
+  <thead>
+    <tr style="background:var(--navy);color:white;">
+      <th rowspan="2" style="padding:8px 10px;border:1px solid rgba(255,255,255,0.15);min-width:28px;">#</th>
+      <th rowspan="2" style="padding:8px 12px;text-align:left;border:1px solid rgba(255,255,255,0.15);min-width:170px;">JINA KAMILI</th>`;
+  [1,2,3,4].forEach(w=>{
+    tbl+=`<th colspan="3" style="padding:7px 4px;text-align:center;border:1px solid rgba(255,255,255,0.15);letter-spacing:0.5px;">JUMA LA ${wkRoman[w-1]}</th>`;
+  });
+  tbl+=`</tr><tr style="background:var(--gold-pale);color:var(--brown);">`;
+  [1,2,3,4].forEach(()=>{
+    dayLabels.forEach(dl=>{
+      tbl+=`<th style="padding:6px 8px;text-align:center;border:1px solid var(--border);font-size:10px;">${dl}</th>`;
+    });
+  });
+  tbl+=`</tr></thead><tbody>`;
+
+  if(!mems.length){
+    tbl+=`<tr><td colspan="14" style="text-align:center;padding:24px;color:var(--gray);">Bonyeza "&#x1F465; Simamia Orodha" kuongeza waumini kwenye orodha hii</td></tr>`;
+  }else{
+    mems.forEach((mem,i)=>{
+      const jd=(cellData[mem.jina])||{};
+      const hasAny=Object.keys(jd).some(k=>jd[k]>0);
+      tbl+=`<tr style="background:${i%2===0?'white':'var(--cream)'};${hasAny?'border-left:3px solid var(--green);':''}">
+        <td style="padding:7px 8px;text-align:center;color:var(--gray);border-right:1px solid var(--border);">${i+1}</td>
+        <td style="padding:7px 12px;font-weight:700;color:var(--navy);border-right:1px solid var(--border);white-space:nowrap;">${mem.jina}</td>`;
+      [1,2,3,4].forEach(wk=>{
+        dayKeys.forEach(dk=>{
+          const ck='w'+wk+'_'+dk;
+          const v=jd[ck]||0;
+          tbl+=`<td style="padding:3px;border-right:1px solid var(--border);${v?'background:var(--green-pale);':''}">
+            <input type="number" min="0" value="${v||''}" placeholder="&#8212;"
+              style="width:62px;border:none;background:transparent;text-align:center;font-size:11px;color:var(--navy);font-weight:${v?700:400};"
+              oninput="zakaInputChanged(${mwaka},${mwezi},${i},'${ck}',this.value)"></td>`;
+        });
+      });
+      tbl+=`</tr>`;
+    });
+  }
+  tbl+=`</tbody></table>`;
+  container.innerHTML=tbl;
+}
+
+function renderZakaKadi(){
+  const memIdx=parseInt(($('zaka-k-muumini')||{}).value);
+  const mwaka=parseInt(($('zaka-k-mwaka')||{}).value||new Date().getFullYear());
+  const container=$('zaka-kadi-container');
+  if(!container)return;
+  const mems=ZAKA.mems(mwaka);
+  if(isNaN(memIdx)||memIdx<0||memIdx>=mems.length){
+    container.innerHTML='<p style="color:var(--gray);text-align:center;padding:30px;font-size:13px;">Chagua muumini kuona kadi yake ya Fungu la Kumi</p>';
+    return;
+  }
+  const jina=mems[memIdx].jina;
+  const kanisa=(kanisaSettings&&kanisaSettings.jina_kanisa)||'PAG';
+
+  // Build monthly totals per week from localStorage cell data
+  const lookup={};
+  for(let m=1;m<=12;m++){
+    const jd=(ZAKA.data(mwaka,m)[jina])||{};
+    lookup[m]={1:0,2:0,3:0,4:0,5:0,jumla:0};
+    [1,2,3,4].forEach(wk=>{
+      const ws=(jd['w'+wk+'_j']||0)+(jd['w'+wk+'_t']||0)+(jd['w'+wk+'_i']||0);
+      lookup[m][wk]=ws;
+      lookup[m].jumla+=ws;
+    });
+  }
+
+  const totalMwaka=Object.values(lookup).reduce((s,m)=>s+m.jumla,0);
+  const miezi=['JAN.','FEB.','MAR.','APR.','MAY','JUN.','JUL.','AUG.','SEP.','OCT.','NOV.','DEC.'];
+  const namba=memIdx+1;
+
+  let html=`<div id="zaka-kadi-print" style="max-width:500px;margin:0 auto;border:2.5px solid var(--navy);border-radius:10px;padding:22px 20px;background:white;">
+  <div style="text-align:center;border-bottom:2px solid var(--navy);padding-bottom:12px;margin-bottom:14px;">
+    <div style="font-size:30px;line-height:1;margin-bottom:4px;">&#10013;</div>
+    <div style="font-size:13px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:1.2px;">Pentecostal Assemblies of God</div>
+    <div style="font-size:15px;font-weight:900;color:var(--gold);margin-top:5px;text-transform:uppercase;letter-spacing:0.8px;">Fungu la Kumi &#8212; Mwaka ${mwaka}</div>
+  </div>
+  <div style="margin-bottom:14px;font-size:12px;">
+    <div style="display:flex;gap:6px;align-items:baseline;margin-bottom:7px;">
+      <span style="font-weight:900;font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap;min-width:50px;">JINA:</span>
+      <span style="flex:1;font-weight:700;color:var(--navy);border-bottom:1.5px solid var(--border);padding-bottom:2px;">${jina}</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="display:flex;gap:6px;align-items:baseline;flex:1;">
+        <span style="font-weight:900;font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">KANISA:</span>
+        <span style="font-weight:700;color:var(--navy);border-bottom:1.5px solid var(--border);padding-bottom:2px;flex:1;">${kanisa}</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:baseline;">
+        <span style="font-weight:900;font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">No.</span>
+        <span style="font-weight:700;color:var(--navy);border-bottom:1.5px solid var(--border);padding-bottom:2px;min-width:55px;">${namba}</span>
+      </div>
+    </div>
+  </div>
+  <div style="overflow-x:auto;margin-bottom:14px;">
+    <table style="width:100%;border-collapse:collapse;font-size:10px;">
+      <thead>
+        <tr style="background:var(--navy);color:white;">
+          <th style="padding:7px 8px;text-align:left;border:1px solid rgba(255,255,255,0.15);"></th>
+          <th style="padding:7px 5px;text-align:center;border:1px solid rgba(255,255,255,0.15);">JUMA<br>LA 1</th>
+          <th style="padding:7px 5px;text-align:center;border:1px solid rgba(255,255,255,0.15);">JUMA<br>LA 2</th>
+          <th style="padding:7px 5px;text-align:center;border:1px solid rgba(255,255,255,0.15);">JUMA<br>LA 3</th>
+          <th style="padding:7px 5px;text-align:center;border:1px solid rgba(255,255,255,0.15);">JUMA<br>LA 4</th>
+          <th style="padding:7px 5px;text-align:center;border:1px solid rgba(255,255,255,0.15);">JUMA<br>LA 5</th>
+          <th style="padding:7px 5px;text-align:center;border:1px solid rgba(255,255,255,0.15);font-weight:900;">JUMLA</th>
+          <th style="padding:7px 5px;text-align:center;border:1px solid rgba(255,255,255,0.15);">SAHIHI</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+  miezi.forEach((m,idx)=>{
+    const mn=idx+1;
+    const ld=lookup[mn];
+    const hasPaid=ld.jumla>0;
+    html+=`<tr style="border-bottom:1px solid var(--border);background:${hasPaid?'var(--green-pale)':'white'};">
+      <td style="padding:5px 8px;font-weight:900;color:var(--navy);border-right:1px solid var(--border);white-space:nowrap;">${m}</td>`;
+    for(let w=1;w<=5;w++){
+      const amt=ld[w];
+      html+=`<td style="padding:5px 4px;text-align:center;border-right:1px solid var(--border);font-size:9.5px;color:${amt?'var(--green)':'#ccc'};">${amt?amt.toLocaleString():'—'}</td>`;
+    }
+    html+=`<td style="padding:5px 5px;text-align:center;border-right:1px solid var(--border);font-weight:800;color:${hasPaid?'var(--green)':'#ccc'};">${hasPaid?ld.jumla.toLocaleString():'—'}</td>
+    <td style="padding:5px 4px;text-align:center;color:var(--green);font-size:14px;">${hasPaid?'✓':''}</td>
+    </tr>`;
+  });
+
+  html+=`</tbody></table>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;border-top:2.5px solid var(--navy);padding-top:10px;margin-bottom:16px;">
+    <span style="font-weight:900;font-size:12px;color:var(--navy);text-transform:uppercase;letter-spacing:1px;">JUMLA SHS.</span>
+    <span style="font-family:'Lora',serif;font-size:20px;font-weight:700;color:${totalMwaka?'var(--green)':'var(--gray)'};">${pesa(totalMwaka)}</span>
+  </div>
+  <div style="border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;background:var(--cream);">
+    <div style="font-weight:900;font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:7px;">2 Kor. 9:6 &#8212; 13</div>
+    <div style="font-size:10.5px;color:var(--brown);line-height:1.75;font-style:italic;">
+      "Basi, naomba, yeye apandaye kidogo, atavuna kidogo; na yeye apandaye kwa wingi, atavuna kwa wingi.
+      Kila mtu atoe kama alivyokusudia moyoni mwake; si kwa huzuni, wala si kwa kulazimishwa;
+      kwa maana Mungu hupenda mtoaji mwenye furaha. Na Mungu aweza kuwakirimisha neema yote,
+      ili, mkiwa na utoshelevu wote kila wakati katika mambo yote, mpate kuzidi katika kila kazi njema;
+      kama ilivyoandikwa, Ametawanya, amewapa maskini; Haki yake inadumu milele.
+      Naye amwezeshaye mpandaji mbegu na mkate kwa chakula, atawapa na kuzidisha mbegu yenu
+      na kuongeza matunda ya haki yenu; mkitajirishwa katika kila kitu kwa ukarimu wote,
+      unaotokeza shukrani kwa Mungu kwa njia yetu. Kwa maana utendaji wa huduma hii
+      si kukidhi tu mahitaji ya watakatifu, bali unazidisha pia kwa sababu ya shukrani nyingi
+      wanazompa Mungu. Kwa sababu ya uthibitisho wa huduma hii, wanaomsifu Mungu
+      kwa utii wa imani yenu katika Injili ya Kristo, na kwa ukarimu wa michango yenu
+      kwao na kwa watu wote."
+    </div>
+  </div>
+</div>`;
+
+  container.innerHTML=html;
+}
+
+function printZakaOrodha(){
+  const mwezi=parseInt(($('zaka-o-mwezi')||{}).value||1);
+  const mwaka=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const miezi=['','Januari','Februari','Machi','Aprili','Mei','Juni','Julai','Agosti','Septemba','Oktoba','Novemba','Desemba'];
+  const mems=ZAKA.mems(mwaka);
+  const cellData=ZAKA.data(mwaka,mwezi);
+  const wkRoman=['I','II','III','IV'];
+  const dayLabels=["J'PILI","J'TANO","IJUMAA"];
+  const dayKeys=['j','t','i'];
+
+  let tbl='<table><thead><tr><th rowspan="2">#</th><th rowspan="2" style="text-align:left;min-width:160px;">JINA KAMILI</th>';
+  [1,2,3,4].forEach(w=>{tbl+='<th colspan="3">JUMA LA '+wkRoman[w-1]+'</th>';});
+  tbl+='</tr><tr>';
+  [1,2,3,4].forEach(()=>{dayLabels.forEach(dl=>{tbl+='<th>'+dl+'</th>';});});
+  tbl+='</tr></thead><tbody>';
+  if(!mems.length){
+    tbl+='<tr><td colspan="14" style="text-align:center;padding:18px;">Orodha haina waumini</td></tr>';
+  }else{
+    mems.forEach((mem,i)=>{
+      const jd=(cellData[mem.jina])||{};
+      tbl+='<tr><td style="text-align:center;">'+(i+1)+'</td><td style="font-weight:700;text-align:left;">'+mem.jina+'</td>';
+      [1,2,3,4].forEach(wk=>{
+        dayKeys.forEach(dk=>{
+          const v=jd['w'+wk+'_'+dk]||0;
+          tbl+='<td style="text-align:center;'+(v?'color:#1a7a3a;font-weight:700;':'')+'\">'+(v?v.toLocaleString():'&#8212;')+'</td>';
+        });
+      });
+      tbl+='</tr>';
+    });
+  }
+  tbl+='</tbody></table>';
+
+  const css='body{font-family:sans-serif;padding:20px;}h2{text-align:center;margin-bottom:16px;}table{border-collapse:collapse;width:100%;font-size:10px;}th{background:#1B2A4A;color:white;padding:6px 8px;border:1px solid #999;text-align:center;}td{padding:5px 8px;border:1px solid #ccc;}tr:nth-child(even){background:#f9f6f0;}@media print{body{padding:0;}@page{margin:1.5cm;size:landscape;}}';
+  const heading='<h2>Orodha ya Fungu la Kumi &#8212; '+miezi[mwezi]+' '+mwaka+'<\/h2>';
+  const pw=window.open('','_blank');
+  if(!pw)return;
+  pw.document.open();
+  pw.document.write('<!DOCTYPE html><html><head><title>Orodha ya Zaka<\/title><style>'+css+'<\/style><\/head>');
+  pw.document.write('<body>'+heading+tbl+'<\/body><\/html>');
+  pw.document.close();
+  pw.print();
+}
+
+function printZakaKadi(){
+  const printEl=$('zaka-kadi-print');
+  if(!printEl){toastMsg('&#10060; Chagua muumini kwanza');return;}
+  const sel=$('zaka-k-muumini');
+  const jina=sel&&sel.selectedIndex>0?sel.options[sel.selectedIndex].text:'Muumini';
+  const pw=window.open('','_blank');
+  if(!pw)return;
+  const css='*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;background:white;display:flex;justify-content:center;padding:24px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #999;padding:5px 4px;text-align:center;}th{background:#1B2A4A;color:white;font-size:10px;}td{font-size:9.5px;}@media print{body{padding:8px;}@page{margin:1cm;}}';
+  pw.document.open();
+  pw.document.write('<!DOCTYPE html><html><head><title>Kadi ya Zaka &#8212; '+jina+'<\/title><style>'+css+'<\/style><\/head>');
+  pw.document.write('<body>'+printEl.outerHTML+'<\/body><\/html>');
+  pw.document.close();
+  pw.print();
+}
 
 </script>
 </body>
