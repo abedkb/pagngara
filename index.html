@@ -823,6 +823,7 @@ const DB={
 let currentRole='',currentUser=null;
 let allWaumini=[],allMichango=[],allAina=[],allMatangazo=[],allApprovals=[],allMatumizi=[],allJumlaIbada=[],allOmbiMichango=[],allRegRequests=[];
 let kanisaSettings={};
+let zakaMemsCache={},zakaDataCache={};
 
 // ═══════════════════════════════════════════
 // HELPERS
@@ -951,6 +952,12 @@ function renderFedhaViongozi(containerId){
   const matMwezi=calcMatumiziTotal(allMatumizi,mr.start,mr.end);
   const el=$(containerId);if(!el)return;
   const mwezi=new Date().toLocaleDateString('sw-TZ',{month:'long',year:'numeric'});
+  const sz=fs.sadakaZaka;
+  const sz10=Math.round(sz*0.10);
+  const szBaada=sz-sz10;
+  const sz70=Math.round(szBaada*0.70);
+  const sz30=Math.round(szBaada*0.30);
+  const salioMwezi=sz30-matMwezi;
   el.innerHTML=`
     <div class="section-header"><div class="sh-icon">💰</div><div><div class="sh-title">Uchambuzi wa Fedha — ${mwezi}</div><div class="sh-sub">Jumla ya Michango yote na Mgawanyo</div></div></div>
     <div class="card"><div class="card-title">📊 Jumla ya Michango kwa Mwezi (${mwezi})</div>
@@ -964,23 +971,30 @@ function renderFedhaViongozi(containerId){
       </div>
       <div style="background:var(--navy);border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:800;">JUMLA YOTE YA MICHANGO</span><span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:#F0C060;">${pesa(fs.jumla)}</span></div>
     </div>
-    <div class="card"><div class="card-title">🔢 Uchambuzi wa Jumla Yote ya Michango</div>
-      <div class="al al-i" style="margin-bottom:12px;">Jumla yote (Sadaka + Shukrani + Zaka + Watoto + Ujenzi + Nyingine) = <strong>${pesa(fs.jumla)}</strong></div>
+    <div class="card"><div class="card-title">🔢 Uchambuzi wa Sadaka + Zaka</div>
+      <div class="al al-i" style="margin-bottom:12px;">Msingi wa Hesabu: Sadaka + Zaka tu = <strong>${pesa(sz)}</strong></div>
       <div style="display:grid;gap:10px;">
-        <div class="fin-card navy" style="padding:14px;"><div class="fin-label">💰 Jumla Yote ya Michango</div><div class="fin-amount">${pesa(fs.jumla)}</div></div>
-        <div class="fin-card red"><div class="fin-label">🔟 Asilimia 10% (Akiba/Kinga)</div><div class="fin-amount">${pesa(fs.asilimia10)}</div><div class="fin-sub">10% ya ${pesa(fs.jumla)}</div></div>
-        <div class="fin-card green"><div class="fin-label">💚 Salio Baada ya 10%</div><div class="fin-amount">${pesa(fs.baada10)}</div><div class="fin-sub">${pesa(fs.jumla)} − ${pesa(fs.asilimia10)}</div></div>
+        <div class="fin-card navy" style="padding:14px;"><div class="fin-label">💰 Jumla (Sadaka + Zaka)</div><div class="fin-amount">${pesa(sz)}</div></div>
+        <div class="fin-card red"><div class="fin-label">🔟 Asilimia 10% (Akiba/Kinga)</div><div class="fin-amount">${pesa(sz10)}</div><div class="fin-sub">10% ya ${pesa(sz)}</div></div>
+        <div class="fin-card green"><div class="fin-label">💚 Salio Baada ya 10%</div><div class="fin-amount">${pesa(szBaada)}</div><div class="fin-sub">${pesa(sz)} − ${pesa(sz10)}</div></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div class="fin-card purple"><div class="fin-label">🟣 70% ya Salio</div><div class="fin-amount">${pesa(fs.asilimia70)}</div></div>
-          <div class="fin-card gold"><div class="fin-label">🟡 30% ya Salio</div><div class="fin-amount">${pesa(fs.asilimia30)}</div></div>
+          <div class="fin-card purple"><div class="fin-label">🟣 70% — Mchungaji</div><div class="fin-amount">${pesa(sz70)}</div><div class="fin-sub">Mshahara wa Mchungaji</div></div>
+          <div class="fin-card gold"><div class="fin-label">🟡 30% — Matumizi ya Kanisa</div><div class="fin-amount">${pesa(sz30)}</div><div class="fin-sub">Bajeti ya Matumizi</div></div>
         </div>
       </div>
     </div>
     <div class="card"><div class="card-title">💸 Mapato vs Matumizi ya Mwezi</div>
-      <div class="fin-grid"><div class="fin-card green"><div class="fin-label">📈 Mapato</div><div class="fin-amount">${pesa(fs.jumla)}</div></div><div class="fin-card red"><div class="fin-label">📉 Matumizi</div><div class="fin-amount">${pesa(matMwezi)}</div></div></div>
-      <div style="border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:${fs.jumla-matMwezi>=0?'#D8F3DC':'#FFE5E8'};border:1px solid ${fs.jumla-matMwezi>=0?'#95D5B2':'#F4A0A5'};">
-        <span style="font-size:13px;font-weight:800;color:${fs.jumla-matMwezi>=0?'var(--green)':'var(--red)'};">SALIO LA MWEZI</span>
-        <span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:${fs.jumla-matMwezi>=0?'var(--green)':'var(--red)'};">${pesa(fs.jumla-matMwezi)}</span>
+      <div class="fin-grid">
+        <div class="fin-card green"><div class="fin-label">📈 Mapato (Sadaka + Zaka)</div><div class="fin-amount">${pesa(sz)}</div></div>
+        <div class="fin-card red"><div class="fin-label">📉 Matumizi</div><div class="fin-amount">${pesa(matMwezi)}</div></div>
+      </div>
+      <div style="background:var(--gold-pale);border-radius:10px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--gold);">
+        <span style="font-size:12px;color:var(--brown);font-weight:700;">30% Bajeti ya Matumizi ya Kanisa</span>
+        <span style="font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--brown);">${pesa(sz30)}</span>
+      </div>
+      <div style="border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:${salioMwezi>=0?'#D8F3DC':'#FFE5E8'};border:1px solid ${salioMwezi>=0?'#95D5B2':'#F4A0A5'};">
+        <span style="font-size:13px;font-weight:800;color:${salioMwezi>=0?'var(--green)':'var(--red)'};">SALIO LA MWEZI (30% − Matumizi)</span>
+        <span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:${salioMwezi>=0?'var(--green)':'var(--red)'};">${pesa(salioMwezi)}</span>
       </div>
     </div>`;
 }
@@ -2221,17 +2235,85 @@ function tkCopySMS(msg){
 const ZAKA={
   mk:y=>'pag_zaka_mem_'+y,
   dk:(y,m)=>'pag_zaka_'+y+'_'+m,
-  mems(y){try{return JSON.parse(localStorage.getItem(ZAKA.mk(y))||'[]');}catch(e){return[];}},
-  setMems(y,a){localStorage.setItem(ZAKA.mk(y),JSON.stringify(a));},
-  data(y,m){try{return JSON.parse(localStorage.getItem(ZAKA.dk(y,m))||'{}');}catch(e){return{};}},
-  setData(y,m,o){localStorage.setItem(ZAKA.dk(y,m),JSON.stringify(o));}
+  mems(y){return zakaMemsCache[y]||[];},
+  setMems(y,a){
+    zakaMemsCache[y]=a;
+    localStorage.setItem(ZAKA.mk(y),JSON.stringify(a));
+    ZAKA._push(ZAKA.mk(y),a);
+  },
+  data(y,m){return zakaDataCache[y+'_'+m]||{};},
+  setData(y,m,o){
+    zakaDataCache[y+'_'+m]=o;
+    localStorage.setItem(ZAKA.dk(y,m),JSON.stringify(o));
+    ZAKA._push(ZAKA.dk(y,m),o);
+  },
+  async _push(key,val){
+    try{
+      await fetch(`${SB}/rest/v1/zaka_kadi`,{
+        method:'POST',
+        headers:{...H,'Prefer':'resolution=merge-duplicates,return=minimal'},
+        body:JSON.stringify({data_key:key,data_value:val,updated_at:new Date().toISOString()})
+      });
+    }catch(e){}
+  },
+  async load(){
+    try{
+      const rows=await DB.get('zaka_kadi','order=data_key.asc');
+      const cloudKeys=new Set();
+      if(Array.isArray(rows)){
+        rows.forEach(r=>{
+          cloudKeys.add(r.data_key);
+          if(r.data_key.startsWith('pag_zaka_mem_')){
+            const y=parseInt(r.data_key.replace('pag_zaka_mem_',''));
+            zakaMemsCache[y]=r.data_value||[];
+          } else if(r.data_key.startsWith('pag_zaka_')){
+            const parts=r.data_key.replace('pag_zaka_','').split('_');
+            zakaDataCache[parts[0]+'_'+parts[1]]=r.data_value||{};
+          }
+        });
+      }
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(!k||!k.startsWith('pag_zaka_')||cloudKeys.has(k))continue;
+        try{
+          const v=JSON.parse(localStorage.getItem(k));
+          if(k.startsWith('pag_zaka_mem_')){
+            const y=parseInt(k.replace('pag_zaka_mem_',''));
+            if(!zakaMemsCache[y]){zakaMemsCache[y]=v;}
+          } else {
+            const parts=k.replace('pag_zaka_','').split('_');
+            const ck=parts[0]+'_'+parts[1];
+            if(!zakaDataCache[ck]){zakaDataCache[ck]=v;}
+          }
+          ZAKA._push(k,v);
+        }catch(e2){}
+      }
+    }catch(e){
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(!k||!k.startsWith('pag_zaka_'))continue;
+        try{
+          const v=JSON.parse(localStorage.getItem(k));
+          if(k.startsWith('pag_zaka_mem_')){
+            const y=parseInt(k.replace('pag_zaka_mem_',''));
+            zakaMemsCache[y]=v;
+          } else {
+            const parts=k.replace('pag_zaka_','').split('_');
+            zakaDataCache[parts[0]+'_'+parts[1]]=v||{};
+          }
+        }catch(e2){}
+      }
+    }
+  }
 };
 
-function initZakaTab(){
+async function initZakaTab(){
   const y=new Date().getFullYear();
   const yrs=[y-2,y-1,y,y+1].map(yr=>`<option value="${yr}"${yr===y?' selected':''}>${yr}</option>`).join('');
   ['zaka-o-mwaka','zaka-k-mwaka'].forEach(id=>{const e=$(id);if(e&&!e.innerHTML.trim())e.innerHTML=yrs;});
   const ms=$('zaka-o-mwezi');if(ms&&!ms.value)ms.value=new Date().getMonth()+1;
+  const c=$('zaka-orodha-container');if(c)c.innerHTML='<p style="text-align:center;padding:24px;color:var(--gray);font-size:13px;">⏳ Inapakia data kutoka seva...</p>';
+  await ZAKA.load();
   _zakaRefreshKadiSel();
   renderZakaOrodha();
 }
