@@ -500,7 +500,7 @@ tr:hover td{background:var(--warm);}
       <div class="card" style="border-left:4px solid var(--sky);">
         <div class="card-title" style="color:var(--sky);">➕ Sajili Muumini Mpya</div>
         <div id="al-kasajili"></div>
-        <div class="al al-i" style="margin-bottom:12px;">📌 Namba ya muumini itatengenezwa kiotomatiki na mfumo. Muumini ataweza kuingia kwa namba ya simu <strong>au</strong> namba ya muumini.</div>
+        <div class="al al-i" style="margin-bottom:12px;">📌 Namba ya muumini itatengenezwa kiotomatiki na mfumo. Muumini ataweza kuingia kwa namba yake ya muumini (au namba ya simu kama imewekwa).</div>
         <!-- Namba preview -->
         <div id="ka-namba-preview" style="display:none;background:var(--green-pale);border:1.5px solid #95D5B2;border-radius:8px;padding:12px 14px;margin-bottom:12px;">
           <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">🪪 Namba ya Muumini (Otomatiki)</div>
@@ -509,7 +509,7 @@ tr:hover td{background:var(--warm);}
         </div>
         <div class="fgrid">
           <div class="fg full"><label>Jina Kamili <span style="color:var(--red)">*</span></label><input type="text" class="fi" id="ka-sj-jina" placeholder="Jina na Ukoo wa Muumini" oninput="kaGenerateNamba()"/></div>
-          <div class="fg"><label>Namba ya Simu <span style="color:var(--red)">*</span></label><input type="text" class="fi" id="ka-sj-simu" placeholder="0712345678"/></div>
+          <div class="fg"><label>Namba ya Simu <span style="color:var(--gray);font-size:10px;">(hiari)</span></label><input type="text" class="fi" id="ka-sj-simu" placeholder="0712345678 — si lazima"/></div>
           <div class="fg"><label>Jinsia</label><select class="fsel" id="ka-sj-jinsia"><option value="">— Chagua —</option><option value="Mme">Mme</option><option value="Mke">Mke</option></select></div>
           <div class="fg"><label>Nenosiri <span style="color:var(--red)">*</span></label><input type="password" class="fi" id="ka-sj-pw" placeholder="Angalau herufi 6"/></div>
           <div class="fg"><label>Rudia Nenosiri <span style="color:var(--red)">*</span></label><input type="password" class="fi" id="ka-sj-pw2" placeholder="Rudia nenosiri"/></div>
@@ -1657,20 +1657,20 @@ async function katibuSajiliMuumini(){
   const tarehe=($('ka-sj-tarehe')||{}).value||leo();
 
   if(!jina){setAl('al-kasajili','Weka jina kamili la muumini','e');return;}
-  if(!simu){setAl('al-kasajili','Weka namba ya simu','e');return;}
   if(!pw){setAl('al-kasajili','Weka nenosiri','e');return;}
   if(pw!==pw2){setAl('al-kasajili','Nenosiri hazifanani','e');return;}
   if(pw.length<6){setAl('al-kasajili','Nenosiri lazima iwe angalau herufi 6','e');return;}
 
   setAl('al-kasajili','Inasajili...','i');
   try{
-    // Check uniqueness of simu
-    const existSimu=await DB.get('waumini',`namba_simu=eq.${simu}`);
-    if(Array.isArray(existSimu)&&existSimu[0]){setAl('al-kasajili','Namba hii ya simu tayari imesajiliwa','e');return;}
+    // If simu provided, check it's not already used
+    if(simu){
+      const existSimu=await DB.get('waumini',`namba_simu=eq.${simu}`);
+      if(Array.isArray(existSimu)&&existSimu[0]){setAl('al-kasajili','Namba hii ya simu tayari imesajiliwa','e');return;}
+    }
 
     // Ensure unique namba ya muumini
     let namba=_kaNambaGenerated||uid();
-    // Verify it doesn't already exist (very unlikely but safe)
     let existNamba=await DB.get('waumini',`namba_muumini=eq.${namba}`);
     while(Array.isArray(existNamba)&&existNamba[0]){
       namba=uid();
@@ -1679,7 +1679,7 @@ async function katibuSajiliMuumini(){
 
     // Register directly as 'hai' — katibu bypass pending
     const r=await DB.post('waumini',{
-      jina_kamili:jina,namba_simu:simu,jinsia,barua_pepe:email,
+      jina_kamili:jina,namba_simu:simu||null,jinsia,barua_pepe:email||null,
       nenosiri:pw,namba_muumini:namba,tarehe_kujiunga:tarehe,hali:'hai'
     });
     if(Array.isArray(r)&&r[0]){
@@ -1690,7 +1690,8 @@ async function katibuSajiliMuumini(){
       const jin=$('ka-sj-jinsia');if(jin)jin.value='';
       const prev=$('ka-namba-preview');if(prev)prev.style.display='none';
       renderKaWaumini();
-      setAl('al-kasajili',`✅ Muumini <strong>${jina}</strong> amesajiliwa! Namba yake: <strong>${namba}</strong>. Anaweza kuingia kwa namba hii au namba ya simu.`,'s');
+      const simuMsg=simu?` Anaweza pia kuingia kwa namba ya simu <strong>${simu}</strong>.`:'';
+      setAl('al-kasajili',`✅ Muumini <strong>${jina}</strong> amesajiliwa! Namba yake ya muumini: <strong>${namba}</strong>.${simuMsg}`,'s');
       toastMsg(`✅ ${jina} amesajiliwa — ${namba}`);
     }else{setAl('al-kasajili','Hitilafu ya usajili. Jaribu tena.','e');}
   }catch(e){setAl('al-kasajili','Hitilafu: '+e.message,'e');}
