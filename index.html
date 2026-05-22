@@ -241,7 +241,7 @@ tr:hover td{background:var(--warm);}
     <div id="ml-login-form">
       <div class="card"><div class="card-title">🔑 Ingia kwa Akaunti Yako</div>
         <div id="al-mlogin"></div>
-        <div class="fg"><label>Namba ya Simu</label><input type="tel" class="fi" id="ml-simu" placeholder="0712345678" onkeydown="if(event.key==='Enter')muuminiLogin()"/></div>
+        <div class="fg"><label>Namba ya Simu au Namba ya Muumini</label><input type="tel" class="fi" id="ml-simu" placeholder="0712345678 au MU123456ABC" onkeydown="if(event.key==='Enter')muuminiLogin()"/></div>
         <div class="fg"><label>Nenosiri</label><input type="password" class="fi" id="ml-pw" placeholder="Nenosiri lako" onkeydown="if(event.key==='Enter')muuminiLogin()"/></div>
         <div style="text-align:right;margin-top:6px;">
   <a href="#" onclick="openForgotModal('muumini')" style="font-size:12px;color:var(--primary);text-decoration:none;">
@@ -496,6 +496,29 @@ tr:hover td{background:var(--warm);}
     <div id="ka-leo" style="display:none;"><div id="ka-leo-content"></div></div>
     <div id="ka-fedha" style="display:none;"><div id="ka-fedha-content"></div></div>
     <div id="ka-waumini" style="display:none;">
+      <!-- SAJILI MUUMINI MPYA — katibu anasajili moja kwa moja -->
+      <div class="card" style="border-left:4px solid var(--sky);">
+        <div class="card-title" style="color:var(--sky);">➕ Sajili Muumini Mpya</div>
+        <div id="al-kasajili"></div>
+        <div class="al al-i" style="margin-bottom:12px;">📌 Namba ya muumini itatengenezwa kiotomatiki na mfumo. Muumini ataweza kuingia kwa namba ya simu <strong>au</strong> namba ya muumini.</div>
+        <!-- Namba preview -->
+        <div id="ka-namba-preview" style="display:none;background:var(--green-pale);border:1.5px solid #95D5B2;border-radius:8px;padding:12px 14px;margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">🪪 Namba ya Muumini (Otomatiki)</div>
+          <div id="ka-namba-val" style="font-family:monospace;font-size:18px;font-weight:800;color:var(--navy);letter-spacing:2px;"></div>
+          <div style="font-size:11px;color:var(--gray);margin-top:4px;">Namba hii itahifadhiwa na mfumo — usiibadilishe.</div>
+        </div>
+        <div class="fgrid">
+          <div class="fg full"><label>Jina Kamili <span style="color:var(--red)">*</span></label><input type="text" class="fi" id="ka-sj-jina" placeholder="Jina na Ukoo wa Muumini" oninput="kaGenerateNamba()"/></div>
+          <div class="fg"><label>Namba ya Simu <span style="color:var(--red)">*</span></label><input type="text" class="fi" id="ka-sj-simu" placeholder="0712345678"/></div>
+          <div class="fg"><label>Jinsia</label><select class="fsel" id="ka-sj-jinsia"><option value="">— Chagua —</option><option value="Mme">Mme</option><option value="Mke">Mke</option></select></div>
+          <div class="fg"><label>Nenosiri <span style="color:var(--red)">*</span></label><input type="password" class="fi" id="ka-sj-pw" placeholder="Angalau herufi 6"/></div>
+          <div class="fg"><label>Rudia Nenosiri <span style="color:var(--red)">*</span></label><input type="password" class="fi" id="ka-sj-pw2" placeholder="Rudia nenosiri"/></div>
+          <div class="fg"><label>Tarehe ya Kujiunga</label><input type="date" class="fi" id="ka-sj-tarehe"/></div>
+          <div class="fg"><label>Barua Pepe (hiari)</label><input type="text" class="fi" id="ka-sj-email" placeholder="muumini@barua.com"/></div>
+        </div>
+        <button class="btn btn-block" style="background:var(--sky);color:white;" onclick="katibuSajiliMuumini()">✅ Hifadhi Muumini</button>
+      </div>
+
       <div class="card"><div class="card-title">🆕 Maombi ya Usajili Mapya <span class="notif-badge" id="ka-reg-count2">0</span></div>
         <div id="al-karegapprove"></div>
         <div id="ka-reg-list"><p style="color:var(--gray);text-align:center;padding:16px;font-size:13px;">Hakuna maombi ya usajili yanayosubiri</p></div>
@@ -600,9 +623,29 @@ tr:hover td{background:var(--warm);}
     </div>
 
     <div id="ha-matumizi" style="display:none;">
-      <div class="card"><div class="card-title">💸 Ingiza Matumizi ya Kanisa</div>
+      <!-- MSHAHARA WA MCHUNGAJI — deducted from 70% -->
+      <div class="card" style="border-left:4px solid var(--purple);">
+        <div class="card-title" style="color:var(--purple);">👔 Ingiza Mshahara wa Mchungaji <span style="font-size:10px;background:var(--purple-pale);color:var(--purple);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:700;">Inatoka kwenye 70%</span></div>
+        <div id="al-hamshahara"></div>
+        <div class="al" style="background:var(--purple-pale);color:var(--purple);border:1px solid #C4B5FD;margin-bottom:12px;">📌 Mshahara wa Mchungaji utatoka kwenye <strong>70%</strong> iliyohesabiwa kutoka kwa Uchambuzi wa Sadaka. Haitaathiri bajeti ya 30% ya matumizi ya kanisa.</div>
+        <div class="fgrid">
+          <div class="fg full"><label>Kichwa / Maelezo ya Malipo</label><input type="text" class="fi" id="ha-msh-kichwa" placeholder="mfano: Mshahara wa Mchungaji — Mei 2026"/></div>
+          <div class="fg"><label>Kiasi (TZS)</label><input type="number" class="fi" id="ha-msh-kiasi" placeholder="500000"/></div>
+          <div class="fg"><label>Tarehe</label><input type="date" class="fi" id="ha-msh-tarehe"/></div>
+          <div class="fg full"><label>Maelezo (hiari)</label><textarea class="fi" id="ha-msh-maelezo" placeholder="Maelezo zaidi..." style="min-height:60px;"></textarea></div>
+        </div>
+        <button class="btn btn-block" style="background:var(--purple);color:white;" onclick="ingizaMshahara()">👔 Hifadhi Mshahara wa Mchungaji</button>
+      </div>
+      <div class="card" style="border-left:4px solid var(--purple);">
+        <div class="card-title" style="color:var(--purple);">📋 Historia ya Mshahara wa Mchungaji</div>
+        <div id="ha-mshahara-list"></div>
+      </div>
+
+      <!-- MATUMIZI YA KANISA — deducted from 30% -->
+      <div class="card" style="border-left:4px solid var(--red);">
+        <div class="card-title">💸 Ingiza Matumizi ya Kanisa <span style="font-size:10px;background:var(--gold-pale);color:var(--brown);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:700;">Inatoka kwenye 30%</span></div>
         <div id="al-hamatumizi"></div>
-        <div class="al al-w">📌 Matumizi yataonekana kwenye dashboard za viongozi wote.</div>
+        <div class="al al-w">📌 Matumizi ya kanisa yatatoka kwenye <strong>30%</strong> ya bajeti ya matumizi ya kanisa. Mshahara wa Mchungaji hauhusiki hapa.</div>
         <div class="fgrid">
           <div class="fg full"><label>Kichwa cha Matumizi</label><input type="text" class="fi" id="ha-mat-kichwa" placeholder="mfano: Bili ya umeme, Karatasi..."/></div>
           <div class="fg"><label>Kiasi (TZS)</label><input type="number" class="fi" id="ha-mat-kiasi" placeholder="10000"/></div>
@@ -612,14 +655,14 @@ tr:hover td{background:var(--warm);}
               <option value="Umeme">⚡ Umeme</option><option value="Maji">💧 Maji</option>
               <option value="Karatasi/Stationery">📄 Karatasi/Stationery</option><option value="Usafiri">🚗 Usafiri</option>
               <option value="Chakula/Vinywaji">🍽 Chakula/Vinywaji</option><option value="Ujenzi/Matengenezo">🏗 Ujenzi/Matengenezo</option>
-              <option value="Mshahara">👔 Mshahara</option><option value="Nyingine">✝ Nyingine</option>
+              <option value="Nyingine">✝ Nyingine</option>
             </select>
           </div>
           <div class="fg full"><label>Maelezo (hiari)</label><textarea class="fi" id="ha-mat-maelezo" placeholder="Maelezo zaidi..." style="min-height:70px;"></textarea></div>
         </div>
-        <button class="btn btn-red btn-block" onclick="ingizaMatumizi()">💸 Hifadhi Matumizi</button>
+        <button class="btn btn-red btn-block" onclick="ingizaMatumizi()">💸 Hifadhi Matumizi ya Kanisa</button>
       </div>
-      <div class="card"><div class="card-title">📋 Matumizi ya Hivi Karibuni</div><div id="ha-matumizi-list"></div></div>
+      <div class="card"><div class="card-title">📋 Matumizi ya Kanisa — Hivi Karibuni</div><div id="ha-matumizi-list"></div></div>
     </div>
     <div id="ha-aina" style="display:none;">
       <div class="card"><div class="card-title">🏷 Ongeza Aina Mpya ya Mchango</div>
@@ -897,7 +940,10 @@ function calcCombinedSummary(michangoList,fromDate,toDate){
 }
 
 function calcMatumiziTotal(matu,fromDate,toDate){
-  return matu.filter(m=>{if(!m.tarehe)return false;if(fromDate&&m.tarehe<fromDate)return false;if(toDate&&m.tarehe>toDate)return false;return true;}).reduce((s,m)=>s+m.kiasi,0);
+  return matu.filter(m=>{if(!m.tarehe)return false;if(m.aina_matumizi==='Mshahara_Mchungaji')return false;if(fromDate&&m.tarehe<fromDate)return false;if(toDate&&m.tarehe>toDate)return false;return true;}).reduce((s,m)=>s+m.kiasi,0);
+}
+function calcMshahariTotal(matu,fromDate,toDate){
+  return matu.filter(m=>{if(!m.tarehe)return false;if(m.aina_matumizi!=='Mshahara_Mchungaji')return false;if(fromDate&&m.tarehe<fromDate)return false;if(toDate&&m.tarehe>toDate)return false;return true;}).reduce((s,m)=>s+m.kiasi,0);
 }
 
 // ═══════════════════════════════════════════
@@ -935,7 +981,7 @@ function ibadaCardHTML(fs,matTotalLeo,matumiziLeo,siku){
 function renderIbadaLeo(containerId){
   const today=leo();
   const michangoLeo=allMichango.filter(m=>m.tarehe_mchango===today);
-  const matumiziLeo=allMatumizi.filter(m=>m.tarehe===today);
+  const matumiziLeo=allMatumizi.filter(m=>m.tarehe===today&&m.aina_matumizi!=='Mshahara_Mchungaji');
   const fs=calcCombinedSummary(michangoLeo,today,today);
   const matTotalLeo=calcMatumiziTotal(allMatumizi,today,today);
   const el=$(containerId);if(!el)return;
@@ -950,6 +996,7 @@ function renderFedhaViongozi(containerId){
   const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
   const fs=calcCombinedSummary(michangoMwezi,mr.start,mr.end);
   const matMwezi=calcMatumiziTotal(allMatumizi,mr.start,mr.end);
+  const mshMwezi=calcMshahariTotal(allMatumizi,mr.start,mr.end);
   const el=$(containerId);if(!el)return;
   const mwezi=new Date().toLocaleDateString('sw-TZ',{month:'long',year:'numeric'});
   const sz=fs.sadakaZaka;
@@ -957,7 +1004,8 @@ function renderFedhaViongozi(containerId){
   const szBaada=sz-sz10;
   const sz70=Math.round(szBaada*0.70);
   const sz30=Math.round(szBaada*0.30);
-  const salioMwezi=sz30-matMwezi;
+  const salio70=sz70-mshMwezi;
+  const salio30=sz30-matMwezi;
   el.innerHTML=`
     <div class="section-header"><div class="sh-icon">💰</div><div><div class="sh-title">Uchambuzi wa Fedha — ${mwezi}</div><div class="sh-sub">Jumla ya Michango yote na Mgawanyo</div></div></div>
     <div class="card"><div class="card-title">📊 Jumla ya Michango kwa Mwezi (${mwezi})</div>
@@ -978,23 +1026,31 @@ function renderFedhaViongozi(containerId){
         <div class="fin-card red"><div class="fin-label">🔟 Asilimia 10% (Akiba/Kinga)</div><div class="fin-amount">${pesa(sz10)}</div><div class="fin-sub">10% ya ${pesa(sz)}</div></div>
         <div class="fin-card green"><div class="fin-label">💚 Salio Baada ya 10%</div><div class="fin-amount">${pesa(szBaada)}</div><div class="fin-sub">${pesa(sz)} − ${pesa(sz10)}</div></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div class="fin-card purple"><div class="fin-label">🟣 70% — Mchungaji</div><div class="fin-amount">${pesa(sz70)}</div><div class="fin-sub">Mshahara wa Mchungaji</div></div>
+          <div class="fin-card purple"><div class="fin-label">🟣 70% — Mchungaji</div><div class="fin-amount">${pesa(sz70)}</div><div class="fin-sub">Bajeti ya Mshahara</div></div>
           <div class="fin-card gold"><div class="fin-label">🟡 30% — Matumizi ya Kanisa</div><div class="fin-amount">${pesa(sz30)}</div><div class="fin-sub">Bajeti ya Matumizi</div></div>
         </div>
       </div>
     </div>
-    <div class="card"><div class="card-title">💸 Mapato vs Matumizi ya Mwezi</div>
-      <div class="fin-grid">
-        <div class="fin-card green"><div class="fin-label">📈 Mapato (Sadaka + Zaka)</div><div class="fin-amount">${pesa(sz)}</div></div>
-        <div class="fin-card red"><div class="fin-label">📉 Matumizi</div><div class="fin-amount">${pesa(matMwezi)}</div></div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <div class="card-title" style="color:var(--purple);">👔 Mshahara wa Mchungaji (70%)</div>
+      <div style="display:grid;gap:8px;">
+        <div class="fin-card purple"><div class="fin-label">🟣 Bajeti ya 70% (Mshahara)</div><div class="fin-amount">${pesa(sz70)}</div></div>
+        <div class="fin-card red"><div class="fin-label">👔 Mshahara Uliolipwa Mwezi Huu</div><div class="fin-amount">${pesa(mshMwezi)}</div></div>
+        <div style="border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:${salio70>=0?'#EDE9FE':'#FFE5E8'};border:1px solid ${salio70>=0?'#C4B5FD':'#F4A0A5'};">
+          <span style="font-size:13px;font-weight:800;color:${salio70>=0?'var(--purple)':'var(--red)'};">SALIO LA 70% (Mshahara)</span>
+          <span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:${salio70>=0?'var(--purple)':'var(--red)'};">${pesa(salio70)}</span>
+        </div>
       </div>
-      <div style="background:var(--gold-pale);border-radius:10px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--gold);">
-        <span style="font-size:12px;color:var(--brown);font-weight:700;">30% Bajeti ya Matumizi ya Kanisa</span>
-        <span style="font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--brown);">${pesa(sz30)}</span>
-      </div>
-      <div style="border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:${salioMwezi>=0?'#D8F3DC':'#FFE5E8'};border:1px solid ${salioMwezi>=0?'#95D5B2':'#F4A0A5'};">
-        <span style="font-size:13px;font-weight:800;color:${salioMwezi>=0?'var(--green)':'var(--red)'};">SALIO LA MWEZI (30% − Matumizi)</span>
-        <span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:${salioMwezi>=0?'var(--green)':'var(--red)'};">${pesa(salioMwezi)}</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--gold);">
+      <div class="card-title" style="color:var(--brown);">💸 Matumizi ya Kanisa (30%)</div>
+      <div style="display:grid;gap:8px;">
+        <div class="fin-card gold"><div class="fin-label">🟡 Bajeti ya 30% (Matumizi ya Kanisa)</div><div class="fin-amount">${pesa(sz30)}</div></div>
+        <div class="fin-card red"><div class="fin-label">📉 Matumizi Yaliyotumika Mwezi Huu</div><div class="fin-amount">${pesa(matMwezi)}</div></div>
+        <div style="border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:${salio30>=0?'var(--gold-pale)':'#FFE5E8'};border:1px solid ${salio30>=0?'var(--gold)':'#F4A0A5'};">
+          <span style="font-size:13px;font-weight:800;color:${salio30>=0?'var(--brown)':'var(--red)'};">SALIO LA 30% (Matumizi ya Kanisa)</span>
+          <span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:${salio30>=0?'var(--brown)':'var(--red)'};">${pesa(salio30)}</span>
+        </div>
       </div>
     </div>`;
 }
@@ -1076,11 +1132,16 @@ function mlTab(tab){
 
 async function muuminiLogin(){
   const simu=$('ml-simu').value.trim(),pw=$('ml-pw').value.trim();
-  if(!simu||!pw){setAl('al-mlogin','Jaza namba ya simu na nenosiri','e');return;}
+  if(!simu||!pw){setAl('al-mlogin','Jaza namba ya simu / namba ya muumini na nenosiri','e');return;}
   setAl('al-mlogin','Inaingia...','i');
   try{
-    const r=await DB.get('waumini',`namba_simu=eq.${simu}&nenosiri=eq.${pw}&select=*`);
-    if(!Array.isArray(r)||!r[0]){setAl('al-mlogin','Simu au nenosiri si sahihi','e');return;}
+    // Try login by namba_simu first, then by namba_muumini
+    let r=await DB.get('waumini',`namba_simu=eq.${simu}&nenosiri=eq.${pw}&select=*`);
+    if(!Array.isArray(r)||!r[0]){
+      // Try by namba_muumini
+      r=await DB.get('waumini',`namba_muumini=eq.${simu}&nenosiri=eq.${pw}&select=*`);
+    }
+    if(!Array.isArray(r)||!r[0]){setAl('al-mlogin','Namba ya simu / namba ya muumini au nenosiri si sahihi','e');return;}
     if(r[0].hali==='pending'){setAl('al-mlogin','Akaunti yako bado haijakubaliwa na Katibu. Tafadhali subiri idhini.','w');return;}
     currentUser=r[0];currentRole='muumini';
     setAl('al-mlogin','');
@@ -1123,7 +1184,7 @@ function katibulLogin(){
 }
 function hazinaLogin(){
   const pw=$('ha-pw').value.trim();
-  if(pw===getPW('hazina')){currentRole='hazina';setAl('al-halogin','');$('ha-tarehe').value=leo();$('ha-mat-tarehe').value=leo();$('ha-jumla-tarehe').value=leo();loadHazinaData();show('s-hazina');}
+  if(pw===getPW('hazina')){currentRole='hazina';setAl('al-halogin','');$('ha-tarehe').value=leo();$('ha-mat-tarehe').value=leo();$('ha-msh-tarehe').value=leo();$('ha-jumla-tarehe').value=leo();loadHazinaData();show('s-hazina');}
   else{setAl('al-halogin','Nenosiri si sahihi','e');}
 }
 function wazeeLogin(){
@@ -1558,10 +1619,81 @@ function kaTab(tab){
     const e=$('ka-'+t);if(e)e.style.display=t===tab?'block':'none';
     const b=$('ka-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
-  if(tab==='waumini'){renderKaWaumini();renderRegRequests();}
+  if(tab==='waumini'){
+    renderKaWaumini();renderRegRequests();
+    // Set default date for registration form
+    const tarEle=$('ka-sj-tarehe');if(tarEle&&!tarEle.value)tarEle.value=leo();
+    // Pre-generate namba
+    kaGenerateNamba();
+  }
   if(tab==='leo')renderIbadaLeo('ka-leo-content');
   if(tab==='fedha')renderFedhaViongozi('ka-fedha-content');
   if(tab==='muhtasari')loadMuhtasari();
+}
+
+// Generate a unique namba ya muumini when jina is typed
+let _kaNambaGenerated='';
+function kaGenerateNamba(){
+  const jina=($('ka-sj-jina')||{}).value||'';
+  if(!jina.trim()&&_kaNambaGenerated){return;} // keep existing if jina cleared
+  if(!_kaNambaGenerated){
+    _kaNambaGenerated=uid();
+  }
+  const preview=$('ka-namba-preview');
+  const val=$('ka-namba-val');
+  if(preview&&val){
+    val.textContent=_kaNambaGenerated;
+    preview.style.display='block';
+  }
+}
+
+async function katibuSajiliMuumini(){
+  const jina=($('ka-sj-jina')||{}).value.trim();
+  const simu=($('ka-sj-simu')||{}).value.trim();
+  const pw=($('ka-sj-pw')||{}).value.trim();
+  const pw2=($('ka-sj-pw2')||{}).value.trim();
+  const jinsia=($('ka-sj-jinsia')||{}).value;
+  const email=($('ka-sj-email')||{}).value.trim();
+  const tarehe=($('ka-sj-tarehe')||{}).value||leo();
+
+  if(!jina){setAl('al-kasajili','Weka jina kamili la muumini','e');return;}
+  if(!simu){setAl('al-kasajili','Weka namba ya simu','e');return;}
+  if(!pw){setAl('al-kasajili','Weka nenosiri','e');return;}
+  if(pw!==pw2){setAl('al-kasajili','Nenosiri hazifanani','e');return;}
+  if(pw.length<6){setAl('al-kasajili','Nenosiri lazima iwe angalau herufi 6','e');return;}
+
+  setAl('al-kasajili','Inasajili...','i');
+  try{
+    // Check uniqueness of simu
+    const existSimu=await DB.get('waumini',`namba_simu=eq.${simu}`);
+    if(Array.isArray(existSimu)&&existSimu[0]){setAl('al-kasajili','Namba hii ya simu tayari imesajiliwa','e');return;}
+
+    // Ensure unique namba ya muumini
+    let namba=_kaNambaGenerated||uid();
+    // Verify it doesn't already exist (very unlikely but safe)
+    let existNamba=await DB.get('waumini',`namba_muumini=eq.${namba}`);
+    while(Array.isArray(existNamba)&&existNamba[0]){
+      namba=uid();
+      existNamba=await DB.get('waumini',`namba_muumini=eq.${namba}`);
+    }
+
+    // Register directly as 'hai' — katibu bypass pending
+    const r=await DB.post('waumini',{
+      jina_kamili:jina,namba_simu:simu,jinsia,barua_pepe:email,
+      nenosiri:pw,namba_muumini:namba,tarehe_kujiunga:tarehe,hali:'hai'
+    });
+    if(Array.isArray(r)&&r[0]){
+      allWaumini.unshift(r[0]);
+      _kaNambaGenerated=''; // reset for next registration
+      // Clear form
+      ['ka-sj-jina','ka-sj-simu','ka-sj-pw','ka-sj-pw2','ka-sj-email'].forEach(id=>{const e=$(id);if(e)e.value='';});
+      const jin=$('ka-sj-jinsia');if(jin)jin.value='';
+      const prev=$('ka-namba-preview');if(prev)prev.style.display='none';
+      renderKaWaumini();
+      setAl('al-kasajili',`✅ Muumini <strong>${jina}</strong> amesajiliwa! Namba yake: <strong>${namba}</strong>. Anaweza kuingia kwa namba hii au namba ya simu.`,'s');
+      toastMsg(`✅ ${jina} amesajiliwa — ${namba}`);
+    }else{setAl('al-kasajili','Hitilafu ya usajili. Jaribu tena.','e');}
+  }catch(e){setAl('al-kasajili','Hitilafu: '+e.message,'e');}
 }
 
 // ═══════════════════════════════════════════
@@ -1585,7 +1717,7 @@ async function loadHazinaData(){
   const dl=$('ha-waumini-dl');if(dl)dl.innerHTML=allWaumini.map(w=>`<option value="${w.jina_kamili}"></option>`).join('');
 
   renderAinaList();renderAinaSelects();loadHaHistoria();renderHaWaumini();initRipotiSelects();
-  renderHaMatumiziList();renderHaOmbiList();renderJumlaHistoria();
+  renderHaMatumiziList();renderHaMshahara();renderHaOmbiList();renderJumlaHistoria();
   renderIbadaLeo('ha-leo-content');renderFedhaViongozi('ha-fedha-content');
   $('ha-ombi-count').textContent=allOmbiMichango.length;
 }
@@ -1824,6 +1956,32 @@ async function ingizaMchango(){
     }else setAl('al-haingiza','Hitilafu. Jaribu tena.','e');
   }catch(e){setAl('al-haingiza','Hitilafu: '+e.message,'e');}
 }
+async function ingizaMshahara(){
+  const kichwa=$('ha-msh-kichwa').value.trim(),kiasi=parseInt($('ha-msh-kiasi').value);
+  const tarehe=$('ha-msh-tarehe').value||leo(),maelezo=$('ha-msh-maelezo').value.trim();
+  if(!kichwa){setAl('al-hamshahara','Weka kichwa / maelezo ya malipo','e');return;}
+  if(!kiasi||kiasi<=0){setAl('al-hamshahara','Weka kiasi sahihi','e');return;}
+  setAl('al-hamshahara','Inafanya kazi...','i');
+  try{
+    const r=await DB.post('matumizi',{kichwa,kiasi,tarehe,aina_matumizi:'Mshahara_Mchungaji',maelezo});
+    if(Array.isArray(r)&&r[0]){
+      allMatumizi.unshift(r[0]);setAl('al-hamshahara','✅ Mshahara wa Mchungaji umehifadhiwa!','s');
+      $('ha-msh-kichwa').value='';$('ha-msh-kiasi').value='';$('ha-msh-maelezo').value='';
+      renderHaMshahara();toastMsg('👔 Mshahara umehifadhiwa');
+    }else setAl('al-hamshahara','Hitilafu. Jaribu tena.','e');
+  }catch(e){setAl('al-hamshahara','Hitilafu: '+e.message,'e');}
+}
+function renderHaMshahara(){
+  const el=$('ha-mshahara-list');if(!el)return;
+  const list=allMatumizi.filter(m=>m.aina_matumizi==='Mshahara_Mchungaji').slice(0,15);
+  if(!list.length){el.innerHTML='<p style="color:var(--gray);text-align:center;padding:16px;font-size:13px;">Bado hakuna mshahara ulioingizwa</p>';return;}
+  el.innerHTML=list.map(m=>`
+    <div class="matumizi-card" style="border-left-color:var(--purple);">
+      <div style="font-size:20px;flex-shrink:0;">👔</div>
+      <div style="flex:1;"><div style="font-weight:800;font-size:13px;color:var(--navy);">${m.kichwa}</div><div style="font-size:11px;color:var(--gray);margin-top:2px;">📅 ${formatDate(m.tarehe)}</div>${m.maelezo?`<div style="font-size:11px;color:var(--gray);margin-top:2px;">${m.maelezo}</div>`:''}</div>
+      <div style="text-align:right;"><div style="font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--purple);">${pesa(m.kiasi)}</div><div style="display:flex;gap:4px;margin-top:4px;justify-content:flex-end;"><button class="btn btn-red btn-sm" onclick="futaMatumizi('${m.id}')">🗑</button></div></div>
+    </div>`).join('');
+}
 async function ingizaMatumizi(){
   const kichwa=$('ha-mat-kichwa').value.trim(),kiasi=parseInt($('ha-mat-kiasi').value);
   const tarehe=$('ha-mat-tarehe').value||leo(),aina=$('ha-mat-aina').value,maelezo=$('ha-mat-maelezo').value.trim();
@@ -1841,9 +1999,9 @@ async function ingizaMatumizi(){
 }
 function renderHaMatumiziList(){
   const el=$('ha-matumizi-list');if(!el)return;
-  const recent=allMatumizi.slice(0,20);
+  const recent=allMatumizi.filter(m=>m.aina_matumizi!=='Mshahara_Mchungaji').slice(0,20);
   if(!recent.length){el.innerHTML='<p style="color:var(--gray);text-align:center;padding:16px;font-size:13px;">Bado hakuna matumizi yaliyoingizwa</p>';return;}
-  const icons={'Umeme':'⚡','Maji':'💧','Karatasi/Stationery':'📄','Usafiri':'🚗','Chakula/Vinywaji':'🍽','Ujenzi/Matengenezo':'🏗','Mshahara':'👔','Nyingine':'💸'};
+  const icons={'Umeme':'⚡','Maji':'💧','Karatasi/Stationery':'📄','Usafiri':'🚗','Chakula/Vinywaji':'🍽','Ujenzi/Matengenezo':'🏗','Nyingine':'💸'};
   el.innerHTML=recent.map(m=>`
     <div class="matumizi-card">
       <div style="font-size:20px;flex-shrink:0;">${icons[m.aina_matumizi]||'💸'}</div>
@@ -1857,7 +2015,21 @@ async function futaMatumizi(id){
 }
 function haririshaMatumizi(id){
   const m=allMatumizi.find(x=>x.id===id);if(!m)return;
-  const aina=['Umeme','Maji','Karatasi/Stationery','Usafiri','Chakula/Vinywaji','Ujenzi/Matengenezo','Mshahara','Nyingine'];
+  // Mshahara wa Mchungaji una form yake — use generic edit only for kanisa matumizi
+  if(m.aina_matumizi==='Mshahara_Mchungaji'){
+    const aina=['Mshahara_Mchungaji'];
+    const opts=aina.map(a=>`<option selected>${a}</option>`).join('');
+    openMod('✏️ Hariri Mshahara wa Mchungaji',`
+      <div class="fg"><label>Kichwa</label><input type="text" id="hmat-kichwa" class="fi" value="${m.kichwa}"/></div>
+      <div class="fg"><label>Kiasi (TZS)</label><input type="number" id="hmat-kiasi" class="fi" value="${m.kiasi}"/></div>
+      <div class="fg"><label>Tarehe</label><input type="date" id="hmat-tarehe" class="fi" value="${m.tarehe}"/></div>
+      <div class="fg"><label>Maelezo</label><input type="text" id="hmat-maelezo" class="fi" value="${m.maelezo||''}"/></div>
+      <input type="hidden" id="hmat-aina" value="Mshahara_Mchungaji"/>
+      <button class="btn btn-green btn-block" onclick="hifadhiMatumizi('${id}')">💾 Hifadhi</button>
+      <div id="hmat-alert" style="margin-top:8px;"></div>`);
+    return;
+  }
+  const aina=['Umeme','Maji','Karatasi/Stationery','Usafiri','Chakula/Vinywaji','Ujenzi/Matengenezo','Nyingine'];
   const opts=aina.map(a=>`<option ${a===m.aina_matumizi?'selected':''}>${a}</option>`).join('');
   openMod('✏️ Hariri Matumizi',`
     <div class="fg"><label>Kichwa</label><input type="text" id="hmat-kichwa" class="fi" value="${m.kichwa}"/></div>
@@ -1943,7 +2115,7 @@ function haTab(tab){
     const b=$('ha-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
   if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini')renderHaWaumini();
-  if(tab==='matumizi')renderHaMatumiziList();if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha')renderFedhaViongozi('ha-fedha-content');
+  if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha')renderFedhaViongozi('ha-fedha-content');
   if(tab==='maombi')renderHaOmbiList();if(tab==='jumla')renderJumlaHistoria();
   if(tab==='zaka')initZakaTab();
 }
@@ -2056,8 +2228,7 @@ $('modal-bg').addEventListener('click',function(e){if(e.target===this)closeModDi
 // ═══════════════════════════════════════════
 show('s-welcome');
 
-// FULL MERGED PATCH (SAFE — no breaking existing logic)
-// ADD ONLY — paste at the END of your existing <script>
+
 
 // =========================
 // 1. FORGOT PASSWORD
