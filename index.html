@@ -510,7 +510,7 @@ tr:hover td{background:var(--warm);}
         <div class="fgrid">
           <div class="fg full"><label>Jina Kamili <span style="color:var(--red)">*</span></label><input type="text" class="fi" id="ka-sj-jina" placeholder="Jina na Ukoo wa Muumini" oninput="kaGenerateNamba()"/></div>
           <div class="fg"><label>Namba ya Simu <span style="color:var(--gray);font-size:10px;">(hiari)</span></label><input type="text" class="fi" id="ka-sj-simu" placeholder="0712345678 — si lazima"/></div>
-          <div class="fg"><label>Jinsia</label><select class="fsel" id="ka-sj-jinsia"><option value="">— Chagua —</option><option value="Mme">Mme</option><option value="Mke">Mke</option></select></div>
+          <div class="fg"><label>Jinsia</label><select class="fsel" id="ka-sj-jinsia"><option value="">— Chagua —</option><option value="Kiume">Kiume</option><option value="Kike">Kike</option></select></div>
           <div class="fg"><label>Nenosiri <span style="color:var(--red)">*</span></label><input type="password" class="fi" id="ka-sj-pw" placeholder="Angalau herufi 6"/></div>
           <div class="fg"><label>Rudia Nenosiri <span style="color:var(--red)">*</span></label><input type="password" class="fi" id="ka-sj-pw2" placeholder="Rudia nenosiri"/></div>
           <div class="fg"><label>Tarehe ya Kujiunga</label><input type="date" class="fi" id="ka-sj-tarehe"/></div>
@@ -1679,7 +1679,7 @@ async function katibuSajiliMuumini(){
 
     // Register directly as 'hai' — katibu bypass pending
     const r=await DB.post('waumini',{
-      jina_kamili:jina,namba_simu:simu||null,jinsia,barua_pepe:email||null,
+      jina_kamili:jina,namba_simu:simu||null,jinsia:jinsia||null,barua_pepe:email||null,
       nenosiri:pw,namba_muumini:namba,tarehe_kujiunga:tarehe,hali:'hai'
     });
     if(Array.isArray(r)&&r[0]){
@@ -1693,7 +1693,7 @@ async function katibuSajiliMuumini(){
       const simuMsg=simu?` Anaweza pia kuingia kwa namba ya simu <strong>${simu}</strong>.`:'';
       setAl('al-kasajili',`✅ Muumini <strong>${jina}</strong> amesajiliwa! Namba yake ya muumini: <strong>${namba}</strong>.${simuMsg}`,'s');
       toastMsg(`✅ ${jina} amesajiliwa — ${namba}`);
-    }else{setAl('al-kasajili','Hitilafu ya usajili. Jaribu tena.','e');}
+    }else{setAl('al-kasajili','Hitilafu ya usajili: '+(r&&r.message?r.message:'Jaribu tena.'),'e');}
   }catch(e){setAl('al-kasajili','Hitilafu: '+e.message,'e');}
 }
 
