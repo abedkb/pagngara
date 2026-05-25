@@ -2421,7 +2421,7 @@ const ZAKA={
   },
   async _push(key,val){
     try{
-      await fetch(`${SB}/rest/v1/zaka_kadi`,{
+      await fetch(`${SB}/rest/v1/zaka_kadi?on_conflict=data_key`,{
         method:'POST',
         headers:{...H,'Prefer':'resolution=merge-duplicates,return=minimal'},
         body:JSON.stringify({data_key:key,data_value:val,updated_at:new Date().toISOString()})
