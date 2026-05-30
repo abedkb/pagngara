@@ -431,7 +431,21 @@ tr:hover td{background:var(--warm);}
           <div class="search-bar" style="flex:1;margin-bottom:0;"><input type="text" id="pa-search" placeholder="Tafuta muumini..." oninput="filterWaumini('pa')"/></div>
           <button class="btn btn-sky btn-sm" onclick="downloadWauminiList('pa')">📥 Pakua CSV</button>
         </div>
-        <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Hali</th><th>Jiunge</th></tr></thead><tbody id="pa-waumini-tbody"></tbody></table></div>
+        <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Hali</th><th>Jiunge</th><th>Ujumbe</th></tr></thead><tbody id="pa-waumini-tbody"></tbody></table></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="card-title">📨 Tuma Ujumbe kwa Waumini</div>
+        <div class="fg"><label>Andika Ujumbe</label><textarea id="pa-bulk-text" class="fi" rows="4" placeholder="Andika ujumbe hapa unaotaka kutuma..."></textarea></div>
+        <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-sm btn-sky" onclick="selectAllBulk('pa',true)">✅ Chagua Wote</button>
+          <button class="btn btn-sm btn-ghost" onclick="selectAllBulk('pa',false)">☐ Futa Uchaguzi</button>
+          <span id="pa-bulk-count" style="font-size:12px;color:var(--gray);">0 wamechaguliwa</span>
+        </div>
+        <div id="pa-bulk-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:10px;font-size:13px;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-block" style="background:#25D366;color:white;flex:1;" onclick="sendBulkMsg('pa','wa')">📱 WhatsApp Nyingi</button>
+          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('pa','sms')">💬 SMS Nyingi</button>
+        </div>
       </div>
     </div>
     <div id="pa-ripoti" style="display:none;">
@@ -529,7 +543,21 @@ tr:hover td{background:var(--warm);}
           <div class="search-bar" style="flex:1;margin-bottom:0;"><input type="text" id="ka-search" placeholder="Tafuta muumini..." oninput="filterWaumini('ka')"/></div>
           <button class="btn btn-sky btn-sm" onclick="downloadWauminiList('ka')">📥 Pakua CSV</button>
         </div>
-        <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Hali ya Uhai</th><th>Vitendo</th></tr></thead><tbody id="ka-waumini-tbody"></tbody></table></div>
+        <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Hali ya Uhai</th><th>Vitendo</th><th>Ujumbe</th></tr></thead><tbody id="ka-waumini-tbody"></tbody></table></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="card-title">📨 Tuma Ujumbe kwa Waumini</div>
+        <div class="fg"><label>Andika Ujumbe</label><textarea id="ka-bulk-text" class="fi" rows="4" placeholder="Andika ujumbe hapa unaotaka kutuma..."></textarea></div>
+        <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-sm btn-sky" onclick="selectAllBulk('ka',true)">✅ Chagua Wote</button>
+          <button class="btn btn-sm btn-ghost" onclick="selectAllBulk('ka',false)">☐ Futa Uchaguzi</button>
+          <span id="ka-bulk-count" style="font-size:12px;color:var(--gray);">0 wamechaguliwa</span>
+        </div>
+        <div id="ka-bulk-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:10px;font-size:13px;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-block" style="background:#25D366;color:white;flex:1;" onclick="sendBulkMsg('ka','wa')">📱 WhatsApp Nyingi</button>
+          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('ka','sms')">💬 SMS Nyingi</button>
+        </div>
       </div>
     </div>
     <!-- MUHTASARI -->
@@ -718,7 +746,21 @@ tr:hover td{background:var(--warm);}
           <div class="search-bar" style="flex:1;margin-bottom:0;"><input type="text" id="ha-search" list="ha-waumini-dl" placeholder="Tafuta muumini..." oninput="filterWaumini('ha')" autocomplete="off"/><datalist id="ha-waumini-dl"></datalist></div>
           <button class="btn btn-sky btn-sm" onclick="downloadWauminiList('ha')">📥 Pakua CSV</button>
         </div>
-        <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Jumla Michango</th></tr></thead><tbody id="ha-waumini-tbody"></tbody></table></div>
+        <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Jumla Michango</th><th>Ujumbe</th></tr></thead><tbody id="ha-waumini-tbody"></tbody></table></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="card-title">📨 Tuma Ujumbe kwa Waumini</div>
+        <div class="fg"><label>Andika Ujumbe</label><textarea id="ha-bulk-text" class="fi" rows="4" placeholder="Andika ujumbe hapa unaotaka kutuma..."></textarea></div>
+        <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-sm btn-sky" onclick="selectAllBulk('ha',true)">✅ Chagua Wote</button>
+          <button class="btn btn-sm btn-ghost" onclick="selectAllBulk('ha',false)">☐ Futa Uchaguzi</button>
+          <span id="ha-bulk-count" style="font-size:12px;color:var(--gray);">0 wamechaguliwa</span>
+        </div>
+        <div id="ha-bulk-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:10px;font-size:13px;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-block" style="background:#25D366;color:white;flex:1;" onclick="sendBulkMsg('ha','wa')">📱 WhatsApp Nyingi</button>
+          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('ha','sms')">💬 SMS Nyingi</button>
+        </div>
       </div>
     </div>
 
@@ -1394,11 +1436,13 @@ async function rejectItem(id,aina){
   toastMsg('❌ Imekataliwa');
 }
 function renderPaWaumini(){
-  if(!allWaumini.length){$('pa-waumini-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--gray);">Hakuna waumini waliosajiliwa</td></tr>';return;}
+  if(!allWaumini.length){$('pa-waumini-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--gray);">Hakuna waumini waliosajiliwa</td></tr>';return;}
   $('pa-waumini-tbody').innerHTML=allWaumini.map((w,i)=>`
     <tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td>
     <td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td>
-    <td style="font-size:12px;color:var(--gray);">${formatDate(w.tarehe_kujiunga)}</td></tr>`).join('');
+    <td style="font-size:12px;color:var(--gray);">${formatDate(w.tarehe_kujiunga)}</td>
+    <td>${msgBtns(w)}</td></tr>`).join('');
+  renderBulkList('pa');
 }
 function renderPaRipoti(){
   const jumla=allMichango.filter(m=>m.hali==='approved').reduce((s,m)=>s+m.kiasi,0);
@@ -1441,7 +1485,7 @@ function paTab(tab){
     const e=$('pa-'+t);if(e)e.style.display=t===tab?'block':'none';
     const b=$('pa-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
-  if(tab==='waumini')renderPaWaumini();
+  if(tab==='waumini'){renderPaWaumini();renderBulkList('pa');}
   if(tab==='leo')renderIbadaLeo('pa-leo-content');
   if(tab==='fedha')renderFedhaViongozi('pa-fedha-content');
 }
@@ -1455,7 +1499,7 @@ function filterWaumini(prefix){
   const tbody=`${prefix}-waumini-tbody`;
   const list=allWaumini.filter(w=>w.jina_kamili.toLowerCase().includes(low)||(w.namba_simu||'').includes(low));
   if(prefix==='pa'){
-    $(tbody).innerHTML=list.map((w,i)=>`<tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td><td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td><td style="font-size:12px;color:var(--gray);">${formatDate(w.tarehe_kujiunga)}</td></tr>`).join('');
+    $(tbody).innerHTML=list.map((w,i)=>`<tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td><td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td><td style="font-size:12px;color:var(--gray);">${formatDate(w.tarehe_kujiunga)}</td><td>${msgBtns(w)}</td></tr>`).join('');
   }else if(prefix==='ka'){
     $(tbody).innerHTML=list.map((w,i)=>`
       <tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td>
@@ -1463,11 +1507,12 @@ function filterWaumini(prefix){
       <td style="display:flex;gap:6px;flex-wrap:wrap;">
         ${w.hali!=='pending'?`<button class="btn btn-sm ${w.hali==='hai'?'btn-ghost':'btn-green'}" onclick="badilishaHali('${w.id}','${w.hali}')">${w.hali==='hai'?'🔴 Weka Si Hai':'🟢 Weka Hai'}</button>`:''}
         <button class="btn btn-red btn-sm" onclick="katibiFutaMuumini('${w.id}','${w.jina_kamili.replace(/'/g,"\\'")}')">🗑 Futa</button>
-      </td></tr>`).join('');
+      </td>
+      <td>${msgBtns(w)}</td></tr>`).join('');
   }else if(prefix==='ha'){
     $(tbody).innerHTML=list.map((w,i)=>{
       const jumla=allMichango.filter(m=>m.muumini_id===w.id&&m.hali==='approved').reduce((s,m)=>s+m.kiasi,0);
-      return`<tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td><td><strong style="color:var(--green);">${pesa(jumla)}</strong></td></tr>`;
+      return`<tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td><td><strong style="color:var(--green);">${pesa(jumla)}</strong></td><td>${msgBtns(w)}</td></tr>`;
     }).join('');
   }
 }
@@ -1550,14 +1595,16 @@ async function rejectRegRequest(rrId,muuminiId,jina){
   toastMsg(`❌ Ombi la ${jina} limekataliwa`);
 }
 function renderKaWaumini(){
-  if(!allWaumini.length){$('ka-waumini-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--gray);">Hakuna waumini waliosajiliwa</td></tr>';return;}
+  if(!allWaumini.length){$('ka-waumini-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--gray);">Hakuna waumini waliosajiliwa</td></tr>';return;}
   $('ka-waumini-tbody').innerHTML=allWaumini.map((w,i)=>`
     <tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td>
     <td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td>
     <td style="display:flex;gap:6px;flex-wrap:wrap;">
       ${w.hali!=='pending'?`<button class="btn btn-sm ${w.hali==='hai'?'btn-ghost':'btn-green'}" onclick="badilishaHali('${w.id}','${w.hali}')">${w.hali==='hai'?'🔴 Weka Si Hai':'🟢 Weka Hai'}</button>`:'<span class="badge bg-gold">Inasubiri</span>'}
       <button class="btn btn-red btn-sm" onclick="katibiFutaMuumini('${w.id}','${w.jina_kamili.replace(/'/g,"\\'")}')">🗑 Futa</button>
-    </td></tr>`).join('');
+    </td>
+    <td>${msgBtns(w)}</td></tr>`).join('');
+  renderBulkList('ka');
 }
 async function badilishaHali(id,haliSasa){
   const haliMpya=haliSasa==='hai'?'si_hai':'hai';
@@ -1620,7 +1667,7 @@ function kaTab(tab){
     const b=$('ka-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
   if(tab==='waumini'){
-    renderKaWaumini();renderRegRequests();
+    renderKaWaumini();renderRegRequests();renderBulkList('ka');
     // Set default date for registration form
     const tarEle=$('ka-sj-tarehe');if(tarEle&&!tarEle.value)tarEle.value=leo();
     // Pre-generate namba
@@ -2104,18 +2151,19 @@ async function hifadhiMchango(id){
 function renderHaWaumini(){
   const q=(($('ha-search')||{}).value||'').toLowerCase();
   const list=q?allWaumini.filter(w=>w.jina_kamili.toLowerCase().includes(q)||(w.namba_simu||'').includes(q)):allWaumini;
-  if(!list.length){$('ha-waumini-tbody').innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--gray);">'+(q?'Hakuna matokeo ya utafutaji':'Hakuna waumini waliosajiliwa')+'</td></tr>';return;}
+  if(!list.length){$('ha-waumini-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--gray);">'+(q?'Hakuna matokeo ya utafutaji':'Hakuna waumini waliosajiliwa')+'</td></tr>';return;}
   $('ha-waumini-tbody').innerHTML=list.map((w,i)=>{
     const jumla=allMichango.filter(m=>m.muumini_id===w.id&&m.hali==='approved').reduce((s,m)=>s+m.kiasi,0);
-    return`<tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td><td><strong style="color:var(--green);">${pesa(jumla)}</strong></td></tr>`;
+    return`<tr><td style="color:var(--gray);font-size:12px;">${i+1}</td><td><strong>${w.jina_kamili}</strong></td><td>${w.namba_simu||'—'}</td><td style="font-family:monospace;font-size:12px;">${w.namba_muumini}</td><td><strong style="color:var(--green);">${pesa(jumla)}</strong></td><td>${msgBtns(w)}</td></tr>`;
   }).join('');
+  renderBulkList('ha');
 }
 function haTab(tab){
   ['ingiza','jumla','maombi','matumizi','aina','leo','fedha','historia','ripoti','waumini','zaka'].forEach(t=>{
     const e=$('ha-'+t);if(e)e.style.display=t===tab?'block':'none';
     const b=$('ha-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
-  if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini')renderHaWaumini();
+  if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini'){renderHaWaumini();renderBulkList('ha');}
   if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha')renderFedhaViongozi('ha-fedha-content');
   if(tab==='maombi')renderHaOmbiList();if(tab==='jumla')renderJumlaHistoria();
   if(tab==='zaka')initZakaTab();
@@ -2814,6 +2862,78 @@ function printZakaKadi(){
   pw.document.write('<body>'+printEl.outerHTML+'<\/body><\/html>');
   pw.document.close();
   pw.print();
+}
+
+// ═══════════════════════════════════════════
+// MESSAGING — SMS & WHATSAPP
+// ═══════════════════════════════════════════
+function normPhone(p){
+  if(!p)return'';
+  p=p.replace(/[\s\-()]/g,'');
+  if(p.startsWith('+'))return p.slice(1);
+  if(p.startsWith('0'))return'255'+p.slice(1);
+  if(p.startsWith('255'))return p;
+  return p;
+}
+
+function msgBtns(w){
+  if(!w.namba_simu)return'<span style="color:var(--gray);font-size:10px;">—</span>';
+  const ph=normPhone(w.namba_simu);
+  const nm=w.jina_kamili.replace(/'/g,"\\'");
+  return`<span style="display:inline-flex;gap:4px;">
+    <a href="https://wa.me/${ph}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;padding:3px 8px;font-size:13px;text-decoration:none;" title="WhatsApp — ${nm}">📱</a>
+    <a href="sms:${ph}" class="btn btn-sm" style="background:var(--sky);color:white;padding:3px 8px;font-size:13px;text-decoration:none;" title="SMS — ${nm}">💬</a>
+  </span>`;
+}
+
+function renderBulkList(prefix){
+  const el=$(prefix+'-bulk-list');
+  if(!el)return;
+  const active=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
+  const noPhone=allWaumini.filter(w=>w.hali==='hai'&&!w.namba_simu);
+  el.innerHTML=(active.length?active.map(w=>`
+    <label style="display:flex;align-items:center;gap:8px;padding:5px 4px;border-bottom:1px solid var(--border);cursor:pointer;">
+      <input type="checkbox" class="${prefix}-bulk-chk" value="${w.id}" data-simu="${w.namba_simu}" data-jina="${w.jina_kamili.replace(/"/g,'&quot;')}" style="width:15px;height:15px;accent-color:var(--sky);flex-shrink:0;">
+      <span style="flex:1;">${w.jina_kamili}</span>
+      <span style="color:var(--gray);font-size:11px;">${w.namba_simu}</span>
+    </label>`).join(''):'')
+    +(noPhone.length?`<div style="color:var(--gray);font-size:11px;padding:6px 4px;border-top:1px dashed var(--border);margin-top:4px;">⚠️ Waumini ${noPhone.length} hawana namba ya simu — hawatajumuishwa</div>`:'')
+    +(!active.length&&!noPhone.length?'<p style="color:var(--gray);text-align:center;padding:12px;font-size:12px;">Hakuna waumini hai</p>':'');
+  el.querySelectorAll('.'+prefix+'-bulk-chk').forEach(c=>c.addEventListener('change',()=>updateBulkCount(prefix)));
+  updateBulkCount(prefix);
+}
+
+function updateBulkCount(prefix){
+  const n=document.querySelectorAll('.'+prefix+'-bulk-chk:checked').length;
+  const el=$(prefix+'-bulk-count');if(el)el.textContent=n+' wamechaguliwa';
+}
+
+function selectAllBulk(prefix,checked){
+  document.querySelectorAll('.'+prefix+'-bulk-chk').forEach(c=>c.checked=checked);
+  updateBulkCount(prefix);
+}
+
+function sendBulkMsg(prefix,type){
+  const msg=$(prefix+'-bulk-text').value.trim();
+  if(!msg){toastMsg('⚠️ Andika ujumbe kwanza!');return;}
+  const sel=[...document.querySelectorAll('.'+prefix+'-bulk-chk:checked')];
+  if(!sel.length){toastMsg('⚠️ Chagua muumini angalau mmoja!');return;}
+  const phones=sel.map(c=>normPhone(c.dataset.simu)).filter(Boolean);
+  if(!phones.length){toastMsg('⚠️ Hakuna namba za simu kati ya waliochaguliwa!');return;}
+  if(type==='sms'){
+    window.location.href='sms:'+phones.join(',')+'?body='+encodeURIComponent(msg);
+  }else{
+    const links=sel.map(c=>{
+      const ph=normPhone(c.dataset.simu);
+      const nm=c.dataset.jina;
+      return ph?`<a href="https://wa.me/${ph}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;text-decoration:none;display:block;margin-bottom:6px;text-align:center;">${nm}</a>`
+               :`<div style="color:var(--gray);font-size:12px;padding:4px;">${nm} — Hakuna simu</div>`;
+    }).join('');
+    openMod('📱 Tuma WhatsApp kwa Waumini',`
+      <div style="background:#e0f2fe;border-radius:6px;padding:7px 10px;margin-bottom:10px;font-size:11px;color:#0369a1;">💡 Bonyeza jina la kila muumini kutuma WhatsApp moja kwa moja. Ujumbe umejazwa tayari.</div>
+      <div style="max-height:300px;overflow-y:auto;padding:4px 0;">${links}</div>
+      <button onclick="navigator.clipboard.writeText(${JSON.stringify(msg)}).then(()=>toastMsg('📋 Umenakiliwa!'))" class="btn btn-block" style="background:#6b7280;color:white;margin-top:10px;">📋 Nakili Ujumbe</button>`);
+  }
 }
 
 </script>
