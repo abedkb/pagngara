@@ -1469,9 +1469,15 @@ async function saveKanisaInfo(){
   const jina=$('pa-kanisa-jina').value.trim(),mahali=$('pa-kanisa-mahali').value.trim(),simu=$('pa-kanisa-simu').value.trim();
   if(!jina){setAl('al-pa-kanisa','Weka jina la kanisa','e');return;}
   const data={jina_kanisa:jina,mahali,simu_kanisa:simu};
-  if(kanisaSettings.id)await DB.patch('kanisa_settings',`id=eq.${kanisaSettings.id}`,data);
-  else{const r=await DB.post('kanisa_settings',data);if(Array.isArray(r)&&r[0])kanisaSettings=r[0];}
-  setAl('al-pa-kanisa','✅ Mipangilio imehifadhiwa!','s');toastMsg('✅ Mipangilio imehifadhiwa');
+  confirmSave('⚙️ Thibitisha Mipangilio ya Kanisa',[
+    ['Jina la Kanisa',jina],
+    ...(mahali?[['Mahali',mahali]]:[]),
+    ...(simu?[['Simu ya Kanisa',simu]]:[]),
+  ],async()=>{
+    if(kanisaSettings.id)await DB.patch('kanisa_settings',`id=eq.${kanisaSettings.id}`,data);
+    else{const r=await DB.post('kanisa_settings',data);if(Array.isArray(r)&&r[0])kanisaSettings=r[0];}
+    setAl('al-pa-kanisa','✅ Mipangilio imehifadhiwa!','s');toastMsg('✅ Mipangilio imehifadhiwa');
+  });
 }
 async function saveNenosiria(){
   const oldPw=$('pa-old-pw').value.trim(),newPw=$('pa-new-pw').value.trim();
@@ -1651,15 +1657,22 @@ async function tumaTangazo(){
   const kichwa=$('ka-title').value.trim(),maelezo=$('ka-body').value.trim();
   const tarehe=$('ka-tarehe').value||leo(),muhimu=$('ka-muhimu').value==='1';
   if(!kichwa||!maelezo){setAl('al-katangazo','Jaza kichwa na maelezo ya tangazo','e');return;}
-  setAl('al-katangazo','Inatuma kwa Mchungaji...','i');
-  try{
-    const ap=await DB.post('approvals',{aina:'tangazo',kichwa,maelezo_ap:maelezo,tarehe_tangazo:tarehe,muhimu,hali:'pending'});
-    if(!Array.isArray(ap)||!ap[0]){setAl('al-katangazo','Hitilafu. Jaribu tena.','e');return;}
-    await DB.post('matangazo',{kichwa,maelezo,tarehe_tangazo:tarehe,muhimu,hali:'pending',approval_id:ap[0].id,send_wa:$('ka-send-wa').checked,send_sms:$('ka-send-sms').checked});
-    setAl('al-katangazo','✅ Tangazo limetumwa kwa Mchungaji kwa idhini!','s');
-    $('ka-title').value='';$('ka-body').value='';
-    await loadKatibuData();renderKaHistoria();
-  }catch(e){setAl('al-katangazo','Hitilafu: '+e.message,'e');}
+  confirmSave('📢 Thibitisha Kutuma Tangazo',[
+    ['Kichwa la Tangazo',kichwa],
+    ['Tarehe',formatDate(tarehe)],
+    ['Muhimu',muhimu?'Ndiyo':'Hapana'],
+    ['Maelezo',maelezo.length>70?maelezo.slice(0,70)+'…':maelezo],
+  ],async()=>{
+    setAl('al-katangazo','Inatuma kwa Mchungaji...','i');
+    try{
+      const ap=await DB.post('approvals',{aina:'tangazo',kichwa,maelezo_ap:maelezo,tarehe_tangazo:tarehe,muhimu,hali:'pending'});
+      if(!Array.isArray(ap)||!ap[0]){setAl('al-katangazo','Hitilafu. Jaribu tena.','e');return;}
+      await DB.post('matangazo',{kichwa,maelezo,tarehe_tangazo:tarehe,muhimu,hali:'pending',approval_id:ap[0].id,send_wa:$('ka-send-wa').checked,send_sms:$('ka-send-sms').checked});
+      setAl('al-katangazo','✅ Tangazo limetumwa kwa Mchungaji kwa idhini!','s');
+      $('ka-title').value='';$('ka-body').value='';
+      await loadKatibuData();renderKaHistoria();
+    }catch(e){setAl('al-katangazo','Hitilafu: '+e.message,'e');}
+  });
 }
 function kaTab(tab){
   ['tangazo','historia','waumini','muhtasari','leo','fedha'].forEach(t=>{
@@ -1708,6 +1721,13 @@ async function katibuSajiliMuumini(){
   if(pw!==pw2){setAl('al-kasajili','Nenosiri hazifanani','e');return;}
   if(pw.length<6){setAl('al-kasajili','Nenosiri lazima iwe angalau herufi 6','e');return;}
 
+  confirmSave('👤 Thibitisha Usajili wa Muumini',[
+    ['Jina Kamili',jina],
+    ...(simu?[['Namba ya Simu',simu]]:[]),
+    ['Jinsia',jinsia||'Haijabainishwa'],
+    ...(email?[['Barua Pepe',email]]:[]),
+    ['Tarehe ya Kujiunga',formatDate(tarehe)],
+  ],async()=>{
   setAl('al-kasajili','Inasajili...','i');
   try{
     // If simu provided, check it's not already used
@@ -1742,6 +1762,7 @@ async function katibuSajiliMuumini(){
       toastMsg(`✅ ${jina} amesajiliwa — ${namba}`);
     }else{setAl('al-kasajili','Hitilafu ya usajili: '+(r&&r.message?r.message:'Jaribu tena.'),'e');}
   }catch(e){setAl('al-kasajili','Hitilafu: '+e.message,'e');}
+  }); // end confirmSave
 }
 
 // ═══════════════════════════════════════════
@@ -1856,20 +1877,33 @@ async function hifadhiJumla(){
   const tarehe=$('ha-jumla-tarehe').value||leo();
   const aina_ibada=$('ha-jumla-aina-ibada').value||'Ibada';
   const maelezo=$('ha-jumla-maelezo').value.trim();
-  setAl('al-hajumla','Inafanya kazi...','i');
-  try{
-    const r=await DB.post('jumla_ibada',{tarehe,aina_ibada,sadaka,shukrani,zaka,watoto,ujenzi,nyingine,maelezo});
-    if(r&&!Array.isArray(r)&&(r.code||r.message)){
-      setAl('al-hajumla','Hitilafu: '+(r.message||r.code),'e');
-    }else{
-      if(Array.isArray(r)&&r[0])allJumlaIbada.unshift(r[0]);
-      else{const fresh=await DB.get('jumla_ibada','order=tarehe.desc');if(Array.isArray(fresh))allJumlaIbada=fresh;}
-      setAl('al-hajumla','✅ Jumla ya ibada imehifadhiwa! Inaonekana kwenye dashboard za viongozi wote.','s');
-      ['ha-jumla-sadaka','ha-jumla-shukrani','ha-jumla-zaka','ha-jumla-watoto','ha-jumla-ujenzi','ha-jumla-nyingine','ha-jumla-maelezo','ha-jumla-aina-ibada'].forEach(id=>{$(id).value='';});
-      $('ha-jumla-preview').style.display='none';
-      renderJumlaHistoria();toastMsg('✅ Jumla ya ibada imehifadhiwa!');
-    }
-  }catch(e){setAl('al-hajumla','Hitilafu: '+e.message,'e');}
+  const rows=[
+    ['Tarehe',formatDate(tarehe)],
+    ['Aina ya Ibada',aina_ibada],
+    ...(sadaka>0?[['Sadaka',pesa(sadaka)]]:[]),
+    ...(zaka>0?[['Zaka / Fungu la Kumi',pesa(zaka)]]:[]),
+    ...(shukrani>0?[['Shukrani',pesa(shukrani)]]:[]),
+    ...(watoto>0?[['Watoto',pesa(watoto)]]:[]),
+    ...(ujenzi>0?[['Ujenzi',pesa(ujenzi)]]:[]),
+    ...(nyingine>0?[['Nyingine',pesa(nyingine)]]:[]),
+    ['JUMLA',pesa(jumla)],
+  ];
+  confirmSave('📋 Thibitisha Jumla ya Ibada',rows,async()=>{
+    setAl('al-hajumla','Inafanya kazi...','i');
+    try{
+      const r=await DB.post('jumla_ibada',{tarehe,aina_ibada,sadaka,shukrani,zaka,watoto,ujenzi,nyingine,maelezo});
+      if(r&&!Array.isArray(r)&&(r.code||r.message)){
+        setAl('al-hajumla','Hitilafu: '+(r.message||r.code),'e');
+      }else{
+        if(Array.isArray(r)&&r[0])allJumlaIbada.unshift(r[0]);
+        else{const fresh=await DB.get('jumla_ibada','order=tarehe.desc');if(Array.isArray(fresh))allJumlaIbada=fresh;}
+        setAl('al-hajumla','✅ Jumla ya ibada imehifadhiwa! Inaonekana kwenye dashboard za viongozi wote.','s');
+        ['ha-jumla-sadaka','ha-jumla-shukrani','ha-jumla-zaka','ha-jumla-watoto','ha-jumla-ujenzi','ha-jumla-nyingine','ha-jumla-maelezo','ha-jumla-aina-ibada'].forEach(id=>{$(id).value='';});
+        $('ha-jumla-preview').style.display='none';
+        renderJumlaHistoria();toastMsg('✅ Jumla ya ibada imehifadhiwa!');
+      }
+    }catch(e){setAl('al-hajumla','Hitilafu: '+e.message,'e');}
+  });
 }
 function renderJumlaHistoria(){
   const el=$('ha-jumla-historia');if(!el)return;
@@ -1911,6 +1945,7 @@ function haririshaJumlaIbada(id){
     <div id="hj-alert" style="margin-top:8px;"></div>`);
 }
 async function hifadhiJumlaIbada(id){
+  if(!confirm('Thibitisha kuhifadhi mabadiliko ya jumla ya ibada?'))return;
   const tarehe=$('hj-tarehe').value;
   if(!tarehe){setAl('hj-alert','Weka tarehe','e');return;}
   const sadaka=parseInt($('hj-sadaka').value)||0;
@@ -1990,34 +2025,50 @@ async function ingizaMchango(){
   if(!muId){setAl('al-haingiza','Chagua muumini kwanza','e');return;}
   if(!ainaId){setAl('al-haingiza','Chagua aina ya mchango','e');return;}
   if(!kiasi||kiasi<=0){setAl('al-haingiza','Weka kiasi sahihi','e');return;}
-  setAl('al-haingiza','Inafanya kazi...','i');
-  try{
-    const aina=allAina.find(a=>a.id===ainaId),muumini=allWaumini.find(w=>w.id===muId);
-    const ap=await DB.post('approvals',{aina:'mchango',kichwa:(aina?aina.jina:'Mchango')+' — '+(muumini||{}).jina_kamili,muumini_id:muId,aina_id:ainaId,kiasi,tarehe_mchango:tarehe,hali:'pending'});
-    if(!Array.isArray(ap)||!ap[0]){setAl('al-haingiza','Hitilafu. Jaribu tena.','e');return;}
-    const r=await DB.post('michango',{muumini_id:muId,aina_id:ainaId,aina_jina:aina?aina.jina:'',aina_icon:aina?aina.icon:'✝',kiasi,tarehe_mchango:tarehe,maelezo,hali:'pending',approval_id:ap[0].id});
-    if(Array.isArray(r)&&r[0]){
-      setAl('al-haingiza','✅ Mchango umehifadhiwa! Unasubiri idhini ya Mchungaji.','s');
-      allMichango.unshift(r[0]);$('ha-kiasi').value='';$('ha-maelezo').value='';
-      $('ha-mgeni-search').value='';$('ha-mgeni-sel').value='';$('ha-mgeni-chip').style.display='none';
-      loadHaHistoria();
-    }else setAl('al-haingiza','Hitilafu. Jaribu tena.','e');
-  }catch(e){setAl('al-haingiza','Hitilafu: '+e.message,'e');}
+  const aina=allAina.find(a=>a.id===ainaId),muumini=allWaumini.find(w=>w.id===muId);
+  const rows=[
+    ['Muumini',muumini?muumini.jina_kamili:'—'],
+    ['Aina ya Mchango',aina?(aina.icon+' '+aina.jina):'—'],
+    ['Kiasi',pesa(kiasi)],
+    ['Tarehe',formatDate(tarehe)],
+    ...(maelezo?[['Maelezo',maelezo]]:[]),
+  ];
+  confirmSave('💰 Thibitisha Mchango',rows,async()=>{
+    setAl('al-haingiza','Inafanya kazi...','i');
+    try{
+      const ap=await DB.post('approvals',{aina:'mchango',kichwa:(aina?aina.jina:'Mchango')+' — '+(muumini||{}).jina_kamili,muumini_id:muId,aina_id:ainaId,kiasi,tarehe_mchango:tarehe,hali:'pending'});
+      if(!Array.isArray(ap)||!ap[0]){setAl('al-haingiza','Hitilafu. Jaribu tena.','e');return;}
+      const r=await DB.post('michango',{muumini_id:muId,aina_id:ainaId,aina_jina:aina?aina.jina:'',aina_icon:aina?aina.icon:'✝',kiasi,tarehe_mchango:tarehe,maelezo,hali:'pending',approval_id:ap[0].id});
+      if(Array.isArray(r)&&r[0]){
+        setAl('al-haingiza','✅ Mchango umehifadhiwa! Unasubiri idhini ya Mchungaji.','s');
+        allMichango.unshift(r[0]);$('ha-kiasi').value='';$('ha-maelezo').value='';
+        $('ha-mgeni-search').value='';$('ha-mgeni-sel').value='';$('ha-mgeni-chip').style.display='none';
+        loadHaHistoria();
+      }else setAl('al-haingiza','Hitilafu. Jaribu tena.','e');
+    }catch(e){setAl('al-haingiza','Hitilafu: '+e.message,'e');}
+  });
 }
 async function ingizaMshahara(){
   const kichwa=$('ha-msh-kichwa').value.trim(),kiasi=parseInt($('ha-msh-kiasi').value);
   const tarehe=$('ha-msh-tarehe').value||leo(),maelezo=$('ha-msh-maelezo').value.trim();
   if(!kichwa){setAl('al-hamshahara','Weka kichwa / maelezo ya malipo','e');return;}
   if(!kiasi||kiasi<=0){setAl('al-hamshahara','Weka kiasi sahihi','e');return;}
-  setAl('al-hamshahara','Inafanya kazi...','i');
-  try{
-    const r=await DB.post('matumizi',{kichwa,kiasi,tarehe,aina_matumizi:'Mshahara_Mchungaji',maelezo});
-    if(Array.isArray(r)&&r[0]){
-      allMatumizi.unshift(r[0]);setAl('al-hamshahara','✅ Mshahara wa Mchungaji umehifadhiwa!','s');
-      $('ha-msh-kichwa').value='';$('ha-msh-kiasi').value='';$('ha-msh-maelezo').value='';
-      renderHaMshahara();toastMsg('👔 Mshahara umehifadhiwa');
-    }else setAl('al-hamshahara','Hitilafu. Jaribu tena.','e');
-  }catch(e){setAl('al-hamshahara','Hitilafu: '+e.message,'e');}
+  confirmSave('👔 Thibitisha Mshahara wa Mchungaji',[
+    ['Kichwa / Maelezo',kichwa],
+    ['Kiasi',pesa(kiasi)],
+    ['Tarehe',formatDate(tarehe)],
+    ...(maelezo?[['Maelezo ya Ziada',maelezo]]:[]),
+  ],async()=>{
+    setAl('al-hamshahara','Inafanya kazi...','i');
+    try{
+      const r=await DB.post('matumizi',{kichwa,kiasi,tarehe,aina_matumizi:'Mshahara_Mchungaji',maelezo});
+      if(Array.isArray(r)&&r[0]){
+        allMatumizi.unshift(r[0]);setAl('al-hamshahara','✅ Mshahara wa Mchungaji umehifadhiwa!','s');
+        $('ha-msh-kichwa').value='';$('ha-msh-kiasi').value='';$('ha-msh-maelezo').value='';
+        renderHaMshahara();toastMsg('👔 Mshahara umehifadhiwa');
+      }else setAl('al-hamshahara','Hitilafu. Jaribu tena.','e');
+    }catch(e){setAl('al-hamshahara','Hitilafu: '+e.message,'e');}
+  });
 }
 function renderHaMshahara(){
   const el=$('ha-mshahara-list');if(!el)return;
@@ -2035,15 +2086,23 @@ async function ingizaMatumizi(){
   const tarehe=$('ha-mat-tarehe').value||leo(),aina=$('ha-mat-aina').value,maelezo=$('ha-mat-maelezo').value.trim();
   if(!kichwa){setAl('al-hamatumizi','Weka kichwa cha matumizi','e');return;}
   if(!kiasi||kiasi<=0){setAl('al-hamatumizi','Weka kiasi sahihi','e');return;}
-  setAl('al-hamatumizi','Inafanya kazi...','i');
-  try{
-    const r=await DB.post('matumizi',{kichwa,kiasi,tarehe,aina_matumizi:aina,maelezo});
-    if(Array.isArray(r)&&r[0]){
-      allMatumizi.unshift(r[0]);setAl('al-hamatumizi','✅ Matumizi yamehifadhiwa!','s');
-      $('ha-mat-kichwa').value='';$('ha-mat-kiasi').value='';$('ha-mat-maelezo').value='';
-      renderHaMatumiziList();toastMsg('💸 Matumizi yamehifadhiwa');
-    }else setAl('al-hamatumizi','Hitilafu. Jaribu tena.','e');
-  }catch(e){setAl('al-hamatumizi','Hitilafu: '+e.message,'e');}
+  confirmSave('💸 Thibitisha Matumizi ya Kanisa',[
+    ['Kichwa',kichwa],
+    ['Aina ya Matumizi',aina||'Nyingine'],
+    ['Kiasi',pesa(kiasi)],
+    ['Tarehe',formatDate(tarehe)],
+    ...(maelezo?[['Maelezo',maelezo]]:[]),
+  ],async()=>{
+    setAl('al-hamatumizi','Inafanya kazi...','i');
+    try{
+      const r=await DB.post('matumizi',{kichwa,kiasi,tarehe,aina_matumizi:aina,maelezo});
+      if(Array.isArray(r)&&r[0]){
+        allMatumizi.unshift(r[0]);setAl('al-hamatumizi','✅ Matumizi yamehifadhiwa!','s');
+        $('ha-mat-kichwa').value='';$('ha-mat-kiasi').value='';$('ha-mat-maelezo').value='';
+        renderHaMatumiziList();toastMsg('💸 Matumizi yamehifadhiwa');
+      }else setAl('al-hamatumizi','Hitilafu. Jaribu tena.','e');
+    }catch(e){setAl('al-hamatumizi','Hitilafu: '+e.message,'e');}
+  });
 }
 function renderHaMatumiziList(){
   const el=$('ha-matumizi-list');if(!el)return;
@@ -2093,6 +2152,7 @@ async function hifadhiMatumizi(id){
   const kiasi=parseInt($('hmat-kiasi').value)||0;
   const tarehe=$('hmat-tarehe').value;
   if(!kichwa||!kiasi||!tarehe){setAl('hmat-alert','Jaza sehemu zote','e');return;}
+  if(!confirm('Thibitisha kuhifadhi mabadiliko ya matumizi?'))return;
   try{
     const patch={kichwa,aina_matumizi:$('hmat-aina').value,kiasi,tarehe,maelezo:$('hmat-maelezo').value.trim()};
     await DB.patch('matumizi',`id=eq.${id}`,patch);
@@ -2139,6 +2199,7 @@ async function hifadhiMchango(id){
   const kiasi=parseInt($('hm-kiasi').value)||0;
   const tarehe=$('hm-tarehe').value;
   if(!kiasi||!tarehe){setAl('hm-alert','Jaza kiasi na tarehe','e');return;}
+  if(!confirm('Thibitisha kuhifadhi mabadiliko ya mchango?'))return;
   try{
     const patch={kiasi,tarehe_mchango:tarehe,maelezo:$('hm-maelezo').value.trim()};
     if(selectedAina){patch.aina_id=selectedAina.id;patch.aina_jina=selectedAina.jina;patch.aina_icon=selectedAina.icon;}
@@ -2208,6 +2269,31 @@ function waTab(tab){
 }
 
 // ═══════════════════════════════════════════
+// THIBITISHA (CONFIRM SAVE HELPER)
+// ═══════════════════════════════════════════
+let _confirmCb=null;
+function confirmSave(title,rows,onYes){
+  _confirmCb=onYes;
+  const rowsHTML=rows.map(r=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:11px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:0.3px;">${r[0]}</span>
+      <span style="font-size:13px;font-weight:800;color:var(--navy);text-align:right;max-width:65%;word-break:break-word;">${r[1]}</span>
+    </div>`).join('');
+  openMod(title,`
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#FEF3C7;border-radius:8px;border:1px solid #FCD34D;margin-bottom:12px;">
+        <span style="font-size:20px;">⚠️</span>
+        <p style="font-size:12px;color:var(--brown);font-weight:700;">Hakikisha taarifa zifuatazo ni sahihi kabla ya kuhifadhi</p>
+      </div>
+      <div style="background:var(--cream);border-radius:8px;padding:8px 12px;border:1px solid var(--border);">${rowsHTML}</div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">✕ Rudi</button>
+      <button class="btn btn-green" style="flex:2;justify-content:center;" onclick="closeModDirect();setTimeout(()=>{_confirmCb&&_confirmCb();},80)">✅ Ndio, Hifadhi</button>
+    </div>`);
+}
+
+// ═══════════════════════════════════════════
 // RIPOTI
 // ═══════════════════════════════════════════
 function getFilteredMichango(){
@@ -2219,51 +2305,154 @@ function getFilteredMichango(){
     if(muId&&m.muumini_id!==muId)return false;return true;
   });
 }
+function getRipotiDateMap(){
+  const from=$('rp-from').value,to=$('rp-to').value;
+  const ainaId=$('rp-aina').value,muId=$('rp-muumini').value;
+  const michango=getFilteredMichango();
+  const jumlaIbada=(!muId&&!ainaId)?allJumlaIbada.filter(j=>{
+    if(from&&j.tarehe<from)return false;
+    if(to&&j.tarehe>to)return false;
+    return true;
+  }):[];
+  const dateMap={};
+  const add=(d,k,v)=>{if(!dateMap[d])dateMap[d]={sadaka:0,zaka:0,shukrani:0,watoto:0,ujenzi:0,nyingine:0};dateMap[d][k]+=v;};
+  michango.forEach(m=>{
+    const d=m.tarehe_mchango;
+    if(m.aina_icon==='\u{1f64f}')add(d,'sadaka',m.kiasi);
+    else if(m.aina_icon==='\u{1f4b0}')add(d,'zaka',m.kiasi);
+    else if(m.aina_icon==='\u{1f31f}')add(d,'shukrani',m.kiasi);
+    else if(m.aina_icon==='\u{1f476}')add(d,'watoto',m.kiasi);
+    else if(m.aina_icon==='\u{1f3d7}')add(d,'ujenzi',m.kiasi);
+    else add(d,'nyingine',m.kiasi);
+  });
+  jumlaIbada.forEach(j=>{
+    const d=j.tarehe;
+    if(j.sadaka)add(d,'sadaka',j.sadaka);
+    if(j.zaka)add(d,'zaka',j.zaka);
+    if(j.shukrani)add(d,'shukrani',j.shukrani);
+    if(j.watoto)add(d,'watoto',j.watoto);
+    if(j.ujenzi)add(d,'ujenzi',j.ujenzi);
+    if(j.nyingine)add(d,'nyingine',j.nyingine);
+  });
+  return dateMap;
+}
 function previewRipoti(){
-  const list=getFilteredMichango();const from=$('rp-from').value,to=$('rp-to').value;
-  const jumla=list.reduce((s,m)=>s+m.kiasi,0);
-  const matumizi=calcMatumiziTotal(allMatumizi,from,to);
+  const from=$('rp-from').value,to=$('rp-to').value;
+  const dateMap=getRipotiDateMap();
+  const dates=Object.keys(dateMap).sort();
   const kanisa=kanisaSettings.jina_kanisa||'PAG - NGARA MJINI';
-  const fs=calcCombinedSummary(list,from,to);
-  const rows=list.map((m,i)=>{const muumini=allWaumini.find(w=>w.id===m.muumini_id);return`<tr><td style="padding:8px;border:1px solid #ddd;">${i+1}</td><td style="padding:8px;border:1px solid #ddd;">${muumini?muumini.jina_kamili:'—'}</td><td style="padding:8px;border:1px solid #ddd;">${m.aina_icon||''} ${m.aina_jina||'—'}</td><td style="padding:8px;border:1px solid #ddd;text-align:right;"><strong>${pesa(m.kiasi)}</strong></td><td style="padding:8px;border:1px solid #ddd;">${formatDate(m.tarehe_mchango)}</td></tr>`;}).join('');
+  if(!dates.length){
+    $('ripoti-preview').innerHTML='<div class="card" style="text-align:center;padding:24px;color:var(--gray);font-size:13px;">Hakuna data katika kipindi kilichochaguliwa</div>';
+    return;
+  }
+  const totals={sadaka:0,zaka:0,shukrani:0,watoto:0,ujenzi:0,nyingine:0};
+  dates.forEach(d=>Object.keys(totals).forEach(k=>totals[k]+=dateMap[d][k]));
+  const jumlaYote=Object.values(totals).reduce((s,v)=>s+v,0);
+  const sz=totals.sadaka+totals.zaka;
+  const sz10=Math.round(sz*0.10);
+  const szBaada=sz-sz10;
+  const sz70=Math.round(szBaada*0.70);
+  const sz30=Math.round(szBaada*0.30);
+  const matumizi=calcMatumiziTotal(allMatumizi,from,to);
+  const mshahara=calcMshahariTotal(allMatumizi,from,to);
+  const salio70=sz70-mshahara;
+  const salio30=sz30-matumizi;
+  const cols=[
+    {k:'sadaka',label:'🙏 Sadaka',show:true},
+    {k:'zaka',label:'💰 Zaka',show:true},
+    {k:'shukrani',label:'🌟 Shukrani',show:totals.shukrani>0},
+    {k:'watoto',label:'👶 Watoto',show:totals.watoto>0},
+    {k:'ujenzi',label:'🏗 Ujenzi',show:totals.ujenzi>0},
+    {k:'nyingine',label:'✝ Nyingine',show:totals.nyingine>0},
+  ].filter(c=>c.show);
+  const thCells=cols.map(c=>`<th style="padding:9px;border:1px solid #334;text-align:right;white-space:nowrap;">${c.label}</th>`).join('');
+  const tfCells=cols.map(c=>`<td style="padding:8px;border:1px solid #334;text-align:right;font-weight:800;color:#F0C060;">${pesa(totals[c.k])}</td>`).join('');
+  const rows=dates.map((d,i)=>{
+    const r=dateMap[d];
+    const rowJumla=Object.values(r).reduce((s,v)=>s+v,0);
+    const cells=cols.map(c=>`<td style="padding:7px 8px;border:1px solid #ddd;text-align:right;">${r[c.k]>0?pesa(r[c.k]):'\u2014'}</td>`).join('');
+    return `<tr style="background:${i%2===0?'white':'#f9f9f9'};"><td style="padding:7px 8px;border:1px solid #ddd;white-space:nowrap;">${formatDate(d)}</td>${cells}<td style="padding:7px 8px;border:1px solid #ddd;text-align:right;font-weight:800;color:var(--navy);">${pesa(rowJumla)}</td></tr>`;
+  }).join('');
   $('ripoti-preview').innerHTML=`
     <div style="background:white;border-radius:14px;padding:24px;border:1px solid var(--border);">
       <div style="text-align:center;margin-bottom:20px;border-bottom:2px solid var(--navy);padding-bottom:16px;">
-        <div style="font-size:28px;margin-bottom:4px;">✝</div>
+        <div style="font-size:28px;margin-bottom:4px;">&#10011;</div>
         <h2 style="font-family:'Lora',serif;color:var(--navy);font-size:18px;">${kanisa}</h2>
-        <p style="color:var(--gray);font-size:12px;">RIPOTI YA FEDHA</p>
-        <p style="font-size:11px;color:var(--gray);margin-top:4px;">Kipindi: ${formatDate(from)} — ${formatDate(to)}</p>
+        <p style="color:var(--gray);font-size:12px;font-weight:800;letter-spacing:1px;">RIPOTI YA FEDHA</p>
+        <p style="font-size:11px;color:var(--gray);margin-top:4px;">Kipindi: ${formatDate(from)} &#8212; ${formatDate(to)}</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
-        <div style="background:var(--cream);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--navy);">${list.length}</div><div style="font-size:10px;color:var(--gray);text-transform:uppercase;font-weight:700;margin-top:4px;">Rekodi</div></div>
-        <div style="background:var(--green-pale);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--green);">${pesa(jumla)}</div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:700;margin-top:4px;">Jumla Michango</div></div>
+        <div style="background:var(--cream);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--navy);">${dates.length}</div><div style="font-size:10px;color:var(--gray);text-transform:uppercase;font-weight:700;margin-top:4px;">Siku za Michango</div></div>
+        <div style="background:var(--green-pale);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--green);">${pesa(jumlaYote)}</div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:700;margin-top:4px;">Jumla Michango</div></div>
         <div style="background:var(--red-pale);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--red);">${pesa(matumizi)}</div><div style="font-size:10px;color:var(--red);text-transform:uppercase;font-weight:700;margin-top:4px;">Jumla Matumizi</div></div>
       </div>
-      <div style="background:var(--cream);border-radius:10px;padding:14px;margin-bottom:16px;">
-        <p style="font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">🔢 Uchambuzi wa Sadaka na Zaka</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
-          <div>Sadaka + Fungu la Kumi:</div><div style="font-weight:700;text-align:right;">${pesa(fs.sadakaZaka)}</div>
-          <div>10% ya Jumla:</div><div style="font-weight:700;text-align:right;color:var(--red);">${pesa(fs.asilimia10)}</div>
-          <div>Salio Baada ya 10%:</div><div style="font-weight:700;text-align:right;color:var(--green);">${pesa(fs.baada10)}</div>
-          <div>70% ya Salio:</div><div style="font-weight:700;text-align:right;color:var(--purple);">${pesa(fs.asilimia70)}</div>
-          <div>30% ya Salio:</div><div style="font-weight:700;text-align:right;color:var(--gold);">${pesa(fs.asilimia30)}</div>
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead><tr style="background:var(--navy);color:white;"><th style="padding:9px;text-align:left;border:1px solid #334;white-space:nowrap;">Tarehe</th>${thCells}<th style="padding:9px;text-align:right;border:1px solid #334;">Jumla</th></tr></thead>
+          <tbody>${rows}</tbody>
+          <tfoot><tr style="background:var(--navy);color:white;"><td style="padding:8px;border:1px solid #334;font-weight:800;font-size:13px;">JUMLA YOTE</td>${tfCells}<td style="padding:8px;border:1px solid #334;text-align:right;font-weight:800;font-size:13px;color:#F0C060;">${pesa(jumlaYote)}</td></tr></tfoot>
+        </table>
+      </div>
+      <div style="background:var(--cream);border-radius:12px;padding:16px;border:1px solid var(--border);">
+        <p style="font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Uchambuzi wa Sadaka + Zaka</p>
+        <p style="font-size:11px;color:var(--gray);margin-bottom:10px;">Kipindi: ${formatDate(from)} &#8212; ${formatDate(to)}</p>
+        <div style="font-size:11px;background:#E3F2FD;border-radius:6px;padding:8px 10px;margin-bottom:10px;color:var(--navy);">Msingi wa Hesabu: Sadaka + Zaka tu = <strong>${pesa(sz)}</strong></div>
+        <div style="display:grid;gap:8px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--navy);border-radius:8px;"><span style="color:rgba(255,255,255,0.85);">Jumla ya Sadaka + Zaka</span><span style="color:#F0C060;font-weight:800;font-family:'Lora',serif;font-size:14px;">${pesa(sz)}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#FFE5E8;border-radius:8px;"><span style="color:var(--red);">10% (Akiba / Kinga)</span><span style="color:var(--red);font-weight:800;font-family:'Lora',serif;font-size:14px;">${pesa(sz10)}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#D8F3DC;border-radius:8px;"><span style="color:var(--green);">Salio Baada ya 10%</span><span style="color:var(--green);font-weight:800;font-family:'Lora',serif;font-size:14px;">${pesa(szBaada)}</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="padding:10px 12px;background:#EDE9FE;border-radius:8px;"><div style="font-size:10px;color:var(--purple);font-weight:800;margin-bottom:3px;">70% &#8212; Mchungaji</div><div style="color:var(--purple);font-weight:800;font-family:'Lora',serif;font-size:15px;">${pesa(sz70)}</div></div>
+            <div style="padding:10px 12px;background:#FBF0D8;border-radius:8px;"><div style="font-size:10px;color:var(--brown);font-weight:800;margin-bottom:3px;">30% &#8212; Matumizi ya Kanisa</div><div style="color:var(--brown);font-weight:800;font-family:'Lora',serif;font-size:15px;">${pesa(sz30)}</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#EDE9FE;border:1px solid #C4B5FD;border-radius:8px;"><span style="color:var(--purple);">Mshahara wa Mchungaji (Uliolipwa)</span><span style="color:var(--purple);font-weight:800;font-family:'Lora',serif;font-size:14px;">${pesa(mshahara)}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 12px;border-radius:8px;background:${salio70>=0?'#EDE9FE':'#FFE5E8'};border:1.5px solid ${salio70>=0?'#C4B5FD':'#F4A0A5'};"><span style="font-weight:800;color:${salio70>=0?'var(--purple)':'var(--red)'};">SALIO LA 70% (Baada ya Mshahara)</span><span style="font-weight:800;font-family:'Lora',serif;font-size:15px;color:${salio70>=0?'var(--purple)':'var(--red)'};">${pesa(salio70)}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#FFE5E8;border:1px solid #F4A0A5;border-radius:8px;"><span style="color:var(--red);">Matumizi ya Kanisa (Yaliyotumika)</span><span style="color:var(--red);font-weight:800;font-family:'Lora',serif;font-size:14px;">${pesa(matumizi)}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 12px;border-radius:8px;background:${salio30>=0?'#FBF0D8':'#FFE5E8'};border:1.5px solid ${salio30>=0?'var(--gold)':'#F4A0A5'};"><span style="font-weight:800;color:${salio30>=0?'var(--brown)':'var(--red)'};">SALIO LA 30% (Baada ya Matumizi)</span><span style="font-weight:800;font-family:'Lora',serif;font-size:15px;color:${salio30>=0?'var(--brown)':'var(--red)'};">${pesa(salio30)}</span></div>
         </div>
       </div>
-      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">
-        <thead><tr style="background:var(--navy);color:white;"><th style="padding:9px;text-align:left;border:1px solid #334;">#</th><th style="padding:9px;text-align:left;border:1px solid #334;">Muumini</th><th style="padding:9px;text-align:left;border:1px solid #334;">Aina</th><th style="padding:9px;text-align:right;border:1px solid #334;">Kiasi</th><th style="padding:9px;text-align:left;border:1px solid #334;">Tarehe</th></tr></thead>
-        <tbody>${rows}</tbody>
-        <tfoot><tr style="background:var(--cream);"><td colspan="3" style="padding:9px;border:1px solid #ddd;font-weight:800;font-size:13px;">JUMLA YOTE</td><td style="padding:9px;border:1px solid #ddd;text-align:right;font-weight:800;font-size:13px;color:var(--green);">${pesa(jumla)}</td><td style="border:1px solid #ddd;"></td></tr></tfoot>
-      </table></div>
-      <p style="text-align:center;font-size:10px;color:var(--gray);margin-top:14px;">Ripoti ilitengenezwa: ${new Date().toLocaleString('sw-TZ')} · Powered by AbedTech</p>
+      <p style="text-align:center;font-size:10px;color:var(--gray);margin-top:14px;">Ripoti ilitengenezwa: ${new Date().toLocaleString('sw-TZ')} &middot; Powered by AbedTech</p>
     </div>`;
 }
 function downloadRipoti(){
-  const list=getFilteredMichango();if(!list.length){toastMsg('Hakuna data ya kupakua');return;}
-  let csv='#,Muumini,Namba ya Muumini,Aina,Kiasi (TZS),Tarehe\n';
-  list.forEach((m,i)=>{const muumini=allWaumini.find(w=>w.id===m.muumini_id)||{};csv+=`${i+1},"${muumini.jina_kamili||''}","${muumini.namba_muumini||''}","${m.aina_jina||''}",${m.kiasi},"${m.tarehe_mchango||''}"\n`;});
-  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
-  const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`Ripoti_PAG_NGARA_${$('rp-from').value}_${$('rp-to').value}.csv`;link.click();
-  toastMsg('📥 CSV imepakuliwa!');
+  const from=$('rp-from').value,to=$('rp-to').value;
+  const dateMap=getRipotiDateMap();
+  const dates=Object.keys(dateMap).sort();
+  if(!dates.length){toastMsg('Hakuna data ya kupakua');return;}
+  const totals={sadaka:0,zaka:0,shukrani:0,watoto:0,ujenzi:0,nyingine:0};
+  dates.forEach(d=>Object.keys(totals).forEach(k=>totals[k]+=dateMap[d][k]));
+  const jumlaYote=Object.values(totals).reduce((s,v)=>s+v,0);
+  const sz=totals.sadaka+totals.zaka;
+  const sz10=Math.round(sz*0.10);
+  const szBaada=sz-sz10;
+  const sz70=Math.round(szBaada*0.70);
+  const sz30=Math.round(szBaada*0.30);
+  const matumizi=calcMatumiziTotal(allMatumizi,from,to);
+  const mshahara=calcMshahariTotal(allMatumizi,from,to);
+  const salio70=sz70-mshahara;
+  const salio30=sz30-matumizi;
+  const kanisa=kanisaSettings.jina_kanisa||'PAG - NGARA MJINI';
+  let csv=`"${kanisa}"\n"RIPOTI YA FEDHA"\n"Kipindi: ${from} hadi ${to}"\n\n`;
+  csv+=`Tarehe,Sadaka,Zaka,Shukrani,Watoto,Ujenzi,Nyingine,Jumla\n`;
+  dates.forEach(d=>{
+    const r=dateMap[d];
+    const rowJumla=Object.values(r).reduce((s,v)=>s+v,0);
+    csv+=`"${d}",${r.sadaka},${r.zaka},${r.shukrani},${r.watoto},${r.ujenzi},${r.nyingine},${rowJumla}\n`;
+  });
+  csv+=`"JUMLA YOTE",${totals.sadaka},${totals.zaka},${totals.shukrani},${totals.watoto},${totals.ujenzi},${totals.nyingine},${jumlaYote}\n`;
+  csv+=`\n"=== UCHAMBUZI WA SADAKA + ZAKA ==="\n`;
+  csv+=`"Jumla ya Sadaka + Zaka",${sz}\n`;
+  csv+=`"10% (Akiba/Kinga)",${sz10}\n`;
+  csv+=`"Salio Baada ya 10%",${szBaada}\n`;
+  csv+=`"70% - Mchungaji (Bajeti)",${sz70}\n`;
+  csv+=`"30% - Matumizi ya Kanisa (Bajeti)",${sz30}\n`;
+  csv+=`"Mshahara wa Mchungaji (Uliolipwa)",${mshahara}\n`;
+  csv+=`"Salio la 70% (Baada ya Mshahara)",${salio70}\n`;
+  csv+=`"Matumizi ya Kanisa (Yaliyotumika)",${matumizi}\n`;
+  csv+=`"Salio la 30% (Baada ya Matumizi)",${salio30}\n`;
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`Ripoti_PAG_${$('rp-from').value}_${$('rp-to').value}.csv`;link.click();
+  toastMsg('Ripoti imepakuliwa!');
 }
 function printRipoti(){previewRipoti();setTimeout(()=>window.print(),500);}
 
