@@ -933,14 +933,43 @@ function copyText(txt){navigator.clipboard.writeText(txt).then(()=>toastMsg('�
 // ═══════════════════════════════════════════
 // FINANCE CALCULATIONS
 // ═══════════════════════════════════════════
+const _pad=n=>String(n).padStart(2,'0');
+const _localDate=d=>`${d.getFullYear()}-${_pad(d.getMonth()+1)}-${_pad(d.getDate())}`;
 function getWeekRange(){
   const now=new Date(),day=now.getDay(),diff=now.getDate()-day;
-  const start=new Date(now.setDate(diff)),end=new Date(now.setDate(diff+6));
-  return{start:start.toISOString().slice(0,10),end:end.toISOString().slice(0,10)};
+  const start=new Date(now.getFullYear(),now.getMonth(),diff);
+  const end=new Date(now.getFullYear(),now.getMonth(),diff+6);
+  return{start:_localDate(start),end:_localDate(end)};
 }
 function getMonthRange(){
+  const now=new Date();const y=now.getFullYear(),m=now.getMonth()+1;
+  const lastDay=new Date(y,m,0).getDate();
+  return{start:`${y}-${_pad(m)}-01`,end:`${y}-${_pad(m)}-${_pad(lastDay)}`};
+}
+function getMonthRangeFor(yyyymm){
+  if(!yyyymm)return getMonthRange();
+  const[y,m]=yyyymm.split('-');const yi=parseInt(y),mi=parseInt(m);
+  const lastDay=new Date(yi,mi,0).getDate();
+  return{start:`${y}-${_pad(mi)}-01`,end:`${y}-${_pad(mi)}-${_pad(lastDay)}`};
+}
+function mweziLabel(yyyymm){
+  if(!yyyymm)return '';
+  const[y,m]=yyyymm.split('-');
+  return new Date(parseInt(y),parseInt(m)-1,1).toLocaleDateString('sw-TZ',{month:'long',year:'numeric'});
+}
+function getAvailableMonths(){
+  const months=new Set();
   const now=new Date();
-  return{start:new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10),end:new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().slice(0,10)};
+  months.add(`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`);
+  allMichango.forEach(m=>{if(m.tarehe_mchango)months.add(m.tarehe_mchango.slice(0,7));});
+  allMatumizi.forEach(m=>{if(m.tarehe)months.add(m.tarehe.slice(0,7));});
+  allJumlaIbada.forEach(j=>{if(j.tarehe)months.add(j.tarehe.slice(0,7));});
+  return Array.from(months).sort().reverse();
+}
+function changeFedhaMonth(yyyymm,containerId){
+  const el=$(containerId);if(!el)return;
+  if(yyyymm)el.dataset.fedhaMonth=yyyymm;else delete el.dataset.fedhaMonth;
+  renderFedhaViongozi(containerId);
 }
 function calcFinanceSummary(michangoList){
   // Include both individual michango AND jumla ya ibada (ina muumini_id=null)
@@ -961,6 +990,7 @@ function calcFinanceSummary(michangoList){
 
 function calcJumlaIbadaForRange(fromDate,toDate){
   return allJumlaIbada.filter(j=>{
+    if(!j.tarehe)return false;
     if(fromDate&&j.tarehe<fromDate)return false;
     if(toDate&&j.tarehe>toDate)return false;
     return true;
@@ -1034,13 +1064,17 @@ function renderIbadaLeo(containerId){
 }
 
 function renderFedhaViongozi(containerId){
-  const mr=getMonthRange();
-  const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
+  const now=new Date();
+  const defaultMwezi=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const el=$(containerId);if(!el)return;
+  const selMwezi=el.dataset.fedhaMonth||defaultMwezi;
+  const mr=getMonthRangeFor(selMwezi);
+  const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango&&m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
   const fs=calcCombinedSummary(michangoMwezi,mr.start,mr.end);
   const matMwezi=calcMatumiziTotal(allMatumizi,mr.start,mr.end);
   const mshMwezi=calcMshahariTotal(allMatumizi,mr.start,mr.end);
-  const el=$(containerId);if(!el)return;
-  const mwezi=new Date().toLocaleDateString('sw-TZ',{month:'long',year:'numeric'});
+  const mwezi=mweziLabel(selMwezi);
+  const availMonths=getAvailableMonths();
   const sz=fs.sadakaZaka;
   const sz10=Math.round(sz*0.10);
   const szBaada=sz-sz10;
@@ -1050,7 +1084,15 @@ function renderFedhaViongozi(containerId){
   const salio30=sz30-matMwezi;
   el.innerHTML=`
     <div class="section-header"><div class="sh-icon">💰</div><div><div class="sh-title">Uchambuzi wa Fedha — ${mwezi}</div><div class="sh-sub">Jumla ya Michango yote na Mgawanyo</div></div></div>
-    <div class="card"><div class="card-title">📊 Jumla ya Michango kwa Mwezi (${mwezi})</div>
+    <div class="card" style="padding:12px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">📅 Chagua Kipindi:</span>
+        <select class="fsel" style="flex:1;min-width:180px;padding:8px 12px;font-size:13px;font-weight:700;border-color:var(--gold);" onchange="changeFedhaMonth(this.value,'${containerId}')">
+          ${availMonths.map(m=>`<option value="${m}"${m===selMwezi?' selected':''}>${mweziLabel(m)}${m===defaultMwezi?' (Sasa)':''}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">📊 Jumla ya Michango — ${mwezi}</div>
       <div class="fin-grid">
         <div class="fin-card green"><div class="fin-label">🙏 Sadaka za Kawaida</div><div class="fin-amount">${pesa(fs.sadaka)}</div></div>
         <div class="fin-card gold"><div class="fin-label">💰 Fungu la Kumi (Zaka)</div><div class="fin-amount">${pesa(fs.zaka)}</div></div>
@@ -1077,7 +1119,7 @@ function renderFedhaViongozi(containerId){
       <div class="card-title" style="color:var(--purple);">👔 Mshahara wa Mchungaji (70%)</div>
       <div style="display:grid;gap:8px;">
         <div class="fin-card purple"><div class="fin-label">🟣 Bajeti ya 70% (Mshahara)</div><div class="fin-amount">${pesa(sz70)}</div></div>
-        <div class="fin-card red"><div class="fin-label">👔 Mshahara Uliolipwa Mwezi Huu</div><div class="fin-amount">${pesa(mshMwezi)}</div></div>
+        <div class="fin-card red"><div class="fin-label">👔 Mshahara Uliolipwa — ${mwezi}</div><div class="fin-amount">${pesa(mshMwezi)}</div></div>
         <div style="border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:${salio70>=0?'#EDE9FE':'#FFE5E8'};border:1px solid ${salio70>=0?'#C4B5FD':'#F4A0A5'};">
           <span style="font-size:13px;font-weight:800;color:${salio70>=0?'var(--purple)':'var(--red)'};">SALIO LA 70% (Mshahara)</span>
           <span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:${salio70>=0?'var(--purple)':'var(--red)'};">${pesa(salio70)}</span>
@@ -1088,7 +1130,7 @@ function renderFedhaViongozi(containerId){
       <div class="card-title" style="color:var(--brown);">💸 Matumizi ya Kanisa (30%)</div>
       <div style="display:grid;gap:8px;">
         <div class="fin-card gold"><div class="fin-label">🟡 Bajeti ya 30% (Matumizi ya Kanisa)</div><div class="fin-amount">${pesa(sz30)}</div></div>
-        <div class="fin-card red"><div class="fin-label">📉 Matumizi Yaliyotumika Mwezi Huu</div><div class="fin-amount">${pesa(matMwezi)}</div></div>
+        <div class="fin-card red"><div class="fin-label">📉 Matumizi Yaliyotumika — ${mwezi}</div><div class="fin-amount">${pesa(matMwezi)}</div></div>
         <div style="border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:${salio30>=0?'var(--gold-pale)':'#FFE5E8'};border:1px solid ${salio30>=0?'var(--gold)':'#F4A0A5'};">
           <span style="font-size:13px;font-weight:800;color:${salio30>=0?'var(--brown)':'var(--red)'};">SALIO LA 30% (Matumizi ya Kanisa)</span>
           <span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:${salio30>=0?'var(--brown)':'var(--red)'};">${pesa(salio30)}</span>
@@ -1099,7 +1141,7 @@ function renderFedhaViongozi(containerId){
 
 function renderWikiSummary(containerId){
   const wr=getWeekRange();
-  const michangoWiki=allMichango.filter(m=>m.tarehe_mchango>=wr.start&&m.tarehe_mchango<=wr.end);
+  const michangoWiki=allMichango.filter(m=>m.tarehe_mchango&&m.tarehe_mchango>=wr.start&&m.tarehe_mchango<=wr.end);
   const fs=calcCombinedSummary(michangoWiki,wr.start,wr.end);
   const matWiki=calcMatumiziTotal(allMatumizi,wr.start,wr.end);
   const el=$(containerId);if(!el)return;
@@ -1127,7 +1169,7 @@ function renderWikiSummary(containerId){
 
 function renderMweziSummary(containerId){
   const mr=getMonthRange();
-  const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
+  const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango&&m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
   const fs=calcCombinedSummary(michangoMwezi,mr.start,mr.end);
   const matMwezi=calcMatumiziTotal(allMatumizi,mr.start,mr.end);
   const el=$(containerId);if(!el)return;
@@ -1493,7 +1535,7 @@ function paTab(tab){
   });
   if(tab==='waumini'){renderPaWaumini();renderBulkList('pa');}
   if(tab==='leo')renderIbadaLeo('pa-leo-content');
-  if(tab==='fedha')renderFedhaViongozi('pa-fedha-content');
+  if(tab==='fedha'){const c=$('pa-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('pa-fedha-content');}
 }
 
 // ═══════════════════════════════════════════
@@ -1687,7 +1729,7 @@ function kaTab(tab){
     kaGenerateNamba();
   }
   if(tab==='leo')renderIbadaLeo('ka-leo-content');
-  if(tab==='fedha')renderFedhaViongozi('ka-fedha-content');
+  if(tab==='fedha'){const c=$('ka-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('ka-fedha-content');}
   if(tab==='muhtasari')loadMuhtasari();
 }
 
@@ -2225,7 +2267,7 @@ function haTab(tab){
     const b=$('ha-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
   if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini'){renderHaWaumini();renderBulkList('ha');}
-  if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha')renderFedhaViongozi('ha-fedha-content');
+  if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha'){const c=$('ha-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('ha-fedha-content');}
   if(tab==='maombi')renderHaOmbiList();if(tab==='jumla')renderJumlaHistoria();
   if(tab==='zaka')initZakaTab();
 }
@@ -2264,7 +2306,7 @@ function waTab(tab){
     const b=$('wa-tab-'+t);if(b)b.classList.toggle('active',t===tab);
   });
   if(tab==='leo')renderIbadaLeo('wa-leo-content');if(tab==='wiki')renderWikiSummary('wa-wiki-content');
-  if(tab==='mwezi')renderMweziSummary('wa-mwezi-content');if(tab==='fedha')renderFedhaViongozi('wa-fedha-content');
+  if(tab==='mwezi')renderMweziSummary('wa-mwezi-content');if(tab==='fedha'){const c=$('wa-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('wa-fedha-content');}
   if(tab==='matangazo')renderWazeeMatangazo();
 }
 
