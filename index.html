@@ -640,6 +640,7 @@ tr:hover td{background:var(--warm);}
         </div>
       </div>
       <div class="card"><div class="card-title">📋 Historia ya Jumla za Ibada</div><div id="ha-jumla-historia"></div></div>
+
     </div>
 
     <!-- MAOMBI YA WAUMINI (Hazina inaapprove) -->
@@ -970,6 +971,18 @@ function changeFedhaMonth(yyyymm,containerId){
   const el=$(containerId);if(!el)return;
   if(yyyymm)el.dataset.fedhaMonth=yyyymm;else delete el.dataset.fedhaMonth;
   renderFedhaViongozi(containerId);
+}
+function getAvailableJumlaMonths(){
+  const months=new Set();
+  const now=new Date();
+  months.add(`${now.getFullYear()}-${_pad(now.getMonth()+1)}`);
+  allJumlaIbada.forEach(j=>{if(j.tarehe)months.add(j.tarehe.slice(0,7));});
+  return Array.from(months).sort().reverse();
+}
+function changeJumlaHistoriaMwezi(yyyymm){
+  const el=$('ha-jumla-historia');if(!el)return;
+  if(yyyymm)el.dataset.mwezi=yyyymm;else delete el.dataset.mwezi;
+  renderJumlaHistoria();
 }
 function calcFinanceSummary(michangoList){
   // Include both individual michango AND jumla ya ibada (ina muumini_id=null)
@@ -1949,22 +1962,54 @@ async function hifadhiJumla(){
 }
 function renderJumlaHistoria(){
   const el=$('ha-jumla-historia');if(!el)return;
-  if(!allJumlaIbada.length){el.innerHTML='<p style="color:var(--gray);text-align:center;padding:16px;font-size:13px;">Bado hakuna jumla zilizohifadhiwa</p>';return;}
-  el.innerHTML=allJumlaIbada.slice(0,20).map(j=>`
-    <div class="jumla-card" style="margin-bottom:10px;">
-      <div class="jc-title">⛪ ${j.aina_ibada||'Ibada'} — ${formatDate(j.tarehe)}</div>
-      ${j.sadaka>0?`<div class="jc-row"><span class="jc-key">🙏 Sadaka ya Kawaida</span><span class="jc-val">${pesa(j.sadaka)}</span></div>`:''}
-      ${j.shukrani>0?`<div class="jc-row"><span class="jc-key">🌟 Sadaka ya Shukrani</span><span class="jc-val">${pesa(j.shukrani)}</span></div>`:''}
-      ${j.zaka>0?`<div class="jc-row"><span class="jc-key">💰 Fungu la Kumi/Zaka</span><span class="jc-val">${pesa(j.zaka)}</span></div>`:''}
-      ${j.watoto>0?`<div class="jc-row"><span class="jc-key">👶 Sadaka ya Watoto</span><span class="jc-val">${pesa(j.watoto)}</span></div>`:''}
-      ${j.ujenzi>0?`<div class="jc-row"><span class="jc-key">🏗 Mchango wa Ujenzi</span><span class="jc-val">${pesa(j.ujenzi)}</span></div>`:''}
-      ${j.nyingine>0?`<div class="jc-row"><span class="jc-key">✝ Michango Mingine</span><span class="jc-val">${pesa(j.nyingine)}</span></div>`:''}
-      <div class="jc-total"><span class="jc-key">JUMLA</span><span class="jc-val">${pesa(j.jumla)}</span></div>
-      <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px;">
-        <button class="btn btn-sky btn-sm" onclick="haririshaJumlaIbada('${j.id}')">✏️ Hariri</button>
-        <button class="btn btn-red btn-sm" onclick="futaJumlaIbada('${j.id}')">🗑 Futa</button>
-      </div>
-    </div>`).join('');
+  const now=new Date();
+  const defaultMwezi=`${now.getFullYear()}-${_pad(now.getMonth()+1)}`;
+  const selMwezi=el.dataset.mwezi||defaultMwezi;
+  const label=mweziLabel(selMwezi);
+  const availMonths=getAvailableJumlaMonths();
+  const filtered=allJumlaIbada.filter(j=>j.tarehe&&j.tarehe.slice(0,7)===selMwezi);
+  const tot=filtered.reduce((a,j)=>({
+    sadaka:a.sadaka+(j.sadaka||0),shukrani:a.shukrani+(j.shukrani||0),zaka:a.zaka+(j.zaka||0),
+    watoto:a.watoto+(j.watoto||0),ujenzi:a.ujenzi+(j.ujenzi||0),nyingine:a.nyingine+(j.nyingine||0),jumla:a.jumla+(j.jumla||0)
+  }),{sadaka:0,shukrani:0,zaka:0,watoto:0,ujenzi:0,nyingine:0,jumla:0});
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+      <span style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">📅 Chagua Mwezi:</span>
+      <select class="fsel" style="flex:1;min-width:160px;padding:8px 12px;font-size:13px;font-weight:700;border-color:var(--gold);" onchange="changeJumlaHistoriaMwezi(this.value)">
+        ${availMonths.map(m=>`<option value="${m}"${m===selMwezi?' selected':''}>${mweziLabel(m)}${m===defaultMwezi?' (Sasa)':''}</option>`).join('')}
+      </select>
+    </div>
+    ${filtered.length===0
+      ?`<p style="color:var(--gray);text-align:center;padding:20px;font-size:13px;">Hakuna jumla za ibada kwa <strong>${label}</strong></p>`
+      :`${filtered.map(j=>`
+      <div class="jumla-card" style="margin-bottom:10px;">
+        <div class="jc-title">⛪ ${j.aina_ibada||'Ibada'} — ${formatDate(j.tarehe)}</div>
+        ${j.sadaka>0?`<div class="jc-row"><span class="jc-key">🙏 Sadaka ya Kawaida</span><span class="jc-val">${pesa(j.sadaka)}</span></div>`:''}
+        ${j.shukrani>0?`<div class="jc-row"><span class="jc-key">🌟 Sadaka ya Shukrani</span><span class="jc-val">${pesa(j.shukrani)}</span></div>`:''}
+        ${j.zaka>0?`<div class="jc-row"><span class="jc-key">💰 Fungu la Kumi/Zaka</span><span class="jc-val">${pesa(j.zaka)}</span></div>`:''}
+        ${j.watoto>0?`<div class="jc-row"><span class="jc-key">👶 Sadaka ya Watoto</span><span class="jc-val">${pesa(j.watoto)}</span></div>`:''}
+        ${j.ujenzi>0?`<div class="jc-row"><span class="jc-key">🏗 Mchango wa Ujenzi</span><span class="jc-val">${pesa(j.ujenzi)}</span></div>`:''}
+        ${j.nyingine>0?`<div class="jc-row"><span class="jc-key">✝ Michango Mingine</span><span class="jc-val">${pesa(j.nyingine)}</span></div>`:''}
+        <div class="jc-total"><span class="jc-key">JUMLA</span><span class="jc-val">${pesa(j.jumla)}</span></div>
+        <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px;">
+          <button class="btn btn-sky btn-sm" onclick="haririshaJumlaIbada('${j.id}')">✏️ Hariri</button>
+          <button class="btn btn-red btn-sm" onclick="futaJumlaIbada('${j.id}')">🗑 Futa</button>
+        </div>
+      </div>`).join('')}
+      ${filtered.length>1?`<div style="background:var(--navy);border-radius:10px;padding:14px;margin-top:4px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">📊 Muhtasari wa ${label}</div>
+        ${tot.sadaka>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">🙏 Sadaka ya Kawaida</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.sadaka)}</span></div>`:''}
+        ${tot.shukrani>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">🌟 Sadaka ya Shukrani</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.shukrani)}</span></div>`:''}
+        ${tot.zaka>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">💰 Fungu la Kumi/Zaka</span><span style="font-family:'Lora',serif;font-size:13px;color:#F0C060;">${pesa(tot.zaka)}</span></div>`:''}
+        ${tot.watoto>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">👶 Sadaka ya Watoto</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.watoto)}</span></div>`:''}
+        ${tot.ujenzi>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">🏗 Mchango wa Ujenzi</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.ujenzi)}</span></div>`:''}
+        ${tot.nyingine>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">✝ Michango Mingine</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.nyingine)}</span></div>`:''}
+        <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid rgba(240,192,96,0.4);margin-top:6px;">
+          <span style="font-size:13px;color:white;font-weight:800;">JUMLA YA ${label.toUpperCase()}</span>
+          <span style="font-family:'Lora',serif;font-size:17px;font-weight:700;color:#F0C060;">${pesa(tot.jumla)}</span>
+        </div>
+      </div>`:''}
+    `}`;
 }
 async function futaJumlaIbada(id){
   if(!confirm('Futa rekodi hii ya jumla ya ibada?'))return;
@@ -2268,7 +2313,7 @@ function haTab(tab){
   });
   if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini'){renderHaWaumini();renderBulkList('ha');}
   if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha'){const c=$('ha-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('ha-fedha-content');}
-  if(tab==='maombi')renderHaOmbiList();if(tab==='jumla')renderJumlaHistoria();
+  if(tab==='maombi')renderHaOmbiList();if(tab==='jumla'){const c=$('ha-jumla-historia');if(c)delete c.dataset.mwezi;renderJumlaHistoria();}
   if(tab==='zaka')initZakaTab();
 }
 
