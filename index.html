@@ -1015,7 +1015,7 @@ async function beemSendSMS(recipients, ujumbe, statusElId){
       })
     });
     const data=await resp.json().catch(()=>({}));
-    if(resp.ok&&(data.success||data.code===100||data.code===111||data.successful)){
+    if(resp.ok&&data.success){
       if(statusElId)setAl(statusElId,`✅ SMS ${recipients.length} imetumwa kwa mafanikio kupitia Beem Africa!`,'s');
       toastMsg(`✅ SMS ${recipients.length} imetumwa — Beem Africa`);
       return {ok:true,sent:recipients.length,data};
