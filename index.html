@@ -480,10 +480,8 @@ tr:hover td{background:var(--warm);}
         <div class="fg"><label>Jina la Kanisa</label><input type="text" class="fi" id="pa-kanisa-jina" placeholder="PAG - NGARA MJINI"/></div>
         <div class="fg"><label>Mahali</label><input type="text" class="fi" id="pa-kanisa-mahali" placeholder="Dar es Salaam"/></div>
         <div class="fg"><label>Simu ya Kanisa</label><input type="tel" class="fi" id="pa-kanisa-simu" placeholder="0712345678"/></div>
-        <div class="fg"><label>Beem Africa — API Key</label><input type="text" class="fi" id="pa-beem-api-key" placeholder="Weka API Key yako hapa"/></div>
-        <div class="fg"><label>Beem Africa — Secret Key</label><input type="text" class="fi" id="pa-beem-secret" placeholder="Weka Secret Key yako hapa"/></div>
         <div class="fg"><label>Beem Africa — Sender Name</label><input type="text" class="fi" id="pa-beem-sender" placeholder="mfano: PAGNGARA"/></div>
-        <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">🔑 Pata API Key na Secret kutoka: <strong>app.beem.africa → Developer → API Access</strong>. Sender name lazima isajiliwe kwanza.</div>
+        <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">📡 Credentials za Beem zimehifadhiwa salama kwenye server — huhitaji kuziweka hapa.</div>
         <button class="btn btn-navy btn-block" onclick="saveKanisaInfo()">💾 Hifadhi Mipangilio</button>
       </div>
       <div class="card"><div class="card-title">🔒 Badilisha Nenosiri za Viongozi</div>
@@ -971,9 +969,9 @@ function buildTangazoMsg(t){const k=kanisaSettings;const kl=k.jina_kanisa?`*${k.
 // ═══════════════════════════════════════════
 // BEEM AFRICA SMS
 // ═══════════════════════════════════════════
-let BEEM_API_KEY_VAL='';  // Loaded from Mipangilio ya Kanisa
-let BEEM_SECRET_VAL='f88948a544a3882d';  // Secret Key — badilisha kwenye Mipangilio
-let BEEM_SENDER='PAGNGARA';  // Sender name iliyosajiliwa Beem — badilisha kwenye Mipangilio
+// Beem credentials zimehifadhiwa kwenye Supabase Edge Function secrets (server-side)
+const BEEM_EDGE_URL=`${SB}/functions/v1/beem-sms`;
+let BEEM_SENDER='PAGNGARA';  // Sender name — inaweza kubadilishwa kwenye Mipangilio
 
 // Format phone to Beem format (255XXXXXXXXX)
 function beemPhone(simu){
@@ -994,43 +992,35 @@ function buildBeemSMSText(ujumbe){
     .trim();
 }
 
-// Send SMS via Beem Africa
+// Send SMS via Supabase Edge Function (credentials stored server-side)
 async function beemSendSMS(recipients, ujumbe, statusElId){
-  // recipients: [{dest_addr:'255712...', message_id:1}, ...]
+  // recipients: [{dest_addr:'255712...', recipient_id:1}, ...]
   if(!recipients||!recipients.length){
     if(statusElId)setAl(statusElId,'⚠️ Hakuna namba za simu za kutumia','w');
     return {ok:false,sent:0};
   }
   const smsText=buildBeemSMSText(ujumbe);
-  // Beem API requires 'recipient_id' (not message_id) — integer per recipient
-  const recipientsFormatted=recipients.map((r,i)=>({
-    recipient_id: i+1,
-    dest_addr: r.dest_addr
-  }));
-  const body={
-    source_addr: BEEM_SENDER,
-    schedule_time: '',
-    encoding: 0,
-    message: smsText,
-    recipients: recipientsFormatted
-  };
   if(statusElId)setAl(statusElId,`⏳ Inatuma SMS ${recipients.length} kwa Beem Africa...`,'i');
   try{
-    const resp=await fetch('https://apisms.beem.africa/v1/send',{
+    const resp=await fetch(BEEM_EDGE_URL,{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'Authorization':'Basic '+btoa(BEEM_API_KEY_VAL+':'+BEEM_SECRET_VAL)
+        'Authorization':`Bearer ${SK}`
       },
-      body:JSON.stringify(body)
+      body:JSON.stringify({
+        recipients: recipients.map((r,i)=>({recipient_id:i+1,dest_addr:r.dest_addr})),
+        message: smsText,
+        source_addr: BEEM_SENDER
+      })
     });
     const data=await resp.json().catch(()=>({}));
-    if(resp.ok||data.code===100||data.code===111){
-      if(statusElId)setAl(statusElId,`✅ SMS ${recipients.length} imetumwa kwa mafanikio kupitia Beem Africa (Sender: PAGNGARA)!`,'s');
+    if(resp.ok&&(data.success||data.code===100||data.code===111||data.successful)){
+      if(statusElId)setAl(statusElId,`✅ SMS ${recipients.length} imetumwa kwa mafanikio kupitia Beem Africa!`,'s');
       toastMsg(`✅ SMS ${recipients.length} imetumwa — Beem Africa`);
       return {ok:true,sent:recipients.length,data};
     }else{
-      const errMsg=data.message||data.msg||('Code: '+resp.status);
+      const errMsg=data.message||data.msg||data.error||('Code: '+resp.status);
       if(statusElId)setAl(statusElId,'❌ Beem SMS imeshindwa: '+errMsg,'e');
       toastMsg('❌ Beem SMS imeshindwa: '+errMsg);
       return {ok:false,sent:0,error:errMsg};
@@ -1634,8 +1624,6 @@ function loadPaSettings(){
   if(kanisaSettings.jina_kanisa)$('pa-kanisa-jina').value=kanisaSettings.jina_kanisa;
   if(kanisaSettings.mahali)$('pa-kanisa-mahali').value=kanisaSettings.mahali;
   if(kanisaSettings.simu_kanisa)$('pa-kanisa-simu').value=kanisaSettings.simu_kanisa;
-  if(kanisaSettings.beem_api_key){$('pa-beem-api-key').value=kanisaSettings.beem_api_key;BEEM_API_KEY_VAL=kanisaSettings.beem_api_key;}
-  if(kanisaSettings.beem_secret){$('pa-beem-secret').value=kanisaSettings.beem_secret;BEEM_SECRET_VAL=kanisaSettings.beem_secret;}
   if(kanisaSettings.beem_sender){$('pa-beem-sender').value=kanisaSettings.beem_sender;BEEM_SENDER=kanisaSettings.beem_sender;}
   $('pa-katibu-pw').value=getPW('katibu');
   $('pa-hazina-pw').value=getPW('hazina');
@@ -1643,11 +1631,9 @@ function loadPaSettings(){
 }
 async function saveKanisaInfo(){
   const jina=$('pa-kanisa-jina').value.trim(),mahali=$('pa-kanisa-mahali').value.trim(),simu=$('pa-kanisa-simu').value.trim();
-  const beemApiKey=$('pa-beem-api-key').value.trim(),beemSecret=$('pa-beem-secret').value.trim(),beemSender=$('pa-beem-sender').value.trim();
+  const beemSender=$('pa-beem-sender').value.trim();
   if(!jina){setAl('al-pa-kanisa','Weka jina la kanisa','e');return;}
-  const data={jina_kanisa:jina,mahali,simu_kanisa:simu,beem_api_key:beemApiKey,beem_secret:beemSecret,beem_sender:beemSender};
-  if(beemApiKey)BEEM_API_KEY_VAL=beemApiKey;
-  if(beemSecret)BEEM_SECRET_VAL=beemSecret;
+  const data={jina_kanisa:jina,mahali,simu_kanisa:simu,beem_sender:beemSender};
   if(beemSender)BEEM_SENDER=beemSender;
   confirmSave('⚙️ Thibitisha Mipangilio ya Kanisa',[
     ['Jina la Kanisa',jina],
@@ -1692,6 +1678,7 @@ function filterWaumini(prefix){
       <td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td>
       <td style="display:flex;gap:6px;flex-wrap:wrap;">
         ${w.hali!=='pending'?`<button class="btn btn-sm ${w.hali==='hai'?'btn-ghost':'btn-green'}" onclick="badilishaHali('${w.id}','${w.hali}')">${w.hali==='hai'?'🔴 Weka Si Hai':'🟢 Weka Hai'}</button>`:''}
+      <button class="btn btn-sm btn-sky" onclick="katibuHaririshaMuumini('${w.id}')">✏️ Hariri</button>
         <button class="btn btn-red btn-sm" onclick="katibiFutaMuumini('${w.id}','${w.jina_kamili.replace(/'/g,"\\'")}')">🗑 Futa</button>
       </td>
       <td>${msgBtns(w)}</td></tr>`).join('');
@@ -1787,6 +1774,7 @@ function renderKaWaumini(){
     <td><span class="badge ${w.hali==='hai'?'bg-green':w.hali==='si_hai'?'bg-red':'bg-gold'}">${w.hali==='hai'?'✓ Hai':w.hali==='si_hai'?'✗ Si Hai':'⏳ Pending'}</span></td>
     <td style="display:flex;gap:6px;flex-wrap:wrap;">
       ${w.hali!=='pending'?`<button class="btn btn-sm ${w.hali==='hai'?'btn-ghost':'btn-green'}" onclick="badilishaHali('${w.id}','${w.hali}')">${w.hali==='hai'?'🔴 Weka Si Hai':'🟢 Weka Hai'}</button>`:'<span class="badge bg-gold">Inasubiri</span>'}
+      <button class="btn btn-sm btn-sky" onclick="katibuHaririshaMuumini('${w.id}')">✏️ Hariri</button>
       <button class="btn btn-red btn-sm" onclick="katibiFutaMuumini('${w.id}','${w.jina_kamili.replace(/'/g,"\\'")}')">🗑 Futa</button>
     </td>
     <td>${msgBtns(w)}</td></tr>`).join('');
@@ -1819,6 +1807,65 @@ async function thibitishaFutaMuumini(id,jina){
     allWaumini=allWaumini.filter(w=>w.id!==id);allMichango=allMichango.filter(m=>m.muumini_id!==id);
     filterWaumini('ka');toastMsg(`🗑 Muumini "${jina}" amefutwa vizuri`);
   }catch(e){toastMsg('❌ Hitilafu ya kufuta: '+e.message);}
+}
+function katibuHaririshaMuumini(id){
+  const w=allWaumini.find(x=>x.id===id);
+  if(!w){toastMsg('❌ Muumini hapatikani');return;}
+  openMod(`✏️ Hariri Muumini — ${w.jina_kamili}`,`
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="fg">
+        <label style="font-size:12px;font-weight:700;color:var(--gray);">Jina Kamili</label>
+        <input type="text" class="fi" id="hr-jina" value="${w.jina_kamili.replace(/"/g,'&quot;')}" placeholder="Jina Kamili"/>
+      </div>
+      <div class="fg">
+        <label style="font-size:12px;font-weight:700;color:var(--gray);">Namba ya Simu</label>
+        <input type="tel" class="fi" id="hr-simu" value="${w.namba_simu||''}" placeholder="07XXXXXXXX"/>
+      </div>
+      <div class="fg">
+        <label style="font-size:12px;font-weight:700;color:var(--gray);">Barua Pepe</label>
+        <input type="email" class="fi" id="hr-email" value="${w.barua_pepe||''}" placeholder="mfano@gmail.com"/>
+      </div>
+      <div class="fg">
+        <label style="font-size:12px;font-weight:700;color:var(--gray);">Jinsia</label>
+        <select class="fsel" id="hr-jinsia">
+          <option value="Kiume" ${w.jinsia==='Kiume'?'selected':''}>Kiume</option>
+          <option value="Kike" ${w.jinsia==='Kike'?'selected':''}>Kike</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label style="font-size:12px;font-weight:700;color:var(--gray);">Tarehe ya Kujiunga</label>
+        <input type="date" class="fi" id="hr-tarehe" value="${w.tarehe_kujiunga||''}"/>
+      </div>
+      <div class="fg">
+        <label style="font-size:12px;font-weight:700;color:var(--gray);">Namba ya Muumini</label>
+        <input type="text" class="fi" id="hr-namba" value="${w.namba_muumini||''}" placeholder="mfano: PAG-001"/>
+      </div>
+      <div id="hr-al"></div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-navy" style="flex:2;justify-content:center;" onclick="hifadhiHaririshaMuumini('${id}')">💾 Hifadhi Mabadiliko</button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Rudi</button>
+      </div>
+    </div>`);
+}
+async function hifadhiHaririshaMuumini(id){
+  const jina=$('hr-jina').value.trim();
+  const simu=$('hr-simu').value.trim();
+  const email=$('hr-email').value.trim();
+  const jinsia=$('hr-jinsia').value;
+  const tarehe=$('hr-tarehe').value;
+  const namba=$('hr-namba').value.trim();
+  if(!jina){setAl('hr-al','Jaza jina kamili la muumini','e');return;}
+  if(!simu){setAl('hr-al','Jaza namba ya simu','e');return;}
+  setAl('hr-al','Inahifadhi...','i');
+  try{
+    const data={jina_kamili:jina,namba_simu:simu,barua_pepe:email,jinsia,tarehe_kujiunga:tarehe,namba_muumini:namba};
+    await DB.patch('waumini',`id=eq.${id}`,data);
+    const idx=allWaumini.findIndex(w=>w.id===id);
+    if(idx!==-1)allWaumini[idx]={...allWaumini[idx],...data};
+    closeModDirect();
+    filterWaumini('ka');
+    toastMsg(`✅ Taarifa za ${jina} zimebadilishwa vizuri`);
+  }catch(e){setAl('hr-al','❌ Hitilafu: '+e.message,'e');}
 }
 function renderKaHistoria(){
   if(!allMatangazo.length){$('ka-tangazo-list').innerHTML='<p style="color:var(--gray);text-align:center;padding:20px;font-size:13px;">Hakuna matangazo bado</p>';return;}
