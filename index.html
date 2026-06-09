@@ -480,6 +480,10 @@ tr:hover td{background:var(--warm);}
         <div class="fg"><label>Jina la Kanisa</label><input type="text" class="fi" id="pa-kanisa-jina" placeholder="PAG - NGARA MJINI"/></div>
         <div class="fg"><label>Mahali</label><input type="text" class="fi" id="pa-kanisa-mahali" placeholder="Dar es Salaam"/></div>
         <div class="fg"><label>Simu ya Kanisa</label><input type="tel" class="fi" id="pa-kanisa-simu" placeholder="0712345678"/></div>
+        <div class="fg"><label>Beem Africa — API Key</label><input type="text" class="fi" id="pa-beem-api-key" placeholder="Weka API Key yako hapa"/></div>
+        <div class="fg"><label>Beem Africa — Secret Key</label><input type="text" class="fi" id="pa-beem-secret" placeholder="Weka Secret Key yako hapa"/></div>
+        <div class="fg"><label>Beem Africa — Sender Name</label><input type="text" class="fi" id="pa-beem-sender" placeholder="mfano: PAGNGARA"/></div>
+        <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">🔑 Pata API Key na Secret kutoka: <strong>app.beem.africa → Developer → API Access</strong>. Sender name lazima isajiliwe kwanza.</div>
         <button class="btn btn-navy btn-block" onclick="saveKanisaInfo()">💾 Hifadhi Mipangilio</button>
       </div>
       <div class="card"><div class="card-title">🔒 Badilisha Nenosiri za Viongozi</div>
@@ -967,8 +971,9 @@ function buildTangazoMsg(t){const k=kanisaSettings;const kl=k.jina_kanisa?`*${k.
 // ═══════════════════════════════════════════
 // BEEM AFRICA SMS
 // ═══════════════════════════════════════════
-const BEEM_SECRET='f88948a544a3882d';
-const BEEM_SENDER='PAGNGARA';
+let BEEM_API_KEY_VAL='';  // Loaded from Mipangilio ya Kanisa
+let BEEM_SECRET_VAL='f88948a544a3882d';  // Secret Key — badilisha kwenye Mipangilio
+let BEEM_SENDER='PAGNGARA';  // Sender name iliyosajiliwa Beem — badilisha kwenye Mipangilio
 
 // Format phone to Beem format (255XXXXXXXXX)
 function beemPhone(simu){
@@ -982,7 +987,11 @@ function beemPhone(simu){
 
 // Build plain SMS text (no markdown)
 function buildBeemSMSText(ujumbe){
-  return ujumbe.replace(/\*/g,'').replace(/_/g,'').replace(/~/g,'').trim();
+  return ujumbe
+    .replace(/[*_~`]/g,'')           // remove markdown symbols
+    .replace(/[\u0080-\uFFFF]/g,'') // remove all non-ASCII (emoji, Unicode)
+    .replace(/\n{3,}/g,'\n\n')      // collapse multiple blank lines
+    .trim();
 }
 
 // Send SMS via Beem Africa
@@ -993,12 +1002,17 @@ async function beemSendSMS(recipients, ujumbe, statusElId){
     return {ok:false,sent:0};
   }
   const smsText=buildBeemSMSText(ujumbe);
+  // Beem API requires 'recipient_id' (not message_id) — integer per recipient
+  const recipientsFormatted=recipients.map((r,i)=>({
+    recipient_id: i+1,
+    dest_addr: r.dest_addr
+  }));
   const body={
     source_addr: BEEM_SENDER,
     schedule_time: '',
-    encoding: '0',
+    encoding: 0,
     message: smsText,
-    recipients: recipients
+    recipients: recipientsFormatted
   };
   if(statusElId)setAl(statusElId,`⏳ Inatuma SMS ${recipients.length} kwa Beem Africa...`,'i');
   try{
@@ -1006,7 +1020,7 @@ async function beemSendSMS(recipients, ujumbe, statusElId){
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'Authorization':'Basic '+btoa('Enock:'+BEEM_SECRET)
+        'Authorization':'Basic '+btoa(BEEM_API_KEY_VAL+':'+BEEM_SECRET_VAL)
       },
       body:JSON.stringify(body)
     });
@@ -1582,7 +1596,7 @@ async function sendTangazoNow(apId){
 async function stnBeemAll(apId,smsMsg){
   const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
   if(!members.length){setAl('stn-beem-al','Hakuna waumini wenye namba ya simu','w');return;}
-  const recipients=members.map((w,i)=>({dest_addr:beemPhone(w.namba_simu),message_id:i+1}));
+  const recipients=members.map((w,i)=>({recipient_id:i+1,dest_addr:beemPhone(w.namba_simu)}));
   const result=await beemSendSMS(recipients,smsMsg,'stn-beem-al');
   if(result.ok)setTimeout(()=>closeModDirect(),2500);
 }
@@ -1620,14 +1634,21 @@ function loadPaSettings(){
   if(kanisaSettings.jina_kanisa)$('pa-kanisa-jina').value=kanisaSettings.jina_kanisa;
   if(kanisaSettings.mahali)$('pa-kanisa-mahali').value=kanisaSettings.mahali;
   if(kanisaSettings.simu_kanisa)$('pa-kanisa-simu').value=kanisaSettings.simu_kanisa;
+  if(kanisaSettings.beem_api_key){$('pa-beem-api-key').value=kanisaSettings.beem_api_key;BEEM_API_KEY_VAL=kanisaSettings.beem_api_key;}
+  if(kanisaSettings.beem_secret){$('pa-beem-secret').value=kanisaSettings.beem_secret;BEEM_SECRET_VAL=kanisaSettings.beem_secret;}
+  if(kanisaSettings.beem_sender){$('pa-beem-sender').value=kanisaSettings.beem_sender;BEEM_SENDER=kanisaSettings.beem_sender;}
   $('pa-katibu-pw').value=getPW('katibu');
   $('pa-hazina-pw').value=getPW('hazina');
   $('pa-wazee-pw').value=getPW('wazee');
 }
 async function saveKanisaInfo(){
   const jina=$('pa-kanisa-jina').value.trim(),mahali=$('pa-kanisa-mahali').value.trim(),simu=$('pa-kanisa-simu').value.trim();
+  const beemApiKey=$('pa-beem-api-key').value.trim(),beemSecret=$('pa-beem-secret').value.trim(),beemSender=$('pa-beem-sender').value.trim();
   if(!jina){setAl('al-pa-kanisa','Weka jina la kanisa','e');return;}
-  const data={jina_kanisa:jina,mahali,simu_kanisa:simu};
+  const data={jina_kanisa:jina,mahali,simu_kanisa:simu,beem_api_key:beemApiKey,beem_secret:beemSecret,beem_sender:beemSender};
+  if(beemApiKey)BEEM_API_KEY_VAL=beemApiKey;
+  if(beemSecret)BEEM_SECRET_VAL=beemSecret;
+  if(beemSender)BEEM_SENDER=beemSender;
   confirmSave('⚙️ Thibitisha Mipangilio ya Kanisa',[
     ['Jina la Kanisa',jina],
     ...(mahali?[['Mahali',mahali]]:[]),
@@ -1912,7 +1933,7 @@ async function katibuBeemSendTangazo(){
   const {kichwa,maelezo,tarehe,muhimu,smsMsg}=_kaBeemPending;
   const checked=[...document.querySelectorAll('.ka-beem-chk:checked')];
   if(!checked.length){setAl('ka-beem-mod-al','Chagua muumini angalau mmoja','e');return;}
-  const recipients=checked.map((c,i)=>({dest_addr:c.dataset.beem,message_id:i+1})).filter(r=>r.dest_addr);
+  const recipients=checked.map((c,i)=>({recipient_id:i+1,dest_addr:c.dataset.beem})).filter(r=>r.dest_addr);
   const result=await beemSendSMS(recipients,smsMsg,'ka-beem-mod-al');
   if(result.ok){
     _kaBeemPending=null;
@@ -2901,7 +2922,7 @@ function tumaKwaWaumini(id){
 async function tkBeemSend(msg){
   const checked=[...document.querySelectorAll('.tk-chk:checked')];
   if(!checked.length){setAl('tk-beem-al','Chagua muumini angalau mmoja','e');return;}
-  const recipients=checked.map((c,i)=>({dest_addr:c.dataset.beem||beemPhone(c.value),message_id:i+1})).filter(r=>r.dest_addr);
+  const recipients=checked.map((c,i)=>({recipient_id:i+1,dest_addr:c.dataset.beem||beemPhone(c.value)})).filter(r=>r.dest_addr);
   const result=await beemSendSMS(recipients,msg,'tk-beem-al');
   if(result.ok)setTimeout(()=>closeModDirect(),2500);
 }
@@ -3373,7 +3394,7 @@ function beemSendOneMuumini(phone,jina){
 async function beemSingleSend(phone,jina){
   const msg=$('beem-single-msg').value.trim();
   if(!msg){setAl('beem-single-al','Andika ujumbe kwanza','e');return;}
-  const result=await beemSendSMS([{dest_addr:phone,message_id:1}],msg,'beem-single-al');
+  const result=await beemSendSMS([{recipient_id:1,dest_addr:phone}],msg,'beem-single-al');
   if(result.ok)setTimeout(()=>closeModDirect(),2000);
 }
 
@@ -3413,7 +3434,7 @@ async function sendBulkMsg(prefix,type){
     // Send via Beem Africa
     const recipients=sel.map((c,i)=>{
       const ph=beemPhone(c.dataset.simu);
-      return ph?{dest_addr:ph,message_id:i+1}:null;
+      return ph?{recipient_id:i+1,dest_addr:ph}:null;
     }).filter(Boolean);
     if(!recipients.length){toastMsg('⚠️ Hakuna namba za simu kati ya waliochaguliwa!');return;}
     // Show confirmation modal
@@ -3451,7 +3472,7 @@ function sendBeemAll(prefix){
   const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
   if(!members.length){toastMsg('⚠️ Hakuna waumini hai wenye namba ya simu!');return;}
 
-  const recipients=members.map((w,i)=>({dest_addr:beemPhone(w.namba_simu),message_id:i+1}));
+  const recipients=members.map((w,i)=>({recipient_id:i+1,dest_addr:beemPhone(w.namba_simu)}));
   const smsText=buildBeemSMSText(msg);
 
   // Preview list — show first 5 names + count
