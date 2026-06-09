@@ -1875,11 +1875,13 @@ async function kaWASendAndSave(kichwa,maelezo,tarehe,muhimu,enc){
     setTimeout(()=>{window.open(`https://wa.me/?text=${enc}`,'_blank');closeModDirect();},600);
   }
 }
+let _kaBeemPending=null;
 async function tumaTangazoBeemModal(){
   const kichwa=$('ka-title').value.trim(),maelezo=$('ka-body').value.trim();
   const tarehe=$('ka-tarehe').value||leo(),muhimu=$('ka-muhimu').value==='1';
   if(!kichwa||!maelezo){setAl('al-katangazo','Jaza kichwa na maelezo ya tangazo','e');return;}
   const smsMsg=buildBeemSMSText(buildTangazoMsg({kichwa,maelezo,tarehe_tangazo:tarehe}));
+  _kaBeemPending={kichwa,maelezo,tarehe,muhimu,smsMsg};
   const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
   const memberRows=members.map(w=>`
     <label style="display:flex;align-items:center;gap:8px;padding:5px 4px;border-bottom:1px solid var(--border);cursor:pointer;">
@@ -1901,17 +1903,19 @@ async function tumaTangazoBeemModal(){
     </div>
     <div id="ka-beem-mod-al"></div>
     <div style="display:flex;gap:8px;">
-      <button class="btn btn-sky" style="flex:2;justify-content:center;" onclick="katibuBeemSendTangazo(${JSON.stringify(kichwa)},${JSON.stringify(maelezo)},${JSON.stringify(tarehe)},${muhimu?1:0},${JSON.stringify(smsMsg)})">✉️ Tuma SMS Beem</button>
+      <button class="btn btn-sky" style="flex:2;justify-content:center;" onclick="katibuBeemSendTangazo()">✉️ Tuma SMS Beem</button>
       <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Rudi</button>
     </div>`);
 }
-async function katibuBeemSendTangazo(kichwa,maelezo,tarehe,muhimu,smsMsg){
+async function katibuBeemSendTangazo(){
+  if(!_kaBeemPending){setAl('ka-beem-mod-al','Hitilafu: data haipatikani. Jaribu tena.','e');return;}
+  const {kichwa,maelezo,tarehe,muhimu,smsMsg}=_kaBeemPending;
   const checked=[...document.querySelectorAll('.ka-beem-chk:checked')];
   if(!checked.length){setAl('ka-beem-mod-al','Chagua muumini angalau mmoja','e');return;}
   const recipients=checked.map((c,i)=>({dest_addr:c.dataset.beem,message_id:i+1})).filter(r=>r.dest_addr);
   const result=await beemSendSMS(recipients,smsMsg,'ka-beem-mod-al');
   if(result.ok){
-    // Save to DB
+    _kaBeemPending=null;
     await _saveTangazoToDB(kichwa,maelezo,tarehe,muhimu===1);
     setAl('al-katangazo','✅ Tangazo limetumwa kwa SMS kupitia Beem Africa na limehifadhiwa!','s');
     setTimeout(()=>closeModDirect(),2500);
