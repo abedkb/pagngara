@@ -999,7 +999,7 @@ async function beemSendSMS(recipients, ujumbe, statusElId){
     if(statusElId)setAl(statusElId,'⚠️ Hakuna namba za simu za kutumia','w');
     return {ok:false,sent:0};
   }
-  const smsText=buildBeemSMSText(ujumbe);
+  const smsText=ujumbe;
   if(statusElId)setAl(statusElId,`⏳ Inatuma SMS ${recipients.length} kwa Beem Africa...`,'i');
   try{
     const resp=await fetch(BEEM_EDGE_URL,{
