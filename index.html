@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>PAG — Ngara Mjini</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
+<!-- PWA -->
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiUEFHIFx1MjAxNCBOZ2FyYSBNamluaSIsInNob3J0X25hbWUiOiJQQUcgTmdhcmEiLCJkZXNjcmlwdGlvbiI6Ik1mdW1vIHdhIFVzaW1hbWl6aSB3YSBLYW5pc2EgbGEgUEFHIE5nYXJhIE1qaW5pIiwic3RhcnRfdXJsIjoiLi9hcHAuaHRtbCIsInNjb3BlIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQtcHJpbWFyeSIsImJhY2tncm91bmRfY29sb3IiOiIjMUIyQTRBIiwidGhlbWVfY29sb3IiOiIjMUIyQTRBIiwibGFuZyI6InN3IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBSUFBQURkdnZ0UUFBQUNha2xFUVZSNDJ1M2FzUTBDTVJCRVVmZEJCMWNLVmRBVS9aRFNEU1Z3RWlrQjJsbXdENzNWcjJEOFFvL1JlcWZ0ck1VYnE1MG5nUWtkak5EUklSZ1pHaU42OUhORFpzV0lIczB3WkVlRzZORU1RN1pUM1pEVlZEZGtMOVVOV1VxUklUT3BEc2hHcWh1eWppSkRwbEVka0YwVUdUS0s2b0Fzb3NpUU9WUUhaQXRGaGd3aGdBU1FqZ2pJQ29vTW1VQUFDU0FCSklBa2dBU1FBQkpBZjkzamR0bTdYN2V1QUFJSUlJQUFBZ2dnZ0FBQ0NDQ0FBQUlJSUlBQUFnZ2dnQUFDQ0NDQUFBSUlJSUFBQWdnZ2dBQUNDQ0NBQUFJSUlJQUFBZ2dnZ0FBQ0NDQ0FBQUlJSUlBQUFnZ2dnQUFDQ0NDQUFBSUlJSURlMWZpRUgvYWkwdzVvVmdBQkJCQkFBQUVFRUVBQUFRUVFRQUFCQkJCQUFBRUVFRUFBQVFRUVFBQUJCQkJBQUFFRUVFQUFBUVFRUUFBQkJCQkFBUGtUN1U4MFFBQUJCQkJBQUFFRUVFQUFBUVFRUUFBQkJCQkFBQUVFRUVBQUFRUVFRQUFCQkJCQUFBRUVFRUFBQVFRUVFBQUJCQkJBQUFFRUVFQUFBUVFRUUFBQkJCQkFBQUVFRUVBQUFRUVFRQUFCQkJCQUFBRUVFRUFBQVFRUVFBQUJCQkJBQUFFRUVFQUFBUVFRUUFBQkJCQkFBQUVFRUVBQUFRUVFRQUFCQkJCQUFBRUVFRUFBQVFRUVFBQUJCQkJBQUFFRUVFQUFBUVFRUUFBQkJCQkFBQUVFRUVBQUFRUVFRQUFCQkJCQUFBRUVFRUFBQVFRUVFBQUJCQkJBQUFFRUVFQUFBUVFRUUFKSUFrZ0FDU0FCSklBa2dBU1FBQkpBRWtENk5xRDlyS0M2SG9BRWtBRFNjUUV4cEVnUFFFb0JNYVJJRDBCS0FUR2tTQTlBU2dFeHBFZ1BRMHIxQUtRVUVFT0s5RENrVkE5RFN2VXdwRlFQUXhvdFowZDZHTkk4UFJpaHc1QVcwSU1ST2hocEFUb1lvUU1UTkEzM0JFRXhDdTNDTkxVbUFBQUFBRWxGVGtTdVFtQ0MiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9LHsic3JjIjoiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFnQUFBQUlBQ0FJQUFBQjdHa090QUFBSjUwbEVRVlI0MnUzVlFRM0NRQlJGMGZHQmcwcEJSVTNoaDIzZElLRk5FTUNPd0wrbk9RcitwTyt1bGZsdTJ4M2dvK1d6K0FCNllQRUI5TUR1QXlpQjNRZFFBcnNQb0FSMkgxQUNuK2tIWk1CbitnRVo4SmwrUUFaOHBoK1FBWi9wQjJUQTlBUElnUFVIMEFEVER5QUQxaDlBQTB3L2dBeFlmd0FOc1A0QUdtRDZBV1RBK2dOb2dQVUgwQURyRDZBQjFoOUFBNncvZ0FaWWZ3QU5NUDBBTWlBQUFBSmcvUUhxRGZBcUFNVUdlQStBWWdPOEJFQ3hBZDRBb05nQTF3Y29Oc0RkQWFJTmNIU0FZZ0JjSEtEWUFMY0dLRGJBbFFHaURYQmlnR0lBM0JlZzJBQ1hCWWcyd0ZrQmlnRndVNEJpQTF3VElOb0Fwd1FvQnNBZEFhSU5jRVNBWWdCY0VDRGFBT2NES0FiQTdRQ2lEWEE0Z0dJQVhBMGcyZ0FuQXlnR3dMMEFvZzF3TElCaUFGd0tJTm9BWndJUUFBQXlBWEFqZ0dnREhBaEFBQURJQk1CMUFLSU5jQm9BQVFBZ0V3QjNBWWcyd0ZFQUJBQ0FUQUJjQkNEYUFPY0FFQUFBQkFBQUFRQmdZQURjQWlEYUFJY0FFQUFBQkFBQUFRQmdZQUJjQVNEYUFDY0FFQUFBQkFBQUFRQkFBQUFRQUFBRUFBQUJBRUFBQUJBQUFBUUFBQUVBUUFBQUVBQUFCSUN3MTNPL0hJOXRFcytLQUlBQWdBQ0FBSUFBZ0FDQUFJQUFnQUFnQUFJQUFvQUFDQUFJQUFJZ0FDQUFDSUFBZ0FBZ0FBSUFBb0FBQ0FBSUFBSWdBQ0FBQ0lBQWdBQWdBQUlBQW9BQUNBQUNBQUlnQUFnQUNJQUFJQUFnQUFLQUFJQUFDQUFDQUFJZ0FBZ0FDSUFBSUFBZ0FBS0FBSUFBQ0FBQ0FBSWdBQWdBQ0FBSUFBZ0FDQUFJQUFnQUNBQUlBQUlnQUNBQUNJQUFnQUFnQUFJQUFvQUFDQUFJQUFJZ0FDQUFDSUFBZ0FBZ0FBSUFBb0FBQ0FBSUFBSWdBQ0FBQ0lBQUlBQWdBQUtBQUlBQUNBQUNBQUlnQUFnQUNJQUFJQUFnQUFLQUFJQUFDQUFDQUFJZ0FBZ0FDSUFBSUFBZ0FBS0FBSUFBZUZrRUFBUUFCQUFFQUFRQUJBQUVBQVFBQkFBQkVBQVFBQVJBQUVBQUVBQUJBQUZBQUFRQUJBQUJFQUFRQUFSQUFFQUFFQUFCQUFGQUFBUUFCQUFCRUFBUUFBUkFBQkFBRUFBQlFBQkFBQVFBQVFBQkVBQUVBQVJBQUJBQUVBQUJRQUJBQUFRQUFRQUJFQUFFQUFSQUFCQUFFQUFCUUFCQUFFQUFRQUJBQUVBQVFBQkFBRUFBRUFBQkFBSDRNOE5tNjh2ZTB6OHlBSWlvQUFnQUFvQUFDSUFBSUFBSWdBQUlBQUtBQUFpQUFBaUFBQ0FBQWlBQUFnQUNJQUFDSUFCZ1hnUkFBQVFBQVVBQUJFQUFFQUFFUUFBRUFBRkFBQVJBQUJBQUJFQUFCQUFCUUFBRVFBQVFBQVJBQUFRQUFVQUFCRUFBRUFBQlFBQUVBQUVRQUFSQUFCQUFBVUFBQkFBQkVBQUVRQUFRQUFGQUFBUUFBUkFBQkVBQUVBQUJRQUFFQUFFUUFBRkFBQkFBQVJBQUJBQUJFQUFCUUFBUUFBRVFBQVFBQVJBQUFVQUFFQUFCRUFBRUFBRVFBQUVRQUFGQUFBUkFBQVFBQkVBQUJFQUFFQUFFUUFBRUFBRkFBQVJBQUJBQUJFQUFCQUFCUUFBRVFBQVFBQVJBQUFRQUFVQUFCRUFBRUFBRVFBQUVBQUVRQUFSQUFCQUFBVUFBQkFBQkVBQUVRQUFRQUFGQUFBUUFBUkFBQkVBQUVBQUJRQUFFQUFFUUFBUkFBQkFBQWNCZktnQUlnQUFJQUFLQUFBaUFBQ0FBQ0lBQUNBQUNnQUFJZ0FBZ0FBaUFBQWdBQW9BQUNJQUFDSUFBSUFBQ1FOVElBSGhXQkFBRUFBUUFCQUFFQUFRQUJBQUVBQVFBQVJBQUVBQUVRQUJBQUJBQUFRQUJRQUFFQUFRQUFSQUFFQUFFUUFCQUFCQUFBUUFCUUFBRUFBUUFBUkFBRUFBRVFBQVFBQkFBQVVBQVFBQUVBQUVBQVJBQUJBQUVRQUFRQUJBQUFVQUFRQUFFQUFFQUFSQUFCQUFFUUFBUUFCQUFBVUFBUUFCQUFFQUFRQUJBQUVBQVFBQkFBQkFBQVFBQlFBQUVBQVFBQVJBQUVBQUVRQUJBQUJBQUFRQUJRQUFFQUFRQUFSQUFFQUFFUUFCQUFCQUFBUUFCUUFBRUFBRUFBUkFBQkFBRVFBQVFBQkFBQVVBQVFBQUVBQUVBQVJBQUJBQUVRQUFRQUJBQUFVQUFRQUFFQUFFQUFSQUFCQUFFd01zaUFDQUFJQUFnQUNBQUlBQWdBQ0FBSUFBSWdBQ0FBQ0FBQWdBQ2dBQUlBQWdBQWlBQUlBQUlnQUNBQUNBQUFnQUNnQUFJQUFnQUFpQUFJQUFJZ0FDQUFDQUFBb0FBZ0FBSUFBSUFBaUFBQ0FBSWdBQWdBQ0FBQW9BQWdBQUlBQUlBQWlBQUNBQUlnQUFnQUNBQUFvQUFnQUFJQUFJQUFnQUNBQUlBQWdBQ0FBSUFBZ0FDZ0FBSUFBZ0FBaUFBSUFBSWdBQ0FBQ0FBQWdBQ2dBQUlBQWdBQWlBQUlBQUlnQUNBQUNBQUFnQUNnQUFJQUFnQUFpQUFDQUFJZ0FBZ0FDQUFBb0FBZ0FBSUFBSUFBaUFBQ0FBSWdBQWdBQ0FBQW9BQWdBQUlBQUlBQWlBQUNBQUlnQUFnQUNBQVhoWUJBQUVBQVFBQkFBRUFBUUFCUUFBRUFBUUFBUkFBRUFBRVFBQkFBQkFBQVFBQlFBQUVBQVFBQVJBQUVBQUVRQUJBQUJBQUFRQUJRQUFFQUFRQUFSQUFCTUFKRUFBQlFBQkFBQVFBQVFBQkVBQUVBQVJBQUJBQUVBQUJRQUJBQUFRQUFRQUJFQUFFQUFSQUFCQUFFQUFCUUFCQUFBUUFBUUFCQUFFQUFRQUJBQUVBQVFBQkFBRkFBQVFBQkFBQkVBQVFBQVJBQUVBQUVBQUJBQUZBQUFRQUJBQUJFQUFRQUFSQUFFQUFFQUFCQUFGQUFBUUFCQUFCRUFBRUFBUkFBQkFBRUFBQlFBQkFBQVFBQVFBQkVBQUVBQVJBQUJBQUVBQUJRQUJBQUFRQUFRQUJFQUFFQUFSQUFCQUFFQUFRQUJBQUVBQVFBQkFBRUFBUUFBUkFBRUFBRUFBQkFBRkFBQVFBQkFBQkVBQVFBQVJBQUVBQUVBQUJBQUZBQUFRQUJBQUJFQUFRQUFSQUFFQUFFQUFCUUFCY0FRRVFBQVFBQkVBQUVBQVFBQUZBQUVBQUJBQUJBQUVRQUFRQUJFQUFFQUFRQUFGQUFFQUFCQUFCQUFFUUFBUUFCRUFBRUFBUUFCQUFFQUFRQUJBQUVBQVFBQkFBQkVBQVFBQVFBQUVBQVVBQUJBQUVBQUVRQUJBQUJFQUFRQUFRQUFFQUFVQUFCQUFFQUFFUUFCQUFCRUFBUUFBUUFBRkFBRUFBQkFBQkFBRVFBQVFBQkVBQUVBQVFBQUZBQUVBQUJBQUJBQUVRQUFRQUJFQUFFQUFRQUFGQUFFQUFCQUFCQUFFQUFRQkFBQUFRQUFBRUFBQUJBRUFBQUJBQUFBUUFBQUVBUUFBQUVBQUFCQUFBQVFBUUFGY0FFQUFBQkFBQUFRQkFBQUFRQUFBRUFBQUJBRUFBQUJBQUFBUUFnQjhKd1BXNUFrQngvUVVBUUFBQUVBQUFCQUNBc1FIUUFJRG8rZ3NBZ0FBQUlBQUFDQUFBWXdPZ0FRRFI5UmNBQUFFQUlCWUFEUUNJcnI4QUFBZ0FBTEVBYUFCQWRQMEZBRUFBQUlnRlFBTUFvdXN2QUFBQ0FFQXNBQm9BRUYxL0FRRG9Ca0FEQUtMckx3QUEzUUJvQUVCMC9RVUFvQnNBRFFDSXJyOEFBSFFEb0FFQTBmVVhBSUJ1QURRQUlMcitBZ0RRRFlBR0FFVFhYd01BdXVzdkFBRGRBR2dBUUhUOU5RQ2d1LzRDQU5BTmdBWUFSTmRmQXdDNjY2OEJBTjMxRndDQWJnQTBBQ0M2L2hvQTBGMS9EUURvcnI4R0FIVFhYd01BdXV1dkFRRGQ5ZGNBZ083NkN3QkFOd0F5QUJDZGZnMEFTSysvQmdCMDExOERBTHJycndFQTNmWFhBSUR1K21zQVFIZjlaUUNnTy8wYUFKQmVmdzBBNks2L0RBQjBwMThEQU5Mckx3T0E2ZmRwQUdEOVpRREE5TXNBZ09tWEFRRFRMd01BcGw4R0FFeS9EQUNZZmlVQXNQdEtBR0QzbFFEQTdpc0JnTjNYQXdDTHJ3Y0F1Y1UvQWFhWnRWNi9LWUZyQUFBQUFFbEZUa1N1UW1DQyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmciLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ=="/>
+<meta name="theme-color" content="#1B2A4A"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="PAG Ngara"/>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACKElEQVR42u3awQ3CMBBFwe2DDlJKqqAp+uFKN5RAJK7ZiHUc5MCsXgXfc3REp7tMswYpBjkvQQkTlGCBCBl8YKHjiViTDzL4wEI7iViNDzg0k6EePizFBxkq+jAQHGSo4sMuSn0YRes4LKLUhzkEh4o4bKHUhyEEh4o4rKDUhwkEh+AQHIJDcAgOwSE4ztbzfl163Kb9wQEHHHDAAQcccMABBxxwwAEHHHDAAQcccMABBxxwwAEHHHDAAQcccMABBxxwwAEHHHDAAQcccMABBxxwwAEHHHDAAQcc/4CjyyN92JtFRxzfDw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAwzdB3wThgAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw7BITgEh+CQ4BAcgkNwCA7BoRPhWM4KWpcBh+BQEw4+lMqAQ3CoCQcfSmXAoS0cfCiVwYdi+wwEBx+qy+CDDD7UKgMOOPhQkwxEsOCDDD50kAxEsOCDDESwoEQxyHmJ3zPxApXWX2gBk7biAAAAAElFTkSuQmCC"/>
 <style>
 :root{
   --cream:#FBF8F3;--warm:#F5EFE6;--brown:#5C3D2E;--brown-light:#8B6355;
@@ -222,6 +230,14 @@ tr:hover td{background:var(--warm);}
         <span class="wb-text"><span class="wb-label">Mzee wa Kanisa — Elder</span><span class="wb-desc">Taarifa za wiki &amp; mwezi za fedha</span></span>
       </button>
     </div>
+    <!-- PWA Install Button -->
+    <button id="pwa-install-btn" onclick="triggerPwaInstall()" style="display:none;width:100%;max-width:340px;margin-top:18px;padding:13px 18px;border-radius:10px;border:1.5px solid rgba(201,149,42,0.55);background:rgba(201,149,42,0.13);color:#F0C060;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;align-items:center;gap:10px;text-align:left;transition:all 0.2s;">
+      <span style="font-size:20px;flex-shrink:0;">📲</span>
+      <span style="flex:1;">
+        <span style="display:block;font-weight:800;">Bonyeza hapa kupakua application hii</span>
+        <span style="display:block;font-size:10px;opacity:0.7;font-weight:400;margin-top:2px;">kwenye simu yako (Android &amp; iPhone)</span>
+      </span>
+    </button>
     <p style="color:rgba(255,255,255,0.18);font-size:10px;margin-top:28px;font-style:italic;">Powered by AbedTech · 0755 863 325</p>
   </div>
 </div>
@@ -436,6 +452,12 @@ tr:hover td{background:var(--warm);}
       <div class="card" style="margin-top:12px;">
         <div class="card-title">📨 Tuma Ujumbe kwa Waumini</div>
         <div class="fg"><label>Andika Ujumbe</label><textarea id="pa-bulk-text" class="fi" rows="4" placeholder="Andika ujumbe hapa unaotaka kutuma..."></textarea></div>
+        <!-- SEND ALL AT ONCE -->
+        <button class="btn btn-block" style="background:var(--sky);color:white;margin-bottom:10px;font-size:14px;font-weight:800;padding:13px;" onclick="sendBeemAll('pa')">
+          ✉️ Tuma SMS kwa Waumini <strong>WOTE</strong> Mara Moja (Beem)
+        </button>
+        <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:4px 0 12px;"></div>
+        <div style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Au chagua waumini maalum:</div>
         <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center;">
           <button class="btn btn-sm btn-sky" onclick="selectAllBulk('pa',true)">✅ Chagua Wote</button>
           <button class="btn btn-sm btn-ghost" onclick="selectAllBulk('pa',false)">☐ Futa Uchaguzi</button>
@@ -444,7 +466,7 @@ tr:hover td{background:var(--warm);}
         <div id="pa-bulk-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:10px;font-size:13px;"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-block" style="background:#25D366;color:white;flex:1;" onclick="sendBulkMsg('pa','wa')">📱 WhatsApp Nyingi</button>
-          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('pa','sms')">💬 SMS Nyingi</button>
+          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('pa','sms')">✉️ SMS Beem (Waliochaguliwa)</button>
         </div>
       </div>
     </div>
@@ -491,7 +513,7 @@ tr:hover td{background:var(--warm);}
     <div id="ka-tangazo">
       <div class="card"><div class="card-title">📢 Unda Tangazo Jipya</div>
         <div id="al-katangazo"></div>
-        <div class="al al-w">📌 Tangazo litaenda kwa Mchungaji kwanza kwa idhini.</div>
+        <div class="al al-s">✅ Katibu anaweza kutuma tangazo moja kwa moja bila idhini ya Mchungaji.</div>
         <div class="fgrid">
           <div class="fg full"><label>Kichwa cha Tangazo</label><input type="text" class="fi" id="ka-title" placeholder="mfano: Ibada ya Jumapili — Mgeni Maalum"/></div>
           <div class="fg full"><label>Maelezo ya Tangazo</label><textarea class="fi" id="ka-body" placeholder="Andika tangazo lako hapa..."></textarea></div>
@@ -499,11 +521,11 @@ tr:hover td{background:var(--warm);}
           <div class="fg"><label>Muhimu?</label><select class="fsel" id="ka-muhimu"><option value="0">Kawaida</option><option value="1">🚨 Muhimu Sana</option></select></div>
         </div>
         <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:16px 0;"></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:700;"><input type="checkbox" id="ka-send-wa" checked style="width:16px;height:16px;accent-color:var(--green);"><span style="color:#25D366;">📱 WhatsApp</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:700;"><input type="checkbox" id="ka-send-sms" checked style="width:16px;height:16px;accent-color:var(--sky);"><span style="color:var(--sky);">💬 SMS</span></label>
+        <div id="ka-send-beem-al"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" style="background:#25D366;color:white;flex:1;justify-content:center;" onclick="tumaTangazoWA()">📱 Tuma WhatsApp (Chagua)</button>
+          <button class="btn btn-sky" style="flex:1;justify-content:center;" onclick="tumaTangazoBeemModal()">✉️ Tuma SMS Beem (Chagua)</button>
         </div>
-        <button class="btn btn-sky btn-block" onclick="tumaTangazo()">📤 Tuma kwa Mchungaji kwa Idhini</button>
       </div>
     </div>
     <div id="ka-historia" style="display:none;"><div id="ka-tangazo-list"></div></div>
@@ -545,9 +567,15 @@ tr:hover td{background:var(--warm);}
         </div>
         <div class="tw"><table><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Namba</th><th>Hali ya Uhai</th><th>Vitendo</th><th>Ujumbe</th></tr></thead><tbody id="ka-waumini-tbody"></tbody></table></div>
       </div>
-      <div class="card" style="margin-top:12px;">
-        <div class="card-title">📨 Tuma Ujumbe kwa Waumini</div>
+      <div class="card" style="margin-top:12px;border-left:4px solid var(--sky);">
+        <div class="card-title" style="color:var(--sky);">📨 Tuma Ujumbe kwa Waumini</div>
         <div class="fg"><label>Andika Ujumbe</label><textarea id="ka-bulk-text" class="fi" rows="4" placeholder="Andika ujumbe hapa unaotaka kutuma..."></textarea></div>
+        <!-- SEND ALL AT ONCE — PRIMARY ACTION -->
+        <button class="btn btn-block" style="background:linear-gradient(135deg,var(--sky),#2563eb);color:white;margin-bottom:10px;font-size:14px;font-weight:800;padding:14px;border-radius:10px;" onclick="sendBeemAll('ka')">
+          ✉️ Tuma SMS kwa Waumini <strong>WOTE</strong> Mara Moja (Beem)
+        </button>
+        <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:4px 0 12px;"></div>
+        <div style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Au chagua waumini maalum:</div>
         <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center;">
           <button class="btn btn-sm btn-sky" onclick="selectAllBulk('ka',true)">✅ Chagua Wote</button>
           <button class="btn btn-sm btn-ghost" onclick="selectAllBulk('ka',false)">☐ Futa Uchaguzi</button>
@@ -556,7 +584,7 @@ tr:hover td{background:var(--warm);}
         <div id="ka-bulk-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:10px;font-size:13px;"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-block" style="background:#25D366;color:white;flex:1;" onclick="sendBulkMsg('ka','wa')">📱 WhatsApp Nyingi</button>
-          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('ka','sms')">💬 SMS Nyingi</button>
+          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('ka','sms')">✉️ SMS Beem (Waliochaguliwa)</button>
         </div>
       </div>
     </div>
@@ -627,7 +655,7 @@ tr:hover td{background:var(--warm);}
           <div class="fg"><label>💰 Fungu la Kumi/Zaka (TZS)</label><input type="number" class="fi" id="ha-jumla-zaka" placeholder="0"/></div>
           <div class="fg"><label>👶 Sadaka ya Watoto (TZS)</label><input type="number" class="fi" id="ha-jumla-watoto" placeholder="0"/></div>
           <div class="fg"><label>🏗 Mchango wa Ujenzi (TZS)</label><input type="number" class="fi" id="ha-jumla-ujenzi" placeholder="0"/></div>
-          <div id="ha-jumla-custom-fields" style="display:contents;"></div>
+          <div class="fg"><label>✝ Michango Mingine (TZS)</label><input type="number" class="fi" id="ha-jumla-nyingine" placeholder="0"/></div>
           <div class="fg full"><label>Maelezo (hiari)</label><input type="text" class="fi" id="ha-jumla-maelezo" placeholder="Maelezo zaidi..."/></div>
         </div>
         <div id="ha-jumla-preview" style="display:none;" class="jumla-card">
@@ -752,6 +780,12 @@ tr:hover td{background:var(--warm);}
       <div class="card" style="margin-top:12px;">
         <div class="card-title">📨 Tuma Ujumbe kwa Waumini</div>
         <div class="fg"><label>Andika Ujumbe</label><textarea id="ha-bulk-text" class="fi" rows="4" placeholder="Andika ujumbe hapa unaotaka kutuma..."></textarea></div>
+        <!-- SEND ALL AT ONCE -->
+        <button class="btn btn-block" style="background:var(--sky);color:white;margin-bottom:10px;font-size:14px;font-weight:800;padding:13px;" onclick="sendBeemAll('ha')">
+          ✉️ Tuma SMS kwa Waumini <strong>WOTE</strong> Mara Moja (Beem)
+        </button>
+        <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:4px 0 12px;"></div>
+        <div style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Au chagua waumini maalum:</div>
         <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center;">
           <button class="btn btn-sm btn-sky" onclick="selectAllBulk('ha',true)">✅ Chagua Wote</button>
           <button class="btn btn-sm btn-ghost" onclick="selectAllBulk('ha',false)">☐ Futa Uchaguzi</button>
@@ -760,7 +794,7 @@ tr:hover td{background:var(--warm);}
         <div id="ha-bulk-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:10px;font-size:13px;"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-block" style="background:#25D366;color:white;flex:1;" onclick="sendBulkMsg('ha','wa')">📱 WhatsApp Nyingi</button>
-          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('ha','sms')">💬 SMS Nyingi</button>
+          <button class="btn btn-block" style="background:var(--sky);color:white;flex:1;" onclick="sendBulkMsg('ha','sms')">✉️ SMS Beem (Waliochaguliwa)</button>
         </div>
       </div>
     </div>
@@ -929,6 +963,70 @@ function getPW(role){return localStorage.getItem('kanisa_pw_'+role)||DEFAULT_PW[
 function setPW(role,pw){localStorage.setItem('kanisa_pw_'+role,pw);}
 function ainaBgColor(icon){const m={'🙏':'#FFF3E0','💰':'#E8F5E9','🌟':'#FFFDE7','👶':'#F3E5F5','🏗':'#F3E5F5','📚':'#E3F2FD','❤':'#FCE4EC','🌍':'#E0F2F1','✝':'#F5F5F5'};return m[icon]||'#F5F5F5';}
 function buildTangazoMsg(t){const k=kanisaSettings;const kl=k.jina_kanisa?`*${k.jina_kanisa}*\n`:'*PAG - NGARA MJINI*\n';return `${kl}📢 *TANGAZO*\n\n*${t.kichwa}*\n\n${t.maelezo}\n\n📅 Tarehe: ${formatDate(t.tarehe_tangazo)}\n\n_Baraka za Mungu!_`;}
+
+// ═══════════════════════════════════════════
+// BEEM AFRICA SMS
+// ═══════════════════════════════════════════
+const BEEM_SECRET='f88948a544a3882d';
+const BEEM_SENDER='PAGNGARA';
+
+// Format phone to Beem format (255XXXXXXXXX)
+function beemPhone(simu){
+  if(!simu)return null;
+  simu=simu.replace(/\s/g,'').replace(/-/g,'');
+  if(simu.startsWith('255'))return simu;
+  if(simu.startsWith('0'))return '255'+simu.slice(1);
+  if(simu.startsWith('+'))return simu.slice(1);
+  return '255'+simu;
+}
+
+// Build plain SMS text (no markdown)
+function buildBeemSMSText(ujumbe){
+  return ujumbe.replace(/\*/g,'').replace(/_/g,'').replace(/~/g,'').trim();
+}
+
+// Send SMS via Beem Africa
+async function beemSendSMS(recipients, ujumbe, statusElId){
+  // recipients: [{dest_addr:'255712...', message_id:1}, ...]
+  if(!recipients||!recipients.length){
+    if(statusElId)setAl(statusElId,'⚠️ Hakuna namba za simu za kutumia','w');
+    return {ok:false,sent:0};
+  }
+  const smsText=buildBeemSMSText(ujumbe);
+  const body={
+    source_addr: BEEM_SENDER,
+    schedule_time: '',
+    encoding: '0',
+    message: smsText,
+    recipients: recipients
+  };
+  if(statusElId)setAl(statusElId,`⏳ Inatuma SMS ${recipients.length} kwa Beem Africa...`,'i');
+  try{
+    const resp=await fetch('https://apisms.beem.africa/v1/send',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Basic '+btoa('Enock:'+BEEM_SECRET)
+      },
+      body:JSON.stringify(body)
+    });
+    const data=await resp.json().catch(()=>({}));
+    if(resp.ok||data.code===100||data.code===111){
+      if(statusElId)setAl(statusElId,`✅ SMS ${recipients.length} imetumwa kwa mafanikio kupitia Beem Africa (Sender: PAGNGARA)!`,'s');
+      toastMsg(`✅ SMS ${recipients.length} imetumwa — Beem Africa`);
+      return {ok:true,sent:recipients.length,data};
+    }else{
+      const errMsg=data.message||data.msg||('Code: '+resp.status);
+      if(statusElId)setAl(statusElId,'❌ Beem SMS imeshindwa: '+errMsg,'e');
+      toastMsg('❌ Beem SMS imeshindwa: '+errMsg);
+      return {ok:false,sent:0,error:errMsg};
+    }
+  }catch(e){
+    if(statusElId)setAl(statusElId,'❌ Hitilafu ya mtandao: '+e.message,'e');
+    toastMsg('❌ Hitilafu ya mtandao wakati wa kutuma SMS');
+    return {ok:false,sent:0,error:e.message};
+  }
+}
 function copyText(txt){navigator.clipboard.writeText(txt).then(()=>toastMsg('📋 Umenakiliwa!'));}
 
 // ═══════════════════════════════════════════
@@ -983,53 +1081,6 @@ function changeJumlaHistoriaMwezi(yyyymm){
   const el=$('ha-jumla-historia');if(!el)return;
   if(yyyymm)el.dataset.mwezi=yyyymm;else delete el.dataset.mwezi;
   renderJumlaHistoria();
-}
-const STANDARD_ICONS=['🙏','💰','🌟','👶','🏗'];
-function parseJumlaData(j){
-  try{const d=JSON.parse(j.maelezo);if(d&&typeof d==='object'&&'custom' in d)return{custom:d.custom||{},nota:d.nota||''};}catch(e){}
-  return{custom:{},nota:j.maelezo||''};
-}
-function getCustomJumlaHTML(customObj){
-  return Object.entries(customObj).filter(([,v])=>v>0).map(([jina,v])=>`<div class="jc-row"><span class="jc-key">✦ ${jina}</span><span class="jc-val">${pesa(v)}</span></div>`).join('');
-}
-function calcCustomAinaBreakdown(michangoList){
-  const approved=michangoList.filter(m=>m.hali==='approved');
-  const groups={};
-  approved.filter(m=>!STANDARD_ICONS.includes(m.aina_icon)).forEach(m=>{
-    const key=m.aina_icon;
-    if(!groups[key]){const a=allAina.find(x=>x.icon===key);groups[key]={icon:key,jina:a?a.jina:'Michango Mingine',total:0};}
-    groups[key].total+=m.kiasi;
-  });
-  return Object.values(groups).filter(g=>g.total>0);
-}
-function calcJumlaCustomAinaTotals(fromDate,toDate){
-  const totals={};
-  allJumlaIbada.filter(j=>j.tarehe&&j.tarehe>=fromDate&&j.tarehe<=toDate).forEach(j=>{
-    const{custom}=parseJumlaData(j);
-    Object.entries(custom).filter(([,v])=>v>0).forEach(([jina,v])=>{totals[jina]=(totals[jina]||0)+v;});
-  });
-  return totals;
-}
-function renderJumlaCustomAinaFields(){
-  const container=$('ha-jumla-custom-fields');if(!container)return;
-  if(allAina.length===0){
-    container.innerHTML=`<div class="fg"><label>✝ Michango Mingine (TZS)</label><input type="number" class="fi" id="ha-jumla-nyingine" placeholder="0"/></div>`;
-  }else{
-    container.innerHTML=allAina.map(a=>`<div class="fg"><label>${a.icon} ${a.jina} (TZS)</label><input type="number" class="fi" id="ha-jumla-c-${a.id}" placeholder="0"/></div>`).join('');
-  }
-}
-function calcJumlaOnlySummary(fromDate,toDate){
-  const j=calcJumlaIbadaForRange(fromDate,toDate);
-  const jumla=j.sadaka+j.zaka+j.shukrani+j.watoto+j.ujenzi+j.nyingine;
-  const sadakaZaka=j.sadaka+j.zaka;
-  const asilimia10=Math.round(sadakaZaka*0.10);const baada10=sadakaZaka-asilimia10;
-  return{...j,jumla,sadakaZaka,asilimia10,baada10,asilimia70:Math.round(baada10*0.70),asilimia30:Math.round(baada10*0.30)};
-}
-function getJumlaCustomValues(){
-  if(allAina.length===0){return{customObj:{},nyingine:parseInt($('ha-jumla-nyingine')?.value)||0};}
-  const customObj={};let nyingine=0;
-  allAina.forEach(a=>{const v=parseInt($(`ha-jumla-c-${a.id}`)?.value)||0;if(v>0){customObj[a.jina]=v;nyingine+=v;}});
-  return{customObj,nyingine};
 }
 function calcFinanceSummary(michangoList){
   // Include both individual michango AND jumla ya ibada (ina muumini_id=null)
@@ -1129,7 +1180,8 @@ function renderFedhaViongozi(containerId){
   const el=$(containerId);if(!el)return;
   const selMwezi=el.dataset.fedhaMonth||defaultMwezi;
   const mr=getMonthRangeFor(selMwezi);
-  const fs=calcJumlaOnlySummary(mr.start,mr.end);
+  const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango&&m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
+  const fs=calcCombinedSummary(michangoMwezi,mr.start,mr.end);
   const matMwezi=calcMatumiziTotal(allMatumizi,mr.start,mr.end);
   const mshMwezi=calcMshahariTotal(allMatumizi,mr.start,mr.end);
   const mwezi=mweziLabel(selMwezi);
@@ -1158,12 +1210,7 @@ function renderFedhaViongozi(containerId){
         <div class="fin-card purple"><div class="fin-label">🌟 Sadaka za Shukrani</div><div class="fin-amount">${pesa(fs.shukrani)}</div></div>
         <div class="fin-card orange"><div class="fin-label">👶 Sadaka za Watoto</div><div class="fin-amount">${pesa(fs.watoto)}</div></div>
         ${fs.ujenzi>0?`<div class="fin-card navy"><div class="fin-label">🏗 Mchango wa Ujenzi</div><div class="fin-amount">${pesa(fs.ujenzi)}</div></div>`:''}
-        ${(()=>{
-          const jiC=calcJumlaCustomAinaTotals(mr.start,mr.end);
-          const attributed=Object.values(jiC).reduce((s,v)=>s+v,0);
-          const residual=fs.nyingine-attributed;
-          return Object.entries(jiC).filter(([,v])=>v>0).map(([jina,v])=>`<div class="fin-card navy"><div class="fin-label">✦ ${jina}</div><div class="fin-amount">${pesa(v)}</div></div>`).join('')+(residual>0?`<div class="fin-card navy"><div class="fin-label">✝ Michango Mingine</div><div class="fin-amount">${pesa(residual)}</div></div>`:'');
-        })()}
+        ${fs.nyingine>0?`<div class="fin-card navy"><div class="fin-label">✝ Michango Mingine</div><div class="fin-amount">${pesa(fs.nyingine)}</div></div>`:''}
       </div>
       <div style="background:var(--navy);border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:800;">JUMLA YOTE YA MICHANGO</span><span style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:#F0C060;">${pesa(fs.jumla)}</span></div>
     </div>
@@ -1205,7 +1252,8 @@ function renderFedhaViongozi(containerId){
 
 function renderWikiSummary(containerId){
   const wr=getWeekRange();
-  const fs=calcJumlaOnlySummary(wr.start,wr.end);
+  const michangoWiki=allMichango.filter(m=>m.tarehe_mchango&&m.tarehe_mchango>=wr.start&&m.tarehe_mchango<=wr.end);
+  const fs=calcCombinedSummary(michangoWiki,wr.start,wr.end);
   const matWiki=calcMatumiziTotal(allMatumizi,wr.start,wr.end);
   const el=$(containerId);if(!el)return;
   el.innerHTML=`
@@ -1217,7 +1265,7 @@ function renderWikiSummary(containerId){
       <div class="ibada-row"><span class="ibada-key">💰 Fungu la Kumi (Zaka)</span><span class="ibada-val">${pesa(fs.zaka)}</span></div>
       <div class="ibada-row"><span class="ibada-key">👶 Sadaka za Watoto</span><span class="ibada-val">${pesa(fs.watoto)}</span></div>
       <div class="ibada-row"><span class="ibada-key">🏗 Mchango wa Ujenzi</span><span class="ibada-val">${pesa(fs.ujenzi)}</span></div>
-      ${(()=>{const c=calcJumlaCustomAinaTotals(wr.start,wr.end);const a=Object.values(c).reduce((s,v)=>s+v,0);const r=fs.nyingine-a;return Object.entries(c).filter(([,v])=>v>0).map(([jina,v])=>`<div class="ibada-row"><span class="ibada-key">✦ ${jina}</span><span class="ibada-val">${pesa(v)}</span></div>`).join('')+(r>0?`<div class="ibada-row"><span class="ibada-key">✝ Michango Mingine</span><span class="ibada-val">${pesa(r)}</span></div>`:'');})()}
+      ${fs.nyingine>0?`<div class="ibada-row"><span class="ibada-key">✝ Michango Mingine</span><span class="ibada-val">${pesa(fs.nyingine)}</span></div>`:''}
       <div class="ibada-row"><span class="ibada-key" style="color:#FCA5A5;">💸 Matumizi</span><span class="ibada-val" style="color:#FCA5A5;">${pesa(matWiki)}</span></div>
       <div class="ibada-total"><span class="ibada-key">JUMLA YA WIKI</span><span class="ibada-val">${pesa(fs.jumla)}</span></div>
     </div>
@@ -1232,7 +1280,8 @@ function renderWikiSummary(containerId){
 
 function renderMweziSummary(containerId){
   const mr=getMonthRange();
-  const fs=calcJumlaOnlySummary(mr.start,mr.end);
+  const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango&&m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
+  const fs=calcCombinedSummary(michangoMwezi,mr.start,mr.end);
   const matMwezi=calcMatumiziTotal(allMatumizi,mr.start,mr.end);
   const el=$(containerId);if(!el)return;
   const mwezi=new Date().toLocaleDateString('sw-TZ',{month:'long',year:'numeric'});
@@ -1245,7 +1294,7 @@ function renderMweziSummary(containerId){
       <div class="ibada-row"><span class="ibada-key">💰 Fungu la Kumi (Zaka)</span><span class="ibada-val">${pesa(fs.zaka)}</span></div>
       <div class="ibada-row"><span class="ibada-key">👶 Sadaka za Watoto</span><span class="ibada-val">${pesa(fs.watoto)}</span></div>
       <div class="ibada-row"><span class="ibada-key">🏗 Mchango wa Ujenzi</span><span class="ibada-val">${pesa(fs.ujenzi)}</span></div>
-      ${(()=>{const c=calcJumlaCustomAinaTotals(mr.start,mr.end);const a=Object.values(c).reduce((s,v)=>s+v,0);const r=fs.nyingine-a;return Object.entries(c).filter(([,v])=>v>0).map(([jina,v])=>`<div class="ibada-row"><span class="ibada-key">✦ ${jina}</span><span class="ibada-val">${pesa(v)}</span></div>`).join('')+(r>0?`<div class="ibada-row"><span class="ibada-key">✝ Michango Mingine</span><span class="ibada-val">${pesa(r)}</span></div>`:'');})()}
+      ${fs.nyingine>0?`<div class="ibada-row"><span class="ibada-key">✝ Michango Mingine</span><span class="ibada-val">${pesa(fs.nyingine)}</span></div>`:''}
       <div class="ibada-total"><span class="ibada-key">JUMLA YA MWEZI</span><span class="ibada-val">${pesa(fs.jumla)}</span></div>
     </div>
     <div class="card"><div class="card-title">🔢 Uchambuzi wa Sadaka na Fungu la Kumi — Mwezi Huu</div>
@@ -1518,18 +1567,24 @@ async function sendTangazoNow(apId){
   await DB.patch('approvals',`id=eq.${apId}`,{hali:'approved',tarehe_approval:leo()});
   allApprovals=allApprovals.filter(a=>a.id!==apId);
   const msg=buildTangazoMsg({kichwa:ap.kichwa,maelezo:ap.maelezo_ap||ap.maelezo,tarehe_tangazo:ap.tarehe_tangazo});
-  const smsOnlyMsg=msg.replace(/\*/g,'').replace(/_/g,'');
-  openMod('📲 Tuma Tangazo',`
+  const smsMsg=buildBeemSMSText(msg);
+  const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
+  openMod('📲 Tuma Tangazo kwa Waumini',`
     <div class="al al-s">✅ Tangazo limeidhinishwa!</div>
-    <div style="background:#e0f2fe;border-radius:6px;padding:7px 10px;margin-bottom:10px;font-size:11px;color:#0369a1;">
-      💡 Kitufe cha SMS kinafungua app ya SMS moja kwa moja kwenye simu yako.
-    </div>
+    <div style="background:var(--cream);border-radius:6px;padding:8px 10px;margin-bottom:10px;font-size:12px;line-height:1.5;white-space:pre-wrap;max-height:80px;overflow-y:auto;">${smsMsg}</div>
+    <div id="stn-beem-al"></div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      <a href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-block" style="background:#25D366;color:white;justify-content:center;text-decoration:none;">📱 Tuma WhatsApp</a>
-      <a href="sms:?body=${encodeURIComponent(smsOnlyMsg)}" class="btn btn-block" style="background:var(--sky);color:white;justify-content:center;text-decoration:none;">💬 Tuma SMS</a>
-      <button onclick="navigator.clipboard.writeText(${JSON.stringify(smsOnlyMsg)}).then(()=>toastMsg('📋 Umenakiliwa!'))" class="btn btn-block" style="background:#6b7280;color:white;">📋 Nakili Ujumbe (Desktop)</button>
+      <a href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-block" style="background:#25D366;color:white;justify-content:center;text-decoration:none;">📱 Tuma WhatsApp (Kikundi)</a>
+      <button class="btn btn-sky btn-block" style="justify-content:center;" onclick="stnBeemAll('${apId}',${JSON.stringify(smsMsg)})">✉️ Tuma SMS Beem — Waumini Wote (${members.length})</button>
     </div>`);
   renderPendingApprovals();$('pa-pending-count').textContent=allApprovals.length;
+}
+async function stnBeemAll(apId,smsMsg){
+  const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
+  if(!members.length){setAl('stn-beem-al','Hakuna waumini wenye namba ya simu','w');return;}
+  const recipients=members.map((w,i)=>({dest_addr:beemPhone(w.namba_simu),message_id:i+1}));
+  const result=await beemSendSMS(recipients,smsMsg,'stn-beem-al');
+  if(result.ok)setTimeout(()=>closeModDirect(),2500);
 }
 async function rejectItem(id,aina){
   await DB.patch('approvals',`id=eq.${id}`,{hali:'rejected',tarehe_approval:leo()});
@@ -1754,29 +1809,113 @@ function renderKaHistoria(){
       </div>
       <div class="tangazo-body" style="font-size:12px;">${t.maelezo}</div>
       <div style="font-size:11px;color:var(--gray);">📅 ${formatDate(t.tarehe_tangazo)}</div>
-      ${t.hali==='approved'?`<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;"><button onclick="tumaKwaWaumini('${t.id}')" class="btn btn-green btn-sm">📤 Tuma kwa Waumini</button><a href="https://wa.me/?text=${encodeURIComponent(buildTangazoMsg(t))}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;text-decoration:none;">📱 WhatsApp</a><a href="sms:?body=${encodeURIComponent(buildTangazoMsg(t).replace(/\*/g,'').replace(/_/g,''))}" class="btn btn-sm" style="background:var(--sky);color:white;text-decoration:none;">💬 SMS</a></div>`:''}
+      ${t.hali==='approved'?`<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;"><button onclick="tumaKwaWaumini('${t.id}')" class="btn btn-green btn-sm">📤 Tuma kwa Waumini</button><a href="https://wa.me/?text=${encodeURIComponent(buildTangazoMsg(t))}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;text-decoration:none;">📱 WhatsApp</a></div>`:''}
     </div>`).join('');
 }
 async function tumaTangazo(){
+  // kept for backward compat but not called anymore
+}
+async function _saveTangazoToDB(kichwa,maelezo,tarehe,muhimu){
+  // Save tangazo directly as approved (katibu bypass)
+  try{
+    const r=await DB.post('matangazo',{kichwa,maelezo,tarehe_tangazo:tarehe,muhimu,hali:'approved',approval_id:null,send_wa:true,send_sms:true});
+    if(Array.isArray(r)&&r[0]){
+      allMatangazo.unshift(r[0]);
+      $('ka-title').value='';$('ka-body').value='';
+      const tarEl=$('ka-tarehe');if(tarEl)tarEl.value='';
+      renderKaHistoria();
+      return r[0];
+    }
+  }catch(e){console.error(e);}
+  return null;
+}
+async function tumaTangazoWA(){
   const kichwa=$('ka-title').value.trim(),maelezo=$('ka-body').value.trim();
   const tarehe=$('ka-tarehe').value||leo(),muhimu=$('ka-muhimu').value==='1';
   if(!kichwa||!maelezo){setAl('al-katangazo','Jaza kichwa na maelezo ya tangazo','e');return;}
-  confirmSave('📢 Thibitisha Kutuma Tangazo',[
-    ['Kichwa la Tangazo',kichwa],
-    ['Tarehe',formatDate(tarehe)],
-    ['Muhimu',muhimu?'Ndiyo':'Hapana'],
-    ['Maelezo',maelezo.length>70?maelezo.slice(0,70)+'…':maelezo],
-  ],async()=>{
-    setAl('al-katangazo','Inatuma kwa Mchungaji...','i');
-    try{
-      const ap=await DB.post('approvals',{aina:'tangazo',kichwa,maelezo_ap:maelezo,tarehe_tangazo:tarehe,muhimu,hali:'pending'});
-      if(!Array.isArray(ap)||!ap[0]){setAl('al-katangazo','Hitilafu. Jaribu tena.','e');return;}
-      await DB.post('matangazo',{kichwa,maelezo,tarehe_tangazo:tarehe,muhimu,hali:'pending',approval_id:ap[0].id,send_wa:$('ka-send-wa').checked,send_sms:$('ka-send-sms').checked});
-      setAl('al-katangazo','✅ Tangazo limetumwa kwa Mchungaji kwa idhini!','s');
-      $('ka-title').value='';$('ka-body').value='';
-      await loadKatibuData();renderKaHistoria();
-    }catch(e){setAl('al-katangazo','Hitilafu: '+e.message,'e');}
-  });
+  const msg=buildTangazoMsg({kichwa,maelezo,tarehe_tangazo:tarehe});
+  const enc=encodeURIComponent(msg);
+  const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
+  const memberRows=members.map(w=>`
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 4px;border-bottom:1px solid var(--border);">
+      <input type="checkbox" class="ka-wa-chk" value="${w.namba_simu}" data-jina="${w.jina_kamili.replace(/"/g,'&quot;')}" checked style="width:16px;height:16px;accent-color:#25D366;flex-shrink:0;cursor:pointer;">
+      <span style="flex:1;font-size:13px;cursor:pointer;" onclick="this.previousElementSibling.click()">${w.jina_kamili}</span>
+      <span style="font-size:11px;color:var(--gray);">${w.namba_simu}</span>
+      <a href="https://wa.me/255${w.namba_simu.replace(/^0/,'')}?text=${enc}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;text-decoration:none;flex-shrink:0;padding:4px 7px;" title="Tuma WhatsApp kwa ${w.jina_kamili}">📱</a>
+    </div>`).join('');
+  openMod('📱 Tuma Tangazo — WhatsApp',`
+    <div style="background:#f0fdf4;border-left:3px solid #25D366;border-radius:6px;padding:10px;margin-bottom:12px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:90px;overflow-y:auto;">${msg.replace(/\*/g,'<b>').replace(/\*/g,'</b>').replace(/_/g,'')}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <span style="font-size:13px;font-weight:700;">Waumini (${members.length}):</span>
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;">
+        <input type="checkbox" id="ka-wa-all" checked onchange="document.querySelectorAll('.ka-wa-chk').forEach(c=>c.checked=this.checked)" style="width:14px;height:14px;accent-color:#25D366;"> Chagua Wote
+      </label>
+    </div>
+    <div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:0 6px;margin-bottom:12px;">
+      ${members.length?memberRows:'<p style="color:var(--gray);text-align:center;padding:16px;font-size:12px;">Hakuna waumini wenye namba ya simu</p>'}
+    </div>
+    <div id="ka-wa-mod-al"></div>
+    <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">💡 Bonyeza 📱 karibu na jina kumtumia muumini mmoja mmoja, au tumia kitufe hapa chini kutuma wote kwa pamoja.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" style="background:#25D366;color:white;flex:2;justify-content:center;" onclick="kaWASendAndSave(${JSON.stringify(kichwa)},${JSON.stringify(maelezo)},${JSON.stringify(tarehe)},${muhimu?1:0},${JSON.stringify(enc)})">📱 Tuma WhatsApp (Waliochaguliwa)</button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Funga</button>
+    </div>`);
+}
+async function kaWASendAndSave(kichwa,maelezo,tarehe,muhimu,enc){
+  const checked=[...document.querySelectorAll('.ka-wa-chk:checked')];
+  if(!checked.length){setAl('ka-wa-mod-al','Chagua muumini angalau mmoja','e');return;}
+  setAl('ka-wa-mod-al','Inahifadhi tangazo...','i');
+  const saved=await _saveTangazoToDB(kichwa,maelezo,tarehe,muhimu===1);
+  if(!saved){setAl('ka-wa-mod-al','Hitilafu ya kuhifadhi tangazo. Jaribu tena.','e');return;}
+  setAl('ka-wa-mod-al','✅ Limehifadhiwa! Inafungua WhatsApp...','s');
+  if(checked.length===1){
+    const num=checked[0].value.replace(/^0/,'');
+    setTimeout(()=>{window.open(`https://wa.me/255${num}?text=${enc}`,'_blank');closeModDirect();},600);
+  } else {
+    setTimeout(()=>{window.open(`https://wa.me/?text=${enc}`,'_blank');closeModDirect();},600);
+  }
+}
+async function tumaTangazoBeemModal(){
+  const kichwa=$('ka-title').value.trim(),maelezo=$('ka-body').value.trim();
+  const tarehe=$('ka-tarehe').value||leo(),muhimu=$('ka-muhimu').value==='1';
+  if(!kichwa||!maelezo){setAl('al-katangazo','Jaza kichwa na maelezo ya tangazo','e');return;}
+  const smsMsg=buildBeemSMSText(buildTangazoMsg({kichwa,maelezo,tarehe_tangazo:tarehe}));
+  const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
+  const memberRows=members.map(w=>`
+    <label style="display:flex;align-items:center;gap:8px;padding:5px 4px;border-bottom:1px solid var(--border);cursor:pointer;">
+      <input type="checkbox" class="ka-beem-chk" value="${w.namba_simu}" data-beem="${beemPhone(w.namba_simu)}" data-jina="${w.jina_kamili.replace(/"/g,'&quot;')}" checked style="width:15px;height:15px;accent-color:var(--sky);flex-shrink:0;">
+      <span style="flex:1;font-size:13px;">${w.jina_kamili}</span>
+      <span style="color:var(--gray);font-size:11px;">${w.namba_simu}</span>
+    </label>`).join('');
+  openMod('✉️ Tuma Tangazo kwa SMS (Beem)',`
+    <div class="al al-i" style="font-size:12px;">📡 Sender: <strong>PAGNGARA</strong> — Beem Africa SMS</div>
+    <div style="background:var(--cream);border-radius:6px;padding:8px 10px;margin-bottom:10px;font-size:12px;white-space:pre-wrap;max-height:80px;overflow-y:auto;">${smsMsg}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <span style="font-size:12px;font-weight:700;">Chagua waumini (${members.length}):</span>
+      <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;">
+        <input type="checkbox" checked onchange="document.querySelectorAll('.ka-beem-chk').forEach(c=>c.checked=this.checked)" style="width:13px;height:13px;"> Wote
+      </label>
+    </div>
+    <div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:0 6px;margin-bottom:10px;">
+      ${members.length?memberRows:'<p style="color:var(--gray);text-align:center;padding:12px;font-size:12px;">Hakuna waumini wenye namba ya simu</p>'}
+    </div>
+    <div id="ka-beem-mod-al"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-sky" style="flex:2;justify-content:center;" onclick="katibuBeemSendTangazo(${JSON.stringify(kichwa)},${JSON.stringify(maelezo)},${JSON.stringify(tarehe)},${muhimu?1:0},${JSON.stringify(smsMsg)})">✉️ Tuma SMS Beem</button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Rudi</button>
+    </div>`);
+}
+async function katibuBeemSendTangazo(kichwa,maelezo,tarehe,muhimu,smsMsg){
+  const checked=[...document.querySelectorAll('.ka-beem-chk:checked')];
+  if(!checked.length){setAl('ka-beem-mod-al','Chagua muumini angalau mmoja','e');return;}
+  const recipients=checked.map((c,i)=>({dest_addr:c.dataset.beem,message_id:i+1})).filter(r=>r.dest_addr);
+  const result=await beemSendSMS(recipients,smsMsg,'ka-beem-mod-al');
+  if(result.ok){
+    // Save to DB
+    await _saveTangazoToDB(kichwa,maelezo,tarehe,muhimu===1);
+    setAl('al-katangazo','✅ Tangazo limetumwa kwa SMS kupitia Beem Africa na limehifadhiwa!','s');
+    setTimeout(()=>closeModDirect(),2500);
+  }
 }
 function kaTab(tab){
   ['tangazo','historia','waumini','muhtasari','leo','fedha'].forEach(t=>{
@@ -1890,7 +2029,7 @@ async function loadHazinaData(){
   const dl=$('ha-waumini-dl');if(dl)dl.innerHTML=allWaumini.map(w=>`<option value="${w.jina_kamili}"></option>`).join('');
 
   renderAinaList();renderAinaSelects();loadHaHistoria();renderHaWaumini();initRipotiSelects();
-  renderHaMatumiziList();renderHaMshahara();renderHaOmbiList();renderJumlaCustomAinaFields();renderJumlaHistoria();
+  renderHaMatumiziList();renderHaMshahara();renderHaOmbiList();renderJumlaHistoria();
   renderIbadaLeo('ha-leo-content');renderFedhaViongozi('ha-fedha-content');
   $('ha-ombi-count').textContent=allOmbiMichango.length;
 }
@@ -1938,11 +2077,11 @@ async function ongezaAinaMchango(){
   const jina=$('ha-aina-jina').value.trim(),icon=$('ha-aina-icon').value,maelezo=$('ha-aina-desc').value.trim();
   if(!jina){setAl('al-haaina','Weka jina la aina','e');return;}
   const r=await DB.post('michango_aina',{jina,icon,maelezo});
-  if(Array.isArray(r)&&r[0]){allAina.push(r[0]);renderAinaList();renderAinaSelects();renderJumlaCustomAinaFields();renderJumlaHistoria();$('ha-aina-jina').value='';$('ha-aina-desc').value='';setAl('al-haaina',`✅ "${jina}" imeongezwa!`,'s');}
+  if(Array.isArray(r)&&r[0]){allAina.push(r[0]);renderAinaList();renderAinaSelects();$('ha-aina-jina').value='';$('ha-aina-desc').value='';setAl('al-haaina',`✅ "${jina}" imeongezwa!`,'s');}
 }
 async function futaAina(id){
   if(!confirm('Futa aina hii?'))return;
-  await DB.del('michango_aina',`id=eq.${id}`);allAina=allAina.filter(a=>a.id!==id);renderAinaList();renderAinaSelects();renderJumlaCustomAinaFields();renderJumlaHistoria();toastMsg('Imefutwa');
+  await DB.del('michango_aina',`id=eq.${id}`);allAina=allAina.filter(a=>a.id!==id);renderAinaList();renderAinaSelects();toastMsg('Imefutwa');
 }
 
 // JUMLA YA IBADA (bila muumini)
@@ -1952,7 +2091,7 @@ function previewJumla(){
   const zaka=parseInt($('ha-jumla-zaka').value)||0;
   const watoto=parseInt($('ha-jumla-watoto').value)||0;
   const ujenzi=parseInt($('ha-jumla-ujenzi').value)||0;
-  const{customObj,nyingine}=getJumlaCustomValues();
+  const nyingine=parseInt($('ha-jumla-nyingine').value)||0;
   const jumla=sadaka+shukrani+zaka+watoto+ujenzi+nyingine;
   const tarehe=$('ha-jumla-tarehe').value||leo();
   const aibaIbada=$('ha-jumla-aina-ibada').value||'—';
@@ -1961,12 +2100,12 @@ function previewJumla(){
   inner.innerHTML=`
     <div class="jc-row"><span class="jc-key">📅 Tarehe</span><span class="jc-val">${formatDate(tarehe)}</span></div>
     <div class="jc-row"><span class="jc-key">⛪ Aina ya Ibada</span><span class="jc-val">${aibaIbada}</span></div>
-    ${sadaka>0?`<div class="jc-row"><span class="jc-key">🙏 Sadaka ya Kawaida</span><span class="jc-val">${pesa(sadaka)}</span></div>`:''}
-    ${shukrani>0?`<div class="jc-row"><span class="jc-key">🌟 Sadaka ya Shukrani</span><span class="jc-val">${pesa(shukrani)}</span></div>`:''}
-    ${zaka>0?`<div class="jc-row"><span class="jc-key">💰 Fungu la Kumi/Zaka</span><span class="jc-val">${pesa(zaka)}</span></div>`:''}
-    ${watoto>0?`<div class="jc-row"><span class="jc-key">👶 Sadaka ya Watoto</span><span class="jc-val">${pesa(watoto)}</span></div>`:''}
+    <div class="jc-row"><span class="jc-key">🙏 Sadaka ya Kawaida</span><span class="jc-val">${pesa(sadaka)}</span></div>
+    <div class="jc-row"><span class="jc-key">🌟 Sadaka ya Shukrani</span><span class="jc-val">${pesa(shukrani)}</span></div>
+    <div class="jc-row"><span class="jc-key">💰 Fungu la Kumi/Zaka</span><span class="jc-val">${pesa(zaka)}</span></div>
+    <div class="jc-row"><span class="jc-key">👶 Sadaka ya Watoto</span><span class="jc-val">${pesa(watoto)}</span></div>
     ${ujenzi>0?`<div class="jc-row"><span class="jc-key">🏗 Mchango wa Ujenzi</span><span class="jc-val">${pesa(ujenzi)}</span></div>`:''}
-    ${getCustomJumlaHTML(customObj)}
+    ${nyingine>0?`<div class="jc-row"><span class="jc-key">✝ Michango Mingine</span><span class="jc-val">${pesa(nyingine)}</span></div>`:''}
     <div class="jc-total"><span class="jc-key">JUMLA YA IBADA</span><span class="jc-val">${pesa(jumla)}</span></div>`;
 }
 async function hifadhiJumla(){
@@ -1975,13 +2114,12 @@ async function hifadhiJumla(){
   const zaka=parseInt($('ha-jumla-zaka').value)||0;
   const watoto=parseInt($('ha-jumla-watoto').value)||0;
   const ujenzi=parseInt($('ha-jumla-ujenzi').value)||0;
-  const{customObj,nyingine}=getJumlaCustomValues();
+  const nyingine=parseInt($('ha-jumla-nyingine').value)||0;
   const jumla=sadaka+shukrani+zaka+watoto+ujenzi+nyingine;
   if(jumla<=0){setAl('al-hajumla','Jaza angalau aina moja ya mchango','e');return;}
   const tarehe=$('ha-jumla-tarehe').value||leo();
   const aina_ibada=$('ha-jumla-aina-ibada').value||'Ibada';
-  const nota=$('ha-jumla-maelezo').value.trim();
-  const maelezo=Object.keys(customObj).length>0?JSON.stringify({custom:customObj,nota}):nota;
+  const maelezo=$('ha-jumla-maelezo').value.trim();
   const rows=[
     ['Tarehe',formatDate(tarehe)],
     ['Aina ya Ibada',aina_ibada],
@@ -1990,7 +2128,7 @@ async function hifadhiJumla(){
     ...(shukrani>0?[['Shukrani',pesa(shukrani)]]:[]),
     ...(watoto>0?[['Watoto',pesa(watoto)]]:[]),
     ...(ujenzi>0?[['Ujenzi',pesa(ujenzi)]]:[]),
-    ...Object.entries(customObj).filter(([,v])=>v>0).map(([jina,v])=>[jina,pesa(v)]),
+    ...(nyingine>0?[['Nyingine',pesa(nyingine)]]:[]),
     ['JUMLA',pesa(jumla)],
   ];
   confirmSave('📋 Thibitisha Jumla ya Ibada',rows,async()=>{
@@ -2003,8 +2141,7 @@ async function hifadhiJumla(){
         if(Array.isArray(r)&&r[0])allJumlaIbada.unshift(r[0]);
         else{const fresh=await DB.get('jumla_ibada','order=tarehe.desc');if(Array.isArray(fresh))allJumlaIbada=fresh;}
         setAl('al-hajumla','✅ Jumla ya ibada imehifadhiwa! Inaonekana kwenye dashboard za viongozi wote.','s');
-        ['ha-jumla-sadaka','ha-jumla-shukrani','ha-jumla-zaka','ha-jumla-watoto','ha-jumla-ujenzi','ha-jumla-maelezo','ha-jumla-aina-ibada'].forEach(id=>{const e=$(id);if(e)e.value='';});
-        allAina.forEach(a=>{const e=$(`ha-jumla-c-${a.id}`);if(e)e.value='';});
+        ['ha-jumla-sadaka','ha-jumla-shukrani','ha-jumla-zaka','ha-jumla-watoto','ha-jumla-ujenzi','ha-jumla-nyingine','ha-jumla-maelezo','ha-jumla-aina-ibada'].forEach(id=>{$(id).value='';});
         $('ha-jumla-preview').style.display='none';
         renderJumlaHistoria();toastMsg('✅ Jumla ya ibada imehifadhiwa!');
       }
@@ -2018,13 +2155,11 @@ function renderJumlaHistoria(){
   const selMwezi=el.dataset.mwezi||defaultMwezi;
   const label=mweziLabel(selMwezi);
   const availMonths=getAvailableJumlaMonths();
-  const mr=getMonthRangeFor(selMwezi);
   const filtered=allJumlaIbada.filter(j=>j.tarehe&&j.tarehe.slice(0,7)===selMwezi);
-  const fs=calcJumlaOnlySummary(mr.start,mr.end);
-  const allCustom=calcJumlaCustomAinaTotals(mr.start,mr.end);
-  const attributedNyingine=Object.values(allCustom).reduce((s,v)=>s+v,0);
-  const residualNyingine=fs.nyingine-attributedNyingine;
-  const muhRow=(label,val,col='#86EFAC')=>val>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">${label}</span><span style="font-family:'Lora',serif;font-size:13px;color:${col};">${pesa(val)}</span></div>`:'';
+  const tot=filtered.reduce((a,j)=>({
+    sadaka:a.sadaka+(j.sadaka||0),shukrani:a.shukrani+(j.shukrani||0),zaka:a.zaka+(j.zaka||0),
+    watoto:a.watoto+(j.watoto||0),ujenzi:a.ujenzi+(j.ujenzi||0),nyingine:a.nyingine+(j.nyingine||0),jumla:a.jumla+(j.jumla||0)
+  }),{sadaka:0,shukrani:0,zaka:0,watoto:0,ujenzi:0,nyingine:0,jumla:0});
   el.innerHTML=`
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
       <span style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">📅 Chagua Mwezi:</span>
@@ -2034,38 +2169,34 @@ function renderJumlaHistoria(){
     </div>
     ${filtered.length===0
       ?`<p style="color:var(--gray);text-align:center;padding:20px;font-size:13px;">Hakuna jumla za ibada kwa <strong>${label}</strong></p>`
-      :`${filtered.map(j=>{
-        const{custom,nota}=parseJumlaData(j);
-        const hasCustom=Object.keys(custom).length>0;
-        return`<div class="jumla-card" style="margin-bottom:10px;">
-          <div class="jc-title">⛪ ${j.aina_ibada||'Ibada'} — ${formatDate(j.tarehe)}</div>
-          ${j.sadaka>0?`<div class="jc-row"><span class="jc-key">🙏 Sadaka ya Kawaida</span><span class="jc-val">${pesa(j.sadaka)}</span></div>`:''}
-          ${j.shukrani>0?`<div class="jc-row"><span class="jc-key">🌟 Sadaka ya Shukrani</span><span class="jc-val">${pesa(j.shukrani)}</span></div>`:''}
-          ${j.zaka>0?`<div class="jc-row"><span class="jc-key">💰 Fungu la Kumi/Zaka</span><span class="jc-val">${pesa(j.zaka)}</span></div>`:''}
-          ${j.watoto>0?`<div class="jc-row"><span class="jc-key">👶 Sadaka ya Watoto</span><span class="jc-val">${pesa(j.watoto)}</span></div>`:''}
-          ${j.ujenzi>0?`<div class="jc-row"><span class="jc-key">🏗 Mchango wa Ujenzi</span><span class="jc-val">${pesa(j.ujenzi)}</span></div>`:''}
-          ${hasCustom?getCustomJumlaHTML(custom):(j.nyingine>0?`<div class="jc-row"><span class="jc-key">✝ Michango Mingine</span><span class="jc-val">${pesa(j.nyingine)}</span></div>`:'')}
-          ${nota?`<div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">📝 ${nota}</div>`:''}
-          <div class="jc-total"><span class="jc-key">JUMLA</span><span class="jc-val">${pesa(j.jumla)}</span></div>
-          <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px;">
-            <button class="btn btn-sky btn-sm" onclick="haririshaJumlaIbada('${j.id}')">✏️ Hariri</button>
-            <button class="btn btn-red btn-sm" onclick="futaJumlaIbada('${j.id}')">🗑 Futa</button>
-          </div>
-        </div>`;}).join('')}
-      <div style="background:var(--navy);border-radius:10px;padding:14px;margin-top:4px;">
-        <div style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">📊 Muhtasari Kamili wa ${label}</div>
-        ${muhRow('🙏 Sadaka ya Kawaida',fs.sadaka)}
-        ${muhRow('🌟 Sadaka ya Shukrani',fs.shukrani)}
-        ${muhRow('💰 Fungu la Kumi/Zaka',fs.zaka,'#F0C060')}
-        ${muhRow('👶 Sadaka ya Watoto',fs.watoto)}
-        ${muhRow('🏗 Mchango wa Ujenzi',fs.ujenzi)}
-        ${Object.entries(allCustom).filter(([,v])=>v>0).map(([jina,v])=>muhRow(`✦ ${jina}`,v)).join('')}
-        ${muhRow('✝ Michango Mingine',residualNyingine>0?residualNyingine:0)}
+      :`${filtered.map(j=>`
+      <div class="jumla-card" style="margin-bottom:10px;">
+        <div class="jc-title">⛪ ${j.aina_ibada||'Ibada'} — ${formatDate(j.tarehe)}</div>
+        ${j.sadaka>0?`<div class="jc-row"><span class="jc-key">🙏 Sadaka ya Kawaida</span><span class="jc-val">${pesa(j.sadaka)}</span></div>`:''}
+        ${j.shukrani>0?`<div class="jc-row"><span class="jc-key">🌟 Sadaka ya Shukrani</span><span class="jc-val">${pesa(j.shukrani)}</span></div>`:''}
+        ${j.zaka>0?`<div class="jc-row"><span class="jc-key">💰 Fungu la Kumi/Zaka</span><span class="jc-val">${pesa(j.zaka)}</span></div>`:''}
+        ${j.watoto>0?`<div class="jc-row"><span class="jc-key">👶 Sadaka ya Watoto</span><span class="jc-val">${pesa(j.watoto)}</span></div>`:''}
+        ${j.ujenzi>0?`<div class="jc-row"><span class="jc-key">🏗 Mchango wa Ujenzi</span><span class="jc-val">${pesa(j.ujenzi)}</span></div>`:''}
+        ${j.nyingine>0?`<div class="jc-row"><span class="jc-key">✝ Michango Mingine</span><span class="jc-val">${pesa(j.nyingine)}</span></div>`:''}
+        <div class="jc-total"><span class="jc-key">JUMLA</span><span class="jc-val">${pesa(j.jumla)}</span></div>
+        <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px;">
+          <button class="btn btn-sky btn-sm" onclick="haririshaJumlaIbada('${j.id}')">✏️ Hariri</button>
+          <button class="btn btn-red btn-sm" onclick="futaJumlaIbada('${j.id}')">🗑 Futa</button>
+        </div>
+      </div>`).join('')}
+      ${filtered.length>1?`<div style="background:var(--navy);border-radius:10px;padding:14px;margin-top:4px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">📊 Muhtasari wa ${label}</div>
+        ${tot.sadaka>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">🙏 Sadaka ya Kawaida</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.sadaka)}</span></div>`:''}
+        ${tot.shukrani>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">🌟 Sadaka ya Shukrani</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.shukrani)}</span></div>`:''}
+        ${tot.zaka>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">💰 Fungu la Kumi/Zaka</span><span style="font-family:'Lora',serif;font-size:13px;color:#F0C060;">${pesa(tot.zaka)}</span></div>`:''}
+        ${tot.watoto>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">👶 Sadaka ya Watoto</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.watoto)}</span></div>`:''}
+        ${tot.ujenzi>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">🏗 Mchango wa Ujenzi</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.ujenzi)}</span></div>`:''}
+        ${tot.nyingine>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="font-size:12px;color:rgba(255,255,255,0.7);">✝ Michango Mingine</span><span style="font-family:'Lora',serif;font-size:13px;color:#86EFAC;">${pesa(tot.nyingine)}</span></div>`:''}
         <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid rgba(240,192,96,0.4);margin-top:6px;">
           <span style="font-size:13px;color:white;font-weight:800;">JUMLA YA ${label.toUpperCase()}</span>
-          <span style="font-family:'Lora',serif;font-size:17px;font-weight:700;color:#F0C060;">${pesa(fs.jumla)}</span>
+          <span style="font-family:'Lora',serif;font-size:17px;font-weight:700;color:#F0C060;">${pesa(tot.jumla)}</span>
         </div>
-      </div>
+      </div>`:''}
     `}`;
 }
 async function futaJumlaIbada(id){
@@ -2075,20 +2206,16 @@ async function futaJumlaIbada(id){
 }
 function haririshaJumlaIbada(id){
   const j=allJumlaIbada.find(x=>x.id===id);if(!j)return;
-  const{custom,nota}=parseJumlaData(j);
-  const customFields=allAina.length===0
-    ?`<div class="fg"><label>✝ Michango Mingine (TZS)</label><input type="number" id="hj-nyingine" class="fi" value="${j.nyingine||0}"/></div>`
-    :allAina.map(a=>`<div class="fg"><label>${a.icon} ${a.jina} (TZS)</label><input type="number" id="hj-c-${a.id}" class="fi" value="${custom[a.jina]||0}"/></div>`).join('');
   openMod('✏️ Hariri Jumla ya Ibada',`
     <div class="fg"><label>Aina ya Ibada</label><input type="text" id="hj-aina" class="fi" value="${j.aina_ibada||''}"/></div>
     <div class="fg"><label>Tarehe</label><input type="date" id="hj-tarehe" class="fi" value="${j.tarehe}"/></div>
-    <div class="fg"><label>🙏 Sadaka ya Kawaida (TZS)</label><input type="number" id="hj-sadaka" class="fi" value="${j.sadaka||0}"/></div>
-    <div class="fg"><label>🌟 Sadaka ya Shukrani (TZS)</label><input type="number" id="hj-shukrani" class="fi" value="${j.shukrani||0}"/></div>
-    <div class="fg"><label>💰 Fungu la Kumi/Zaka (TZS)</label><input type="number" id="hj-zaka" class="fi" value="${j.zaka||0}"/></div>
-    <div class="fg"><label>👶 Sadaka ya Watoto (TZS)</label><input type="number" id="hj-watoto" class="fi" value="${j.watoto||0}"/></div>
-    <div class="fg"><label>🏗 Mchango wa Ujenzi (TZS)</label><input type="number" id="hj-ujenzi" class="fi" value="${j.ujenzi||0}"/></div>
-    ${customFields}
-    <div class="fg"><label>Maelezo (hiari)</label><input type="text" id="hj-maelezo" class="fi" value="${nota}"/></div>
+    <div class="fg"><label>🙏 Sadaka ya Kawaida</label><input type="number" id="hj-sadaka" class="fi" value="${j.sadaka||0}"/></div>
+    <div class="fg"><label>🌟 Sadaka ya Shukrani</label><input type="number" id="hj-shukrani" class="fi" value="${j.shukrani||0}"/></div>
+    <div class="fg"><label>💰 Fungu la Kumi/Zaka</label><input type="number" id="hj-zaka" class="fi" value="${j.zaka||0}"/></div>
+    <div class="fg"><label>👶 Sadaka ya Watoto</label><input type="number" id="hj-watoto" class="fi" value="${j.watoto||0}"/></div>
+    <div class="fg"><label>🏗 Mchango wa Ujenzi</label><input type="number" id="hj-ujenzi" class="fi" value="${j.ujenzi||0}"/></div>
+    <div class="fg"><label>✝ Michango Mingine</label><input type="number" id="hj-nyingine" class="fi" value="${j.nyingine||0}"/></div>
+    <div class="fg"><label>Maelezo</label><input type="text" id="hj-maelezo" class="fi" value="${j.maelezo||''}"/></div>
     <button class="btn btn-green btn-block" onclick="hifadhiJumlaIbada('${id}')">💾 Hifadhi</button>
     <div id="hj-alert" style="margin-top:8px;"></div>`);
 }
@@ -2101,20 +2228,13 @@ async function hifadhiJumlaIbada(id){
   const zaka=parseInt($('hj-zaka').value)||0;
   const watoto=parseInt($('hj-watoto').value)||0;
   const ujenzi=parseInt($('hj-ujenzi').value)||0;
-  let nyingine=0;const customObj={};
-  if(allAina.length===0){
-    nyingine=parseInt($('hj-nyingine')?.value)||0;
-  }else{
-    allAina.forEach(a=>{const v=parseInt($(`hj-c-${a.id}`)?.value)||0;if(v>0){customObj[a.jina]=v;nyingine+=v;}});
-  }
-  const nota=$('hj-maelezo').value.trim();
-  const maelezo=Object.keys(customObj).length>0?JSON.stringify({custom:customObj,nota}):nota;
+  const nyingine=parseInt($('hj-nyingine').value)||0;
   const jumla=sadaka+shukrani+zaka+watoto+ujenzi+nyingine;
   try{
-    const patch={aina_ibada:$('hj-aina').value.trim(),tarehe,sadaka,shukrani,zaka,watoto,ujenzi,nyingine,maelezo};
+    const patch={aina_ibada:$('hj-aina').value.trim(),tarehe,sadaka,shukrani,zaka,watoto,ujenzi,nyingine,maelezo:$('hj-maelezo').value.trim()};
     await DB.patch('jumla_ibada',`id=eq.${id}`,patch);
     const idx=allJumlaIbada.findIndex(x=>x.id===id);
-    if(idx!==-1)Object.assign(allJumlaIbada[idx],{...patch,jumla});
+    if(idx!==-1)Object.assign(allJumlaIbada[idx],{...patch,jumla:sadaka+shukrani+zaka+watoto+ujenzi+nyingine});
     closeModDirect();renderJumlaHistoria();toastMsg('✅ Jumla ya ibada imehifadhiwa');
   }catch(e){setAl('hj-alert','Hitilafu: '+e.message,'e');}
 }
@@ -2381,7 +2501,7 @@ function haTab(tab){
   });
   if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini'){renderHaWaumini();renderBulkList('ha');}
   if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha'){const c=$('ha-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('ha-fedha-content');}
-  if(tab==='maombi')renderHaOmbiList();if(tab==='jumla'){const c=$('ha-jumla-historia');if(c)delete c.dataset.mwezi;renderJumlaCustomAinaFields();renderJumlaHistoria();}
+  if(tab==='maombi')renderHaOmbiList();if(tab==='jumla'){const c=$('ha-jumla-historia');if(c)delete c.dataset.mwezi;renderJumlaHistoria();}
   if(tab==='zaka')initZakaTab();
 }
 
@@ -2740,42 +2860,46 @@ function tumaKwaWaumini(id){
   const t=allMatangazo.find(x=>x.id===id);
   if(!t){toastMsg('Tangazo halipatikani');return;}
   const msg=buildTangazoMsg(t);
+  const smsMsg=buildBeemSMSText(msg);
   const enc=encodeURIComponent(msg);
   const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
 
-  const smsMsg=msg.replace(/\*/g,'').replace(/_/g,'');
-  const smsEnc=encodeURIComponent(smsMsg);
-
   const memberRows=members.map(w=>{
-    const intl='+255'+w.namba_simu.replace(/^0/,'');
+    const ph=normPhone(w.namba_simu);
+    const bph=beemPhone(w.namba_simu);
     return `
     <div style="display:flex;align-items:center;gap:6px;padding:7px 4px;border-bottom:1px solid var(--border);">
-      <input type="checkbox" class="tk-chk" value="${w.namba_simu}" data-jina="${w.jina_kamili}" checked style="width:16px;height:16px;accent-color:var(--green);flex-shrink:0;cursor:pointer;">
+      <input type="checkbox" class="tk-chk" value="${w.namba_simu}" data-beem="${bph}" data-jina="${w.jina_kamili}" checked style="width:16px;height:16px;accent-color:var(--green);flex-shrink:0;cursor:pointer;">
       <span style="flex:1;font-size:13px;cursor:pointer;" onclick="this.previousElementSibling.click()">${w.jina_kamili}</span>
       <span style="font-size:11px;color:var(--gray);">${w.namba_simu}</span>
       <a href="https://wa.me/255${w.namba_simu.replace(/^0/,'')}?text=${enc}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;text-decoration:none;flex-shrink:0;padding:4px 7px;" title="Tuma WhatsApp">📱</a>
-      <a href="sms:${intl}?body=${smsEnc}" class="btn btn-sm" style="background:var(--sky);color:white;text-decoration:none;flex-shrink:0;padding:4px 7px;" title="Tuma SMS">💬</a>
     </div>`;
   }).join('');
 
   openMod('📤 Tuma Tangazo kwa Waumini',`
     <div style="background:#f0fdf4;border-left:3px solid #25D366;border-radius:6px;padding:10px;margin-bottom:12px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:90px;overflow-y:auto;">${smsMsg}</div>
-    <div style="background:#e0f2fe;border-radius:6px;padding:7px 10px;margin-bottom:10px;font-size:11px;color:#0369a1;line-height:1.5;">
-      📱 = WhatsApp &nbsp;|&nbsp; 💬 = SMS (inafungua app ya simu moja kwa moja)
-    </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
       <span style="font-size:13px;font-weight:700;">Waumini (${members.length}):</span>
       <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;">
         <input type="checkbox" id="tk-all" checked onchange="document.querySelectorAll('.tk-chk').forEach(c=>c.checked=this.checked)" style="width:14px;height:14px;accent-color:var(--green);"> Chagua Wote
       </label>
     </div>
-    <div style="max-height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:0 6px;margin-bottom:12px;">
+    <div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:0 6px;margin-bottom:12px;">
       ${members.length?memberRows:'<p style="color:var(--gray);text-align:center;padding:16px;font-size:12px;">Hakuna waumini wenye namba ya simu</p>'}
     </div>
+    <div id="tk-beem-al"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn btn-sky btn-block" style="justify-content:center;" onclick="tkCopyNumbers()">📋 Nakili Namba Zilizochaguliwa</button>
-      <button class="btn btn-block" style="background:#6b7280;color:white;justify-content:center;" onclick="tkCopySMS(${JSON.stringify(smsMsg)})">📋 Nakili Ujumbe (Desktop)</button>
+      <button class="btn btn-sky" style="flex:2;justify-content:center;" onclick="tkBeemSend(${JSON.stringify(smsMsg)})">✉️ Tuma SMS Beem (Waliochaguliwa)</button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Funga</button>
     </div>`);
+}
+
+async function tkBeemSend(msg){
+  const checked=[...document.querySelectorAll('.tk-chk:checked')];
+  if(!checked.length){setAl('tk-beem-al','Chagua muumini angalau mmoja','e');return;}
+  const recipients=checked.map((c,i)=>({dest_addr:c.dataset.beem||beemPhone(c.value),message_id:i+1})).filter(r=>r.dest_addr);
+  const result=await beemSendSMS(recipients,msg,'tk-beem-al');
+  if(result.ok)setTimeout(()=>closeModDirect(),2500);
 }
 
 function tkCopyNumbers(){
@@ -3224,10 +3348,29 @@ function msgBtns(w){
   if(!w.namba_simu)return'<span style="color:var(--gray);font-size:10px;">—</span>';
   const ph=normPhone(w.namba_simu);
   const nm=w.jina_kamili.replace(/'/g,"\\'");
+  const beemPh=beemPhone(w.namba_simu);
   return`<span style="display:inline-flex;gap:4px;">
     <a href="https://wa.me/${ph}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;padding:3px 8px;font-size:13px;text-decoration:none;" title="WhatsApp — ${nm}">📱</a>
-    <a href="sms:${ph}" class="btn btn-sm" style="background:var(--sky);color:white;padding:3px 8px;font-size:13px;text-decoration:none;" title="SMS — ${nm}">💬</a>
+    <button class="btn btn-sm" style="background:var(--sky);color:white;padding:3px 8px;font-size:13px;" title="SMS Beem — ${nm}" onclick="beemSendOneMuumini('${beemPh}','${nm}')">✉️</button>
   </span>`;
+}
+
+// Send SMS to a single muumini via Beem (opens modal for message)
+function beemSendOneMuumini(phone,jina){
+  openMod('✉️ Tuma SMS kwa '+jina,`
+    <div class="al al-i" style="font-size:12px;">📡 SMS itatumwa kupitia Beem Africa — Sender: <strong>PAGNGARA</strong></div>
+    <div class="fg"><label>Andika Ujumbe</label><textarea class="fi" id="beem-single-msg" rows="4" placeholder="Andika ujumbe hapa..."></textarea></div>
+    <div id="beem-single-al"></div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn btn-sky" style="flex:2;justify-content:center;" onclick="beemSingleSend('${phone}','${jina.replace(/'/g,"\\'")}')">✉️ Tuma SMS (Beem)</button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Funga</button>
+    </div>`);
+}
+async function beemSingleSend(phone,jina){
+  const msg=$('beem-single-msg').value.trim();
+  if(!msg){setAl('beem-single-al','Andika ujumbe kwanza','e');return;}
+  const result=await beemSendSMS([{dest_addr:phone,message_id:1}],msg,'beem-single-al');
+  if(result.ok)setTimeout(()=>closeModDirect(),2000);
 }
 
 function renderBulkList(prefix){
@@ -3257,15 +3400,27 @@ function selectAllBulk(prefix,checked){
   updateBulkCount(prefix);
 }
 
-function sendBulkMsg(prefix,type){
+async function sendBulkMsg(prefix,type){
   const msg=$(prefix+'-bulk-text').value.trim();
   if(!msg){toastMsg('⚠️ Andika ujumbe kwanza!');return;}
   const sel=[...document.querySelectorAll('.'+prefix+'-bulk-chk:checked')];
   if(!sel.length){toastMsg('⚠️ Chagua muumini angalau mmoja!');return;}
-  const phones=sel.map(c=>normPhone(c.dataset.simu)).filter(Boolean);
-  if(!phones.length){toastMsg('⚠️ Hakuna namba za simu kati ya waliochaguliwa!');return;}
   if(type==='sms'){
-    window.location.href='sms:'+phones.join(',')+'?body='+encodeURIComponent(msg);
+    // Send via Beem Africa
+    const recipients=sel.map((c,i)=>{
+      const ph=beemPhone(c.dataset.simu);
+      return ph?{dest_addr:ph,message_id:i+1}:null;
+    }).filter(Boolean);
+    if(!recipients.length){toastMsg('⚠️ Hakuna namba za simu kati ya waliochaguliwa!');return;}
+    // Show confirmation modal
+    openMod('✉️ Thibitisha Kutuma SMS (Beem)',`
+      <div class="al al-i">📡 SMS ${recipients.length} zitatumwa kupitia Beem Africa — Sender: <strong>PAGNGARA</strong></div>
+      <div style="background:var(--cream);border-radius:8px;padding:10px;font-size:12px;margin-bottom:12px;max-height:80px;overflow-y:auto;">${buildBeemSMSText(msg)}</div>
+      <div id="beem-bulk-al"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-sky" style="flex:2;justify-content:center;" onclick="confirmBeemBulk(${JSON.stringify(recipients)},${JSON.stringify(msg)})">✉️ Tuma SMS ${recipients.length} (Beem)</button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Rudi</button>
+      </div>`);
   }else{
     const links=sel.map(c=>{
       const ph=normPhone(c.dataset.simu);
@@ -3279,7 +3434,114 @@ function sendBulkMsg(prefix,type){
       <button onclick="navigator.clipboard.writeText(${JSON.stringify(msg)}).then(()=>toastMsg('📋 Umenakiliwa!'))" class="btn btn-block" style="background:#6b7280;color:white;margin-top:10px;">📋 Nakili Ujumbe</button>`);
   }
 }
+async function confirmBeemBulk(recipients,msg){
+  const result=await beemSendSMS(recipients,msg,'beem-bulk-al');
+  if(result.ok)setTimeout(()=>closeModDirect(),2500);
+}
 
+// ─── Send to ALL active members at once ───────────────────────────────────
+function sendBeemAll(prefix){
+  const msg=$(prefix+'-bulk-text').value.trim();
+  if(!msg){toastMsg('⚠️ Andika ujumbe kwanza!');return;}
+
+  const members=allWaumini.filter(w=>w.hali==='hai'&&w.namba_simu);
+  if(!members.length){toastMsg('⚠️ Hakuna waumini hai wenye namba ya simu!');return;}
+
+  const recipients=members.map((w,i)=>({dest_addr:beemPhone(w.namba_simu),message_id:i+1}));
+  const smsText=buildBeemSMSText(msg);
+
+  // Preview list — show first 5 names + count
+  const preview=members.slice(0,5).map(w=>`
+    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;">
+      <span style="font-weight:700;">✓ ${w.jina_kamili}</span>
+      <span style="color:var(--gray);">${w.namba_simu}</span>
+    </div>`).join('');
+  const extra=members.length>5
+    ? `<div style="font-size:11px;color:var(--gray);padding:6px 0;text-align:center;">... na waumini ${members.length-5} wengine</div>`
+    : '';
+
+  openMod('✉️ Tuma SMS kwa Waumini Wote — Beem Africa',`
+    <div class="al al-i" style="font-size:12px;margin-bottom:10px;">
+      📡 Sender: <strong>PAGNGARA</strong> &nbsp;|&nbsp; Waumini: <strong>${members.length}</strong> wenye namba
+    </div>
+    <div style="background:var(--navy);color:#F0C060;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:100px;overflow-y:auto;">${smsText}</div>
+    <div style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">Orodha ya wapokeaji:</div>
+    <div style="max-height:160px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:0 10px;margin-bottom:12px;">
+      ${preview}${extra}
+    </div>
+    <div id="beem-all-al"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" style="flex:3;justify-content:center;background:linear-gradient(135deg,var(--sky),#2563eb);color:white;font-weight:800;font-size:14px;padding:12px;" onclick="confirmBeemAll(${JSON.stringify(recipients)},${JSON.stringify(msg)})">
+        ✉️ Thibitisha — Tuma kwa ${members.length} Waumini
+      </button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeModDirect()">Rudi</button>
+    </div>`);
+}
+async function confirmBeemAll(recipients,msg){
+  const result=await beemSendSMS(recipients,msg,'beem-all-al');
+  if(result.ok)setTimeout(()=>closeModDirect(),2500);
+}
+
+
+// ═══════════════════════════════════════════
+// PWA — SERVICE WORKER & INSTALL PROMPT
+// ═══════════════════════════════════════════
+(function(){
+  // Service Worker: skipped for single-file deployment.
+  // The PWA is installable via browser menu (Chrome/Android) and
+  // "Add to Home Screen" (iOS Safari) using the manifest alone.
+
+  // Capture the install prompt
+  let deferredPrompt = null;
+  const installBtn = document.getElementById('pwa-install-btn');
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if(installBtn){ installBtn.style.display = 'flex'; }
+  });
+
+  // Called by the install button
+  window.triggerPwaInstall = function(){
+    if(!deferredPrompt){ return; }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      if(choice.outcome === 'accepted'){
+        toastMsg('✅ App imewekwa kwenye simu yako!');
+        if(installBtn){ installBtn.style.display = 'none'; }
+      }
+      deferredPrompt = null;
+    });
+  };
+
+  // When already installed, hide the button
+  window.addEventListener('appinstalled', () => {
+    if(installBtn){ installBtn.style.display = 'none'; }
+    deferredPrompt = null;
+    toastMsg('✅ PAG App imewekwa kwenye simu yako!');
+  });
+
+  // iOS Safari — show manual instructions since iOS doesn't fire beforeinstallprompt
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isInStandaloneMode = ('standalone' in navigator) && navigator.standalone;
+  if(isIos && !isInStandaloneMode && installBtn){
+    installBtn.style.display = 'flex';
+    window.triggerPwaInstall = function(){
+      openMod('📲 Weka App kwenye iPhone / iPad',
+        '<div style="line-height:1.8;font-size:14px;">' +
+        '<p style="margin-bottom:12px;">Fuata hatua hizi kuweka app kwenye simu yako ya iPhone au iPad:</p>' +
+        '<ol style="padding-left:18px;">' +
+        '<li style="margin-bottom:8px;">Bonyeza kitufe cha <strong>Share</strong> <span style="font-size:18px;">⬆️</span> chini ya skrini ya Safari.</li>' +
+        '<li style="margin-bottom:8px;">Tembeza chini uone chaguo la <strong>"Add to Home Screen"</strong> <span style="font-size:16px;">➕</span>.</li>' +
+        '<li style="margin-bottom:8px;">Bonyeza <strong>"Add"</strong> — app itaonekana kwenye skrini yako kuu!</li>' +
+        '</ol>' +
+        '<div style="background:#1B2A4A;color:#F0C060;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:12px;">' +
+        '💡 App hii inafanya kazi bila intaneti (offline) baada ya kupakua mara ya kwanza.' +
+        '</div></div>'
+      );
+    };
+  }
+})();
 </script>
 </body>
 </html>
