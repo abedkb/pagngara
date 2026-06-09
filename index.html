@@ -1006,6 +1006,7 @@ async function beemSendSMS(recipients, ujumbe, statusElId){
       method:'POST',
       headers:{
         'Content-Type':'application/json',
+        'apikey':SK,
         'Authorization':`Bearer ${SK}`
       },
       body:JSON.stringify({
