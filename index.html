@@ -1185,12 +1185,13 @@ function renderFedhaViongozi(containerId){
   const el=$(containerId);if(!el)return;
   const selMwezi=el.dataset.fedhaMonth||defaultMwezi;
   const mr=getMonthRangeFor(selMwezi);
-  const michangoMwezi=allMichango.filter(m=>m.tarehe_mchango&&m.tarehe_mchango>=mr.start&&m.tarehe_mchango<=mr.end);
-  const fs=calcCombinedSummary(michangoMwezi,mr.start,mr.end);
   const matMwezi=calcMatumiziTotal(allMatumizi,mr.start,mr.end);
   const mshMwezi=calcMshahariTotal(allMatumizi,mr.start,mr.end);
   const mwezi=mweziLabel(selMwezi);
   const availMonths=getAvailableMonths();
+  // Fedha tab uses ONLY jumla_ibada data (entered in Jumla tab) as the source
+  const js=calcJumlaIbadaForRange(mr.start,mr.end);
+  const fs={sadaka:js.sadaka,zaka:js.zaka,shukrani:js.shukrani,watoto:js.watoto,ujenzi:js.ujenzi,nyingine:js.nyingine,jumla:js.sadaka+js.zaka+js.shukrani+js.watoto+js.ujenzi+js.nyingine,sadakaZaka:js.sadaka+js.zaka};
   const sz=fs.sadakaZaka;
   const sz10=Math.round(sz*0.10);
   const szBaada=sz-sz10;
