@@ -841,6 +841,22 @@ tr:hover td{background:var(--warm);}
               <button class="btn btn-green btn-sm" onclick="zakaAddManual()">+ Ongeza</button>
             </div>
             <div id="zaka-members-list" style="max-height:260px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;background:white;padding:6px 10px;"></div>
+            <div id="zaka-edit-member-form" style="display:none;margin-top:10px;background:white;border:1.5px solid var(--sky);border-radius:8px;padding:12px;">
+              <div style="font-weight:900;font-size:11px;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">✏ Hariri Taarifa za Muumini</div>
+              <input type="hidden" id="zaka-edit-idx"/>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;">
+                <div style="flex:1;min-width:160px;">
+                  <label style="font-size:11px;font-weight:700;color:var(--brown);display:block;margin-bottom:3px;">Jina</label>
+                  <input class="fi" id="zaka-edit-jina" type="text" style="width:100%;"/>
+                </div>
+                <div style="min-width:110px;">
+                  <label style="font-size:11px;font-weight:700;color:var(--brown);display:block;margin-bottom:3px;">Namba ya Kadi</label>
+                  <input class="fi" id="zaka-edit-namba" type="number" min="1" style="width:100%;"/>
+                </div>
+                <button class="btn btn-sky btn-sm" onclick="zakaEditMemberSave()">💾 Hifadhi</button>
+                <button class="btn btn-ghost btn-sm" onclick="zakaEditMemberCancel()">✕ Ghairi</button>
+              </div>
+            </div>
           </div>
           <div id="zaka-orodha-container" style="overflow-x:auto;"></div>
         </div>
@@ -3109,6 +3125,7 @@ function renderZakaMembersList(){
       <button class="btn btn-ghost btn-sm" style="padding:3px 8px;" onclick="zakaMoveUp(${i})">&#8593;</button>
       <button class="btn btn-ghost btn-sm" style="padding:3px 8px;" onclick="zakaMoveDown(${i})">&#8595;</button>
       <button class="btn btn-sm" style="padding:3px 8px;background:var(--red-pale);color:var(--red);" onclick="zakaRemoveMember(${i})">&#10005;</button>
+      <button class="btn btn-sm" style="padding:3px 8px;background:var(--sky-pale);color:var(--sky);" onclick="zakaEditMember(${i})" title="Hariri">&#9998;</button>
     </div>`).join('');
   }
   const addSel=$('zaka-add-from-list');
@@ -3162,6 +3179,47 @@ function zakaRemoveMember(idx){
   if(!confirm('Futa "'+mems[idx].jina+'" kutoka orodha?'))return;
   mems.splice(idx,1);ZAKA.setMems(y,mems);
   renderZakaMembersList();renderZakaOrodha();_zakaRefreshKadiSel();
+}
+
+function zakaEditMember(idx){
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  if(!mems[idx])return;
+  $('zaka-edit-idx').value=idx;
+  $('zaka-edit-jina').value=mems[idx].jina;
+  $('zaka-edit-namba').value=idx+1;
+  $('zaka-edit-namba').max=mems.length;
+  const f=$('zaka-edit-member-form');if(f){f.style.display='block';f.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  $('zaka-edit-jina').focus();
+}
+
+function zakaEditMemberCancel(){
+  const f=$('zaka-edit-member-form');if(f)f.style.display='none';
+}
+
+function zakaEditMemberSave(){
+  const idx=parseInt($('zaka-edit-idx').value);
+  const newJina=($('zaka-edit-jina').value||'').trim();
+  const newNamba=parseInt($('zaka-edit-namba').value);
+  if(!newJina){toastMsg('Jina haliwezi kuwa tupu');return;}
+  const y=parseInt(($('zaka-o-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  if(mems.some((m,i)=>i!==idx&&m.jina.toLowerCase()===newJina.toLowerCase())){
+    toastMsg('Jina hilo lipo tayari kwenye orodha');return;
+  }
+  if(isNaN(newNamba)||newNamba<1||newNamba>mems.length){
+    toastMsg('Namba ya kadi si sahihi (1–'+mems.length+')');return;
+  }
+  mems[idx].jina=newJina;
+  const newIdx=newNamba-1;
+  if(newIdx!==idx){
+    const [moved]=mems.splice(idx,1);
+    mems.splice(newIdx,0,moved);
+  }
+  ZAKA.setMems(y,mems);
+  $('zaka-edit-member-form').style.display='none';
+  renderZakaMembersList();renderZakaOrodha();_zakaRefreshKadiSel();
+  toastMsg('✓ Taarifa za muumini zimehifadhiwa');
 }
 
 function zakaInputChanged(y,m,memIdx,cellKey,val){
