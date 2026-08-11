@@ -813,6 +813,9 @@ tr:hover td{background:var(--warm);}
         <div class="card">
           <div class="card-title">📋 Orodha ya Fungu la Kumi — Juma kwa Juma</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
+            <div class="search-bar" style="flex:1;min-width:200px;margin-bottom:0;">
+              <input type="text" id="zaka-o-search" placeholder="Tafuta jina la muumini..." autocomplete="off" oninput="filterZakaOrodha()"/>
+            </div>
             <select class="fsel" id="zaka-o-mwezi" style="width:140px;" onchange="renderZakaOrodha()">
               <option value="1">Januari</option><option value="2">Februari</option><option value="3">Machi</option>
               <option value="4">Aprili</option><option value="5">Mei</option><option value="6">Juni</option>
@@ -867,10 +870,12 @@ tr:hover td{background:var(--warm);}
         <div class="card">
           <div class="card-title">🪪 Kadi ya Fungu la Kumi — Mwanachama Mmoja</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
-            <select class="fsel" id="zaka-k-muumini" style="flex:1;min-width:180px;" onchange="renderZakaKadi()">
-              <option value="">— Chagua Muumini —</option>
-            </select>
-            <select class="fsel" id="zaka-k-mwaka" style="width:100px;" onchange="renderZakaKadi()"></select>
+            <div class="search-bar" style="flex:1;min-width:180px;margin-bottom:0;">
+              <input type="text" id="zaka-k-search" list="zaka-k-dl" placeholder="Tafuta jina la muumini..." autocomplete="off" oninput="zakaKadiSearchInput()"/>
+              <datalist id="zaka-k-dl"></datalist>
+            </div>
+            <input type="hidden" id="zaka-k-muumini"/>
+            <select class="fsel" id="zaka-k-mwaka" style="width:100px;" onchange="_zakaRefreshKadiSel();renderZakaKadi()"></select>
             <button class="btn btn-sky btn-sm" onclick="printZakaKadi()">🖨 Chapisha Kadi</button>
           </div>
           <div id="zaka-kadi-container"></div>
@@ -3099,10 +3104,21 @@ async function initZakaTab(){
 function _zakaRefreshKadiSel(){
   const y=parseInt(($('zaka-k-mwaka')||{}).value||new Date().getFullYear());
   const mems=ZAKA.mems(y);
-  const sel=$('zaka-k-muumini');if(!sel)return;
-  const cur=sel.value;
-  sel.innerHTML='<option value="">&#8212; Chagua Muumini &#8212;</option>'+
-    mems.map((m,i)=>`<option value="${i}"${String(i)===String(cur)?'  selected':''}>${m.jina}</option>`).join('');
+  const dl=$('zaka-k-dl');
+  if(dl)dl.innerHTML=mems.map(m=>`<option value="${m.jina}"></option>`).join('');
+  const hid=$('zaka-k-muumini');const search=$('zaka-k-search');
+  if(!hid||!search)return;
+  const idx=mems.findIndex(m=>m.jina===search.value.trim());
+  hid.value=idx>=0?idx:'';
+}
+
+function zakaKadiSearchInput(){
+  const y=parseInt(($('zaka-k-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(y);
+  const val=($('zaka-k-search')||{}).value.trim();
+  const idx=mems.findIndex(m=>m.jina.toLowerCase()===val.toLowerCase());
+  $('zaka-k-muumini').value=idx>=0?idx:'';
+  renderZakaKadi();
 }
 
 function toggleZakaMembersPanel(){
@@ -3276,7 +3292,7 @@ function renderZakaOrodha(){
     mems.forEach((mem,i)=>{
       const jd=(cellData[mem.jina])||{};
       const hasAny=Object.keys(jd).some(k=>jd[k]>0);
-      tbl+=`<tr style="background:${i%2===0?'white':'var(--cream)'};${hasAny?'border-left:3px solid var(--green);':''}">
+      tbl+=`<tr data-jina="${mem.jina}" style="background:${i%2===0?'white':'var(--cream)'};${hasAny?'border-left:3px solid var(--green);':''}">
         <td style="padding:7px 8px;text-align:center;color:var(--gray);border-right:1px solid var(--border);">${i+1}</td>
         <td style="padding:7px 12px;font-weight:700;color:var(--navy);border-right:1px solid var(--border);white-space:nowrap;">${mem.jina}</td>`;
       [1,2,3,4].forEach(wk=>{
@@ -3294,6 +3310,14 @@ function renderZakaOrodha(){
   }
   tbl+=`</tbody></table>`;
   container.innerHTML=tbl;
+  filterZakaOrodha();
+}
+
+function filterZakaOrodha(){
+  const q=($('zaka-o-search')||{}).value.trim().toLowerCase();
+  $('zaka-orodha-container').querySelectorAll('tr[data-jina]').forEach(tr=>{
+    tr.style.display=(!q||tr.dataset.jina.toLowerCase().includes(q))?'':'none';
+  });
 }
 
 function renderZakaKadi(){
@@ -3452,8 +3476,10 @@ function printZakaOrodha(){
 function printZakaKadi(){
   const printEl=$('zaka-kadi-print');
   if(!printEl){toastMsg('&#10060; Chagua muumini kwanza');return;}
-  const sel=$('zaka-k-muumini');
-  const jina=sel&&sel.selectedIndex>0?sel.options[sel.selectedIndex].text:'Muumini';
+  const memIdx=parseInt(($('zaka-k-muumini')||{}).value);
+  const mwaka=parseInt(($('zaka-k-mwaka')||{}).value||new Date().getFullYear());
+  const mems=ZAKA.mems(mwaka);
+  const jina=(!isNaN(memIdx)&&mems[memIdx])?mems[memIdx].jina:'Muumini';
   const pw=window.open('','_blank');
   if(!pw)return;
   const css='*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;background:white;display:flex;justify-content:center;padding:24px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #999;padding:5px 4px;text-align:center;}th{background:#1B2A4A;color:white;font-size:10px;}td{font-size:9.5px;}@media print{body{padding:8px;}@page{margin:1cm;}}';
