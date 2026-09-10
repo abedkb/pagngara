@@ -617,7 +617,8 @@ tr:hover td{background:var(--warm);}
   </div>
   <div class="aw"><div style="height:14px;"></div>
     <div class="tabs">
-      <div class="tab active" id="ha-tab-ingiza" onclick="haTab('ingiza')">➕ Mchango</div>
+      <div class="tab active" id="ha-tab-ripoti" onclick="haTab('ripoti')">📄 Ripoti</div>
+      <div class="tab" id="ha-tab-ingiza" onclick="haTab('ingiza')">➕ Mchango</div>
       <div class="tab" id="ha-tab-jumla" onclick="haTab('jumla')">📊 Jumla</div>
       <div class="tab" id="ha-tab-maombi" onclick="haTab('maombi')">🤲 Maombi <span class="notif-badge" id="ha-ombi-count">0</span></div>
       <div class="tab" id="ha-tab-matumizi" onclick="haTab('matumizi')">💸 Matumizi</div>
@@ -625,11 +626,10 @@ tr:hover td{background:var(--warm);}
       <div class="tab" id="ha-tab-leo" onclick="haTab('leo')">📅 Leo</div>
       <div class="tab" id="ha-tab-fedha" onclick="haTab('fedha')">💰 Fedha</div>
       <div class="tab" id="ha-tab-historia" onclick="haTab('historia')">📋 Historia</div>
-      <div class="tab" id="ha-tab-ripoti" onclick="haTab('ripoti')">📄 Ripoti</div>
       <div class="tab" id="ha-tab-waumini" onclick="haTab('waumini')">👥 Waumini</div>
       <div class="tab" id="ha-tab-zaka" onclick="haTab('zaka')">📋 Kadi ya Zaka</div>
     </div>
-    <div id="ha-ingiza">
+    <div id="ha-ingiza" style="display:none;">
       <div class="card"><div class="card-title">➕ Ingiza Mchango wa Muumini (Binafsi)</div>
         <div id="al-haingiza"></div>
         <div class="al al-w">📌 Baada ya kuhifadhi, taarifa hii itaenda kwa Mchungaji kwa idhini.</div>
@@ -649,6 +649,12 @@ tr:hover td{background:var(--warm);}
       <div class="card"><div class="card-title">📊 Ingiza Jumla ya Michango ya Ibada (bila kuainisha muumini husika)</div>
         <div id="al-hajumla"></div>
         <div class="al al-i">ℹ️ Hapa unaweza kuingiza jumla ya michango iliyokusanywa wakati wa ibada bila kulazimika kuorodhesha kila muumini mmoja mmoja. Taarifa hizi zitaonekana kwenye dashboard za viongozi wote moja kwa moja.</div>
+        <div class="fg">
+          <label>📷 Pakia Picha au PDF ya Taarifa ya Mapato</label>
+          <input type="file" accept="image/*,application/pdf" capture="environment" class="fi" id="jumla-photo-input" onchange="handleFinancialPhotoUpload(this, 'jumla')">
+          <div id="jumla-photo-status" style="font-size:12px;margin-top:4px;"></div>
+        </div>
+        <div class="al al-i" style="font-size:12px;">Pakia picha/PDF ya taarifa iliyojazwa — namba zitajazwa hapa chini moja kwa moja. Kagua na hariri kabla ya kuhifadhi.</div>
         <div class="fgrid">
           <div class="fg"><label>📅 Tarehe ya Ibada</label><input type="date" class="fi" id="ha-jumla-tarehe"/></div>
           <div class="fg"><label>Aina ya Ibada</label><input type="text" class="fi" id="ha-jumla-aina-ibada" placeholder="mfano: Jumapili, Jumatano..."/></div>
@@ -705,6 +711,13 @@ tr:hover td{background:var(--warm);}
         <div class="card-title">💸 Ingiza Matumizi ya Kanisa <span style="font-size:10px;background:var(--gold-pale);color:var(--brown);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:700;">Inatoka kwenye 30%</span></div>
         <div id="al-hamatumizi"></div>
         <div class="al al-w">📌 Matumizi ya kanisa yatatoka kwenye <strong>30%</strong> ya bajeti ya matumizi ya kanisa. Mshahara wa Mchungaji hauhusiki hapa.</div>
+        <div class="fg">
+          <label>📷 Pakia Picha au PDF ya Taarifa ya Matumizi</label>
+          <input type="file" accept="image/*,application/pdf" capture="environment" class="fi" id="matumizi-photo-input" onchange="handleFinancialPhotoUpload(this, 'matumizi')">
+          <div id="matumizi-photo-status" style="font-size:12px;margin-top:4px;"></div>
+        </div>
+        <div id="matumizi-extracted-review"></div>
+        <div style="font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin:14px 0 6px;">— Au Ingiza kwa Mkono —</div>
         <div class="fgrid">
           <div class="fg full"><label>Kichwa cha Matumizi</label><input type="text" class="fi" id="ha-mat-kichwa" placeholder="mfano: Bili ya umeme, Karatasi..."/></div>
           <div class="fg"><label>Kiasi (TZS)</label><input type="number" class="fi" id="ha-mat-kiasi" placeholder="10000"/></div>
@@ -754,7 +767,22 @@ tr:hover td{background:var(--warm);}
         <div class="tw"><table><thead><tr><th>Muumini</th><th>Aina</th><th>Kiasi</th><th>Tarehe</th><th>Hali</th><th>Kitendo</th></tr></thead><tbody id="ha-hist-tbody"></tbody></table></div>
       </div>
     </div>
-    <div id="ha-ripoti" style="display:none;">
+    <div id="ha-ripoti">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:4px;">
+          <div class="card-title" style="margin-bottom:0;">📈 Mwenendo wa Mapato ya Ibada</div>
+          <button class="btn btn-outline" style="font-size:12px;padding:6px 12px;white-space:nowrap;" onclick="downloadIbadaTrendChart()">⬇️ Pakua Picha</button>
+        </div>
+        <div class="fg" style="margin-bottom:10px;">
+          <select class="fsel" id="trend-range-select" onchange="renderIbadaTrendChart()">
+            <option value="15">Ibada 15 za Mwisho (~wiki 5)</option>
+            <option value="30" selected>Ibada 30 za Mwisho (~wiki 10)</option>
+            <option value="90">Ibada 90 za Mwisho (~mwaka 1)</option>
+          </select>
+        </div>
+        <div id="trend-missing-alert"></div>
+        <div style="position:relative;height:420px;"><canvas id="ibada-trend-canvas"></canvas></div>
+      </div>
       <div class="report-header"><div class="rh-title">📄 Tengeneza Ripoti ya Fedha</div><div class="rh-sub">Chagua kipindi na upakue ripoti kamili</div></div>
       <div class="card"><div class="card-title">🗓 Chagua Kipindi</div>
         <div class="fgrid">
@@ -944,6 +972,7 @@ tr:hover td{background:var(--warm);}
     <div id="fp-alert" style="margin-top:10px;"></div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 // ═══════════════════════════════════════════
 // SUPABASE CONFIG
@@ -1200,6 +1229,132 @@ function renderIbadaLeo(containerId){
     ${ibadaCardHTML(fs,matTotalLeo,matumiziLeo,formatDateShort(today))}`;
 }
 
+// ==================== MWENENDO WA MAPATO (Revenue Trend Chart) ====================
+// Ibada hufanyika mara tatu kwa wiki: Jumatano(3), Ijumaa(5), Jumapili(0).
+const SERVICE_DAYS_OF_WEEK = [0, 3, 5];
+
+// Inarudisha tarehe (ISO) za ibada N za mwisho, zikitembea kalenda
+// halisi (si tu rekodi zilizopo) — hivyo ibada yoyote isiyo na
+// jumla_ibada iliyowekwa itaonekana wazi kwenye grafu.
+// Inajenga tarehe ya "YYYY-MM-DD" kutoka sehemu za tarehe ZA MAHALI
+// (local), si kwa UTC — kutumia toISOString() moja kwa moja kunaweza
+// kuhamisha tarehe siku moja nyuma kwa maeneo yenye saa mbele ya UTC
+// (kama EAT, UTC+3), na kusababisha tarehe zisilingane na rekodi
+// halisi za hifadhidata.
+function toLocalISODate(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function getRecentServiceDays(n){
+  const days=[];
+  const cursor=new Date();
+  cursor.setHours(0,0,0,0);
+  while(days.length<n){
+    if(SERVICE_DAYS_OF_WEEK.includes(cursor.getDay())){
+      days.push(toLocalISODate(cursor));
+    }
+    cursor.setDate(cursor.getDate()-1);
+  }
+  return days.reverse();
+}
+
+let ibadaTrendChartInstance=null;
+function renderIbadaTrendChart(){
+  const canvas=$('ibada-trend-canvas');
+  if(!canvas)return;
+  if(canvas.offsetParent===null)return; // tab si hai kwa sasa
+  const wrap=canvas.parentElement;
+  if(typeof Chart==='undefined'){
+    wrap.innerHTML='<div style="text-align:center;padding:30px;color:#C1121F;">⚠️ Maktaba ya grafu (Chart.js) haikupakia. Angalia muunganiko wa mtandao kisha pakua upya ukurasa.</div>';
+    return;
+  }
+  const rangeSel=$('trend-range-select');
+  const n=rangeSel?parseInt(rangeSel.value):30;
+  const serviceDays=getRecentServiceDays(n);
+  const missingAlert=$('trend-missing-alert');
+
+  const labels=serviceDays.map(d=>formatDateShort(d));
+  const missing=serviceDays.map(d=>!allJumlaIbada.some(j=>j.tarehe===d));
+  const values=serviceDays.map((d,i)=>{
+    if(missing[i])return 0;
+    const dayEntries=allJumlaIbada.filter(j=>j.tarehe===d);
+    return dayEntries.reduce((s,j)=>s+(j.sadaka||0)+(j.shukrani||0)+(j.zaka||0)+(j.watoto||0)+(j.ujenzi||0)+(j.nyingine||0),0);
+  });
+  const missingDates=serviceDays.filter((d,i)=>missing[i]);
+
+  if(missingAlert){
+    missingAlert.innerHTML=missingDates.length
+      ? `<div class="al al-e" style="margin-bottom:10px;">⚠️ <strong>Ibada ${missingDates.length} hazina taarifa za fedha:</strong> ${missingDates.map(d=>formatDateShort(d)).join(', ')}</div>`
+      : `<div class="al al-s" style="margin-bottom:10px;">✅ Ibada zote katika kipindi hiki zina taarifa za fedha</div>`;
+  }
+
+  let drawCanvas=$('ibada-trend-canvas');
+  if(!drawCanvas||drawCanvas.tagName!=='CANVAS'){
+    wrap.innerHTML='<canvas id="ibada-trend-canvas"></canvas>';
+    drawCanvas=$('ibada-trend-canvas');
+  }
+
+  if(ibadaTrendChartInstance)ibadaTrendChartInstance.destroy();
+  ibadaTrendChartInstance=new Chart(drawCanvas.getContext('2d'),{
+    type:'line',
+    data:{
+      labels,
+      datasets:[{
+        label:'Jumla ya Mapato (TZS)',
+        data:values,
+        borderColor:'#C9952A',
+        backgroundColor:'rgba(201,149,42,0.15)',
+        borderWidth:2,
+        pointBackgroundColor:(ctx)=>missing[ctx.dataIndex]?'#C1121F':'#1B2A4A',
+        pointBorderColor:(ctx)=>missing[ctx.dataIndex]?'#C1121F':'#1B2A4A',
+        pointStyle:(ctx)=>missing[ctx.dataIndex]?'rectRot':'circle',
+        pointRadius:(ctx)=>missing[ctx.dataIndex]?7:3,
+        pointHoverRadius:(ctx)=>missing[ctx.dataIndex]?9:5,
+        segment:{
+          borderDash:(ctx)=>(missing[ctx.p0DataIndex]||missing[ctx.p1DataIndex])?[6,4]:undefined,
+          borderColor:(ctx)=>(missing[ctx.p0DataIndex]||missing[ctx.p1DataIndex])?'#C1121F':'#C9952A',
+        },
+        tension:0.3,
+        fill:true,
+      }],
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label:(ctx)=>missing[ctx.dataIndex]?'⚠️ Hakuna taarifa iliyoingizwa':pesa(ctx.parsed.y),
+          },
+        },
+      },
+      scales:{
+        x:{ticks:{font:{weight:'bold',size:11},color:'#1B2A4A'}},
+        y:{beginAtZero:true,ticks:{callback:(v)=>pesa(v),font:{weight:'bold',size:11},color:'#1B2A4A'}},
+      },
+    },
+  });
+}
+
+function downloadIbadaTrendChart(){
+  if(!ibadaTrendChartInstance){toastMsg('Grafu bado haijapakiwa');return;}
+  const link=document.createElement('a');
+  link.download='mwenendo-wa-mapato-'+leo()+'.png';
+  const src=ibadaTrendChartInstance.canvas;
+  const out=document.createElement('canvas');
+  out.width=src.width;out.height=src.height;
+  const ctx=out.getContext('2d');
+  ctx.fillStyle='#ffffff';
+  ctx.fillRect(0,0,out.width,out.height);
+  ctx.drawImage(src,0,0);
+  link.href=out.toDataURL('image/png',1.0);
+  link.click();
+}
+
 function renderFedhaViongozi(containerId){
   const now=new Date();
   const defaultMwezi=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -1406,7 +1561,12 @@ function katibulLogin(){
 }
 function hazinaLogin(){
   const pw=$('ha-pw').value.trim();
-  if(pw===getPW('hazina')){currentRole='hazina';setAl('al-halogin','');$('ha-tarehe').value=leo();$('ha-mat-tarehe').value=leo();$('ha-msh-tarehe').value=leo();$('ha-jumla-tarehe').value=leo();loadHazinaData();show('s-hazina');}
+  if(pw===getPW('hazina')){
+    currentRole='hazina';setAl('al-halogin','');$('ha-tarehe').value=leo();$('ha-mat-tarehe').value=leo();$('ha-msh-tarehe').value=leo();$('ha-jumla-tarehe').value=leo();
+    const gotoJumla=new URLSearchParams(location.search).get('goto')==='hazina-jumla';
+    show('s-hazina');
+    loadHazinaData().then(()=>{ haTab(gotoJumla?'jumla':'ripoti'); });
+  }
   else{setAl('al-halogin','Nenosiri si sahihi','e');}
 }
 function wazeeLogin(){
@@ -2589,6 +2749,129 @@ function renderHaWaumini(){
   }).join('');
   renderBulkList('ha');
 }
+// ==================== KUSOMA TAARIFA KWA PICHA (Gemini vision extraction) ====================
+function fileToBase64Fin(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result.split(',')[1]);
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function callFinancialExtract(file, formType){
+  const imageBase64=await fileToBase64Fin(file);
+  const res=await fetch(`${SB}/functions/v1/extract-financial-image`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+SK,'apikey':SK},
+    body:JSON.stringify({imageBase64, mediaType: file.type||'image/jpeg', formType})
+  });
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok||!data.success)throw new Error(data.error||'Usomaji wa picha haukufanikiwa');
+  return data.data;
+}
+
+async function handleFinancialPhotoUpload(inputEl, formType){
+  const file=inputEl.files&&inputEl.files[0];
+  if(!file)return;
+  const statusId=formType==='jumla'?'jumla-photo-status':'matumizi-photo-status';
+  $(statusId).innerHTML='<span style="color:var(--gray);">⏳ Inasoma picha... (inaweza kuchukua sekunde chache)</span>';
+  try{
+    const extracted=await callFinancialExtract(file, formType);
+    if(formType==='jumla'){fillJumlaFromExtraction(extracted);}
+    else{fillMatumiziFromExtraction(extracted);}
+    const warn=extracted.confidence_note?`<div style="color:var(--orange);margin-top:4px;">⚠️ ${extracted.confidence_note}</div>`:'';
+    $(statusId).innerHTML=`<span style="color:var(--green);">✅ Picha imesomwa — <strong>kagua namba zote kabla ya kuhifadhi</strong>.</span>${warn}`;
+  }catch(err){
+    $(statusId).innerHTML=`<span style="color:var(--red);">❌ ${err.message}</span>`;
+  }
+}
+
+function fillJumlaFromExtraction(d){
+  if(d.tarehe&&$('ha-jumla-tarehe'))$('ha-jumla-tarehe').value=d.tarehe;
+  if(d.aina_ibada&&$('ha-jumla-aina-ibada'))$('ha-jumla-aina-ibada').value=d.aina_ibada;
+  ['sadaka','shukrani','zaka','watoto','ujenzi','nyingine'].forEach(k=>{
+    if(d[k]!==undefined&&d[k]!==null&&$('ha-jumla-'+k))$('ha-jumla-'+k).value=d[k];
+  });
+  if(typeof previewJumla==='function')previewJumla();
+}
+
+let _matumiziExtractedDate='';
+let _matumiziExtractedItems=[];
+
+function fillMatumiziFromExtraction(d){
+  _matumiziExtractedDate=d.tarehe||$('ha-mat-tarehe')?.value||leo();
+  _matumiziExtractedItems=(d.items||[]).map(it=>({
+    kichwa:it.kichwa||'',
+    kiasi:it.kiasi||0,
+    aina_matumizi:it.aina_matumizi||'Nyingine',
+    maelezo:it.maelezo||''
+  }));
+  renderMatumiziExtractedReview();
+}
+
+function renderMatumiziExtractedReview(){
+  const box=$('matumizi-extracted-review');
+  if(!box)return;
+  if(!_matumiziExtractedItems.length){box.innerHTML='';return;}
+  box.innerHTML=`
+    <div class="card" style="border:2px solid var(--gold);">
+      <div class="card-title">📷 Vitu Vilivyosomwa Kutoka Picha — Kagua Kabla ya Kuhifadhi</div>
+      <div class="fg"><label>Tarehe (itatumika kwa vitu vyote)</label><input type="date" class="fi" id="matumizi-extract-date" value="${_matumiziExtractedDate}"></div>
+      ${_matumiziExtractedItems.map((it,i)=>`
+        <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-size:11px;font-weight:800;color:var(--gray);">KIPENGELE #${i+1}</span>
+            <button class="btn btn-red btn-sm" style="padding:3px 8px;" onclick="removeMatumiziExtractedItem(${i})">🗑</button>
+          </div>
+          <div class="fg"><label>Kichwa cha Matumizi</label><input type="text" class="fi" value="${(it.kichwa||'').replace(/"/g,'&quot;')}" oninput="updateMatumiziExtractedField(${i},'kichwa',this.value)"></div>
+          <div style="display:flex;gap:8px;">
+            <div class="fg" style="flex:1;"><label>Kiasi</label><input type="number" class="fi" value="${it.kiasi||0}" oninput="updateMatumiziExtractedField(${i},'kiasi',this.value)"></div>
+            <div class="fg" style="flex:1;"><label>Aina</label><input type="text" class="fi" value="${(it.aina_matumizi||'').replace(/"/g,'&quot;')}" oninput="updateMatumiziExtractedField(${i},'aina_matumizi',this.value)"></div>
+          </div>
+          <div class="fg"><label>Maelezo (hiari)</label><input type="text" class="fi" value="${(it.maelezo||'').replace(/"/g,'&quot;')}" oninput="updateMatumiziExtractedField(${i},'maelezo',this.value)"></div>
+        </div>`).join('')}
+      <div id="matumizi-extract-alert"></div>
+      <button class="btn btn-primary btn-block" onclick="saveAllMatumiziExtracted()">💾 Hifadhi Vyote (${_matumiziExtractedItems.length})</button>
+    </div>`;
+}
+
+function updateMatumiziExtractedField(idx, field, value){
+  if(!_matumiziExtractedItems[idx])return;
+  _matumiziExtractedItems[idx][field]=(field==='kiasi')?(value===''?0:parseFloat(value)):value;
+}
+
+function removeMatumiziExtractedItem(idx){
+  _matumiziExtractedItems.splice(idx,1);
+  renderMatumiziExtractedReview();
+}
+
+async function saveAllMatumiziExtracted(){
+  const dateVal=$('matumizi-extract-date')?.value||_matumiziExtractedDate||leo();
+  const invalid=_matumiziExtractedItems.find(it=>!it.kichwa||!it.kiasi||it.kiasi<=0);
+  if(invalid){$('matumizi-extract-alert').innerHTML='<div class="al al-e">Kila kipengele lazima kiwe na kichwa na kiasi sahihi</div>';return;}
+  try{
+    const rows=_matumiziExtractedItems.map(it=>({
+      kichwa: it.kichwa, kiasi: Math.round(it.kiasi), tarehe: dateVal,
+      aina_matumizi: it.aina_matumizi||'Nyingine', maelezo: it.maelezo||null
+    }));
+    const r=await DB.post('matumizi', rows);
+    if(r&&!Array.isArray(r)&&(r.code||r.message)){
+      $('matumizi-extract-alert').innerHTML=`<div class="al al-e">❌ ${r.message||r.code}</div>`;
+      return;
+    }
+    if(Array.isArray(r))allMatumizi.unshift(...r);
+    _matumiziExtractedItems=[];
+    if($('matumizi-photo-input'))$('matumizi-photo-input').value='';
+    if($('matumizi-photo-status'))$('matumizi-photo-status').innerHTML='';
+    renderMatumiziExtractedReview();
+    renderHaMatumiziList();
+    toastMsg('✅ Matumizi yote yamehifadhiwa!');
+  }catch(e){
+    $('matumizi-extract-alert').innerHTML=`<div class="al al-e">❌ ${e.message}</div>`;
+  }
+}
+
 function haTab(tab){
   ['ingiza','jumla','maombi','matumizi','aina','leo','fedha','historia','ripoti','waumini','zaka'].forEach(t=>{
     const e=$('ha-'+t);if(e)e.style.display=t===tab?'block':'none';
@@ -2597,6 +2880,7 @@ function haTab(tab){
   if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini'){renderHaWaumini();renderBulkList('ha');}
   if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha'){const c=$('ha-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('ha-fedha-content');}
   if(tab==='maombi')renderHaOmbiList();if(tab==='jumla'){const c=$('ha-jumla-historia');if(c)delete c.dataset.mwezi;renderJumlaHistoria();}
+  if(tab==='ripoti')renderIbadaTrendChart();
   if(tab==='zaka')initZakaTab();
 }
 
@@ -2834,7 +3118,11 @@ $('modal-bg').addEventListener('click',function(e){if(e.target===this)closeModDi
 // ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
-show('s-welcome');
+if(new URLSearchParams(location.search).get('goto')==='hazina-jumla'){
+  show('s-hazina-login');
+}else{
+  show('s-welcome');
+}
 
 
 
