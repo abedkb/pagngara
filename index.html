@@ -655,6 +655,26 @@ tr:hover td{background:var(--warm);}
           <div id="jumla-photo-status" style="font-size:12px;margin-top:4px;"></div>
         </div>
         <div class="al al-i" style="font-size:12px;">Pakia picha/PDF ya taarifa iliyojazwa — namba zitajazwa hapa chini moja kwa moja. Kagua na hariri kabla ya kuhifadhi.</div>
+        <div class="card" style="border:2px solid var(--gold);margin-bottom:14px;">
+          <div class="card-title">🧮 Hesabu Noti (hiari)</div>
+          <div class="al al-i" style="font-size:12px;">Hesabu noti kwa kila aina ya sadaka — weka <strong>idadi ya noti</strong>, mfumo utahesabu kiasi na kujaza sehemu husika chini moja kwa moja.</div>
+          <div style="overflow-x:auto;margin-bottom:6px;">
+          <table style="border-collapse:collapse;width:100%;font-size:11px;">
+            <thead>
+              <tr>
+                <th style="text-align:left;min-width:70px;padding:4px;background:var(--navy);color:var(--gold);position:sticky;left:0;">NOTI</th>
+                <th style="padding:4px;min-width:56px;background:var(--navy);color:var(--gold);font-size:9px;">SADAKA</th>
+                <th style="padding:4px;min-width:56px;background:var(--navy);color:var(--gold);font-size:9px;">SHUKRANI</th>
+                <th style="padding:4px;min-width:56px;background:var(--navy);color:var(--gold);font-size:9px;">ZAKA</th>
+                <th style="padding:4px;min-width:56px;background:var(--navy);color:var(--gold);font-size:9px;">WATOTO</th>
+                <th style="padding:4px;min-width:56px;background:var(--navy);color:var(--gold);font-size:9px;">UJENZI</th>
+                <th style="padding:4px;min-width:56px;background:var(--navy);color:var(--gold);font-size:9px;">NYINGINE</th>
+              </tr>
+            </thead>
+            <tbody id="jumla-grid-body"></tbody>
+          </table>
+          </div>
+        </div>
         <div class="fgrid">
           <div class="fg"><label>📅 Tarehe ya Ibada</label><input type="date" class="fi" id="ha-jumla-tarehe"/></div>
           <div class="fg"><label>Aina ya Ibada</label><input type="text" class="fi" id="ha-jumla-aina-ibada" placeholder="mfano: Jumapili, Jumatano..."/></div>
@@ -2363,6 +2383,42 @@ function previewJumla(){
     ${nyingine>0?`<div class="jc-row"><span class="jc-key">✝ Michango Mingine</span><span class="jc-val">${pesa(nyingine)}</span></div>`:''}
     <div class="jc-total"><span class="jc-key">JUMLA YA IBADA</span><span class="jc-val">${pesa(jumla)}</span></div>`;
 }
+// ==================== HESABU NOTI (Jumla Tab Denomination Grid) ====================
+const JUMLA_GRID_DENOMINATIONS=[10000,5000,2000,1000,500,200,100,50];
+const JUMLA_GRID_CATS=['sadaka','shukrani','zaka','watoto','ujenzi','nyingine'];
+
+function renderJumlaGridBody(){
+  const body=$('jumla-grid-body');
+  if(!body)return;
+  body.innerHTML=JUMLA_GRID_DENOMINATIONS.map(den=>`<tr>
+      <td style="padding:3px 4px;font-weight:700;color:var(--navy);background:#F7FAFC;position:sticky;left:0;">${den.toLocaleString()}</td>
+      ${JUMLA_GRID_CATS.map(cat=>`<td style="padding:2px;"><input type="number" min="0" class="fi jumla-grid-cell" style="width:52px;padding:4px;text-align:center;font-size:11px;" id="jgrid-${cat}-${den}" placeholder="0" oninput="recalcJumlaGridPag()"></td>`).join('')}
+    </tr>`).join('')
+    +`<tr style="border-top:2px solid var(--gold);">
+      <td style="padding:4px;font-weight:700;background:#FFF9E6;position:sticky;left:0;">JUMLA</td>
+      ${JUMLA_GRID_CATS.map(cat=>`<td style="padding:4px;text-align:center;font-weight:700;color:var(--navy);background:#FFF9E6;" id="jgrid-total-${cat}">0</td>`).join('')}
+    </tr>`;
+}
+
+function recalcJumlaGridPag(){
+  JUMLA_GRID_CATS.forEach(cat=>{
+    const total=JUMLA_GRID_DENOMINATIONS.reduce((sum,den)=>{
+      const count=parseInt($(`jgrid-${cat}-${den}`)?.value)||0;
+      return sum+count*den;
+    },0);
+    const cell=$(`jgrid-total-${cat}`);
+    if(cell)cell.textContent=total.toLocaleString();
+    const field=$('ha-jumla-'+cat);
+    if(field)field.value=total>0?total:'';
+  });
+  if(typeof previewJumla==='function')previewJumla();
+}
+
+function resetJumlaGrid(){
+  document.querySelectorAll('.jumla-grid-cell').forEach(inp=>inp.value='');
+  JUMLA_GRID_CATS.forEach(cat=>{const cell=$(`jgrid-total-${cat}`);if(cell)cell.textContent='0';});
+}
+
 async function hifadhiJumla(){
   const sadaka=parseInt($('ha-jumla-sadaka').value)||0;
   const shukrani=parseInt($('ha-jumla-shukrani').value)||0;
@@ -2397,6 +2453,9 @@ async function hifadhiJumla(){
         else{const fresh=await DB.get('jumla_ibada','order=tarehe.desc');if(Array.isArray(fresh))allJumlaIbada=fresh;}
         setAl('al-hajumla','✅ Jumla ya ibada imehifadhiwa! Inaonekana kwenye dashboard za viongozi wote.','s');
         ['ha-jumla-sadaka','ha-jumla-shukrani','ha-jumla-zaka','ha-jumla-watoto','ha-jumla-ujenzi','ha-jumla-nyingine','ha-jumla-maelezo','ha-jumla-aina-ibada'].forEach(id=>{$(id).value='';});
+        resetJumlaGrid();
+        if($('jumla-photo-input'))$('jumla-photo-input').value='';
+        if($('jumla-photo-status'))$('jumla-photo-status').innerHTML='';
         $('ha-jumla-preview').style.display='none';
         renderJumlaHistoria();toastMsg('✅ Jumla ya ibada imehifadhiwa!');
       }
@@ -2879,7 +2938,7 @@ function haTab(tab){
   });
   if(tab==='historia')loadHaHistoria();if(tab==='ripoti')previewRipoti();if(tab==='waumini'){renderHaWaumini();renderBulkList('ha');}
   if(tab==='matumizi'){renderHaMatumiziList();renderHaMshahara();}if(tab==='leo')renderIbadaLeo('ha-leo-content');if(tab==='fedha'){const c=$('ha-fedha-content');if(c)delete c.dataset.fedhaMonth;renderFedhaViongozi('ha-fedha-content');}
-  if(tab==='maombi')renderHaOmbiList();if(tab==='jumla'){const c=$('ha-jumla-historia');if(c)delete c.dataset.mwezi;renderJumlaHistoria();}
+  if(tab==='maombi')renderHaOmbiList();if(tab==='jumla'){const c=$('ha-jumla-historia');if(c)delete c.dataset.mwezi;renderJumlaHistoria();renderJumlaGridBody();}
   if(tab==='ripoti')renderIbadaTrendChart();
   if(tab==='zaka')initZakaTab();
 }
