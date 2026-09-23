@@ -1348,8 +1348,10 @@ function renderIbadaTrendChart(){
   _ibadaTrendMissing=missing;
 
   if(missingAlert){
+    const verb=missingDates.length===1?'haina':'hazina';
+    const fmtSlash=(d)=>{const dt=new Date(d+'T00:00:00');return `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;};
     missingAlert.innerHTML=missingDates.length
-      ? `<div class="al al-e" style="margin-bottom:10px;">⚠️ <strong>Ibada ${missingDates.length} hazina taarifa za fedha:</strong> ${missingDates.map(d=>formatDateShort(d)).join(', ')}</div>`
+      ? `<div class="al al-e" style="margin-bottom:10px;">⚠️ <strong>Ibada ${missingDates.length} ${verb} taarifa za fedha:</strong> ${missingDates.map(fmtSlash).join(', ')}</div>`
       : `<div class="al al-s" style="margin-bottom:10px;">✅ Ibada zote katika kipindi hiki zina taarifa za fedha</div>`;
   }
 
