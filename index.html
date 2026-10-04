@@ -1197,6 +1197,25 @@ const leo=()=>new Date().toISOString().slice(0,10);
 const uid=()=>'MU'+Date.now().toString().slice(-6)+Math.random().toString(36).substr(2,3).toUpperCase();
 const setAl=(id,msg,t='i')=>{const e=$(id);if(!e)return;e.innerHTML=msg?`<div class="al al-${t}">${msg}</div>`:''};
 const toastMsg=msg=>{const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);};
+// Kiashiria cha "inasubiri" kwa vitendo vya kuhifadhi (hujificha chenyewe baada ya sekunde 20)
+let _loadingTimer=null;
+function showLoading(on){
+  let o=document.getElementById('app-loading');
+  if(!o){
+    o=document.createElement('div');o.id='app-loading';
+    o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;z-index:99999;color:#fff;font-weight:800;font-size:15px;';
+    o.innerHTML='<div style="background:#1B2B4B;padding:16px 26px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);">⏳ Inasubiri...</div>';
+    document.body.appendChild(o);
+  }
+  clearTimeout(_loadingTimer);
+  o.style.display=on?'flex':'none';
+  if(on)_loadingTimer=setTimeout(()=>{o.style.display='none';},20000);
+}
+// Hitilafu isiyotarajiwa isinyamaze — mtumiaji aone ujumbe
+window.addEventListener('unhandledrejection',e=>{
+  showLoading(false);
+  toastMsg('❌ Hitilafu: '+((e.reason&&e.reason.message)||'imeshindwa kukamilisha'));
+});
 const openMod=(title,body)=>{$('mod-title').textContent=title;$('mod-body').innerHTML=body;$('modal-bg').classList.add('open');};
 const closeModDirect=()=>$('modal-bg').classList.remove('open');
 const formatDate=d=>{if(!d)return'—';try{return new Date(d+'T00:00:00').toLocaleDateString('sw-TZ',{day:'numeric',month:'long',year:'numeric'});}catch{return d;}};
@@ -1914,7 +1933,7 @@ async function hifadhiMalipo(ahadiId){
   showLoading(true);
   const r=await DB.post('ujenzi_malipo',{ahadi_id:ahadiId,kiasi,tarehe,maelezo:maelezo||null});
   showLoading(false);
-  if(Array.isArray(r)&&r[0]){allUjenziMalipo.push(r[0]);closeMod();renderUjenziAhadiList();renderUjenziSummary();toastMsg('✅ Malipo yamehifadhiwa');}
+  if(Array.isArray(r)&&r[0]){allUjenziMalipo.push(r[0]);closeModDirect();renderUjenziAhadiList();renderUjenziSummary();toastMsg('✅ Malipo yamehifadhiwa');}
   else{setAl('al-mlmodal','Hitilafu imetokea','e');}
 }
 
@@ -2005,7 +2024,7 @@ function sendBeemWababa(){
 }
 async function confirmSendBeemWababa(){
   const res=await beemSendSMS(window._wbSendRecipients,window._wbSendText,'al-wbsend');
-  if(res.ok)setTimeout(closeMod,1200);
+  if(res.ok)setTimeout(closeModDirect,1200);
 }
 
 // ═══════════════════════════════════════════
