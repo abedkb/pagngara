@@ -692,6 +692,7 @@ tr:hover td{background:var(--warm);}
           <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;" onclick="rtPrint()">🖨 Chapisha</button>
           <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;" onclick="rtShare()">📤 Shiriki</button>
         </div>
+        <button class="btn btn-ghost btn-sm btn-block" style="margin-bottom:12px;" onclick="rtFixTeams()">🔧 Sahihisha Timu za Zamu za Mwezi Huu</button>
         <div id="rt-list"></div>
       </div>
     </div>
@@ -2634,9 +2635,10 @@ function rtEsc(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g
 function rtArr(v){return Array.isArray(v)?v:[];}
 
 // Timu za zamu ZISIZOBADILIKA (kutoka daftari la kanisa). Zinazunguka kila wiki.
-const RT_TIMU_WAZEE=[['Perpetua Muhile','Samwel Nyaisa'],['Emmanuel Kulwa','Obed Exavery']];
-const RT_TIMU_SHEMASI=[['Claudia Antidius','Danford Nazary','Jetruda Kakondere'],['Paulo Amos','Monica Kayanda','Peter Charles'],['Vedasto Wanka','Imani Charles','John Nyamwilahila']];
-// Wiki ya kuanzia (Jumatatu 28 Sep 2026): timu ya Samwel Nyaisa (Wazee Timu 1) + Mashemasi Timu 1
+const RT_TIMU_WAZEE=[['Samwel Nyaisa','Obed Exavery'],['Perpetua Muhile','Emmanuel Kulwa']];
+const RT_TIMU_SHEMASI=[['Claudia Antidius','Danford Nazary','Monica Kayanda'],['Jetruda Kakondere','Vedasto Wanka'],['John Nyamwilahila','Imani Charles'],['Peter Charles','Paulo Amos']];
+// Wiki ya kuanzia (Jumatatu 28 Sep 2026, ibada 30/9–4/10): Wazee Timu 1 (Samwel Nyaisa) + Mashemasi Timu 1.
+// Wazee hubadilishana kila wiki (2), mashemasi huzunguka kila wiki (4) — kama ratiba ya Oktoba iliyoandikwa.
 const RT_ANCHOR={week:'2026-09-28',wazee:0,shemasi:0};
 function rtTeamsForWeek(wk){
   const diff=Math.round((new Date(wk+'T00:00:00')-new Date(RT_ANCHOR.week+'T00:00:00'))/604800000);
@@ -2809,6 +2811,26 @@ function rtRenderList(){
     </tr>`).join('')
   }</tbody></table></div>`;
 }
+// Sahihisha timu za wazee/mashemasi kwenye ratiba zilizohifadhiwa (kiongozi na mhubiri havibadilishwi)
+async function rtFixTeams(){
+  const rows=rtMonthRows();
+  if(!rows.length){toastMsg('⚠️ Hakuna ratiba kwa mwezi huu');return;}
+  const same=(a,b)=>JSON.stringify(rtArr(a))===JSON.stringify(b);
+  const todo=rows.map(r=>{const t=rtTeamsForWeek(rtWeekKey(r.tarehe));return {r,w:RT_TIMU_WAZEE[t.wi].slice(),m:RT_TIMU_SHEMASI[t.si].slice()};})
+    .filter(x=>!same(x.r.wazee,x.w)||!same(x.r.mashemasi,x.m));
+  if(!todo.length){toastMsg('✅ Timu zote za mwezi huu tayari ni sahihi');return;}
+  if(!confirm(`Timu za zamu za siku ${todo.length} zitasahihishwa kulingana na mzunguko. Kiongozi na mhubiri havitaguswa. Endelea?`))return;
+  showLoading(true);
+  let ok=0;
+  for(const x of todo){
+    let r;try{r=await DB.patch('ratiba_wahudumu',`id=eq.${x.r.id}`,{wazee:x.w,mashemasi:x.m});}catch(e){r=null;}
+    if(Array.isArray(r)&&r[0]){const i=allRatiba.findIndex(a=>a.id===x.r.id);if(i>=0)allRatiba[i]=r[0];ok++;}
+  }
+  showLoading(false);
+  rtRenderList();
+  toastMsg(ok===todo.length?`✅ Timu za siku ${ok} zimesahihishwa`:`⚠️ Zimesahihishwa ${ok} kati ya ${todo.length}`);
+}
+
 // ---- Pakua / Chapisha / Shiriki ----
 function rtLoadScript(src){
   return new Promise((res,rej)=>{
